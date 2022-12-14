@@ -66,4 +66,9 @@ class AuthController extends Controller
             "message" => "Регистрация прошла успешно"
         ], 200); 
     }
+
+    public function logout()
+    {
+        
+    }
 }
