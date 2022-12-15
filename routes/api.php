@@ -29,7 +29,7 @@ Route::middleware('guest:api')->controller(AuthController::class)->group(functio
 Route::middleware('user')->group(function(){
     Route::controller(ProfileController::class)->group(function(){
         Route::get("/profile", 'getUser'); //Возвращает данные профиля
-        Route::post("/profile/update", 'update'); //Редактирование профиля
+        Route::put("/profile/update", 'update'); //Редактирование профиля
     });
 
     Route::controller(BonusController::class)->group(function(){
@@ -38,7 +38,7 @@ Route::middleware('user')->group(function(){
 
     Route::controller(NotificationController::class)->group(function(){
         Route::get("/notification", 'getUserNotification'); //Возвращает уведомления для пользователя
-        Route::post("/notification/read/{id}", "read"); //Убирает сообщение для пользователя(делает его прочитанным)
+        Route::put("/notification/read/{id}", "read"); //Убирает сообщение для пользователя(делает его прочитанным)
         Route::get("notification/count", "getCount"); //Возвращает кол-во уведомлений
     });
 
