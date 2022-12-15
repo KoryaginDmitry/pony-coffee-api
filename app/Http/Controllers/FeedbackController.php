@@ -1,103 +1,34 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\CoffeePot;
-use App\Models\Feedback;
-use App\Models\Message;
+;
+use App\Service\FeedbackService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
 {   
+    public function __construct(protected FeedbackService $service)
+    {
+        
+    }
     public function getFeedback($coffeePot_id = 0)
     {
-        if(auth('api')->user()->role->name == 'admin'){
-            if($coffeePot_id != 0){
-                $coffeePot = CoffeePot::find($coffeePot_id);
-                
-                if(!$coffeePot){
-                    return response()->json([
-                        "message" => "Такой кофе точки нет"
-                    ], 422);
-                }
+        $data = $this->service->getFeedback($coffeePot_id);
 
-                $feedbacks = Feedback::where("coffee_pot_id", $coffeePot_id)
-                    ->with('messages')
-                    ->get();
-            }
-            else{
-                $feedbacks = Feedback::with("messages")->get();
-            }
-        }
-        else{
-            $feedbacks = Feedback::where('user_id', auth('api')->id())
-                ->with("messages")
-                ->get();
-        }
-
-        return response()->json($feedbacks, 200);
+        return response()->json($data['body'], $data['code']);
     }
 
     public function create(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            "coffeePot" => ["required", "exists:coffee_pots,id"],
-            "grade" => ["nullable", "min:1", "max:5"],
-            "text" => ["required", "string", "min:15"]
-        ]);
-        
-        if($validator->fails()){
-            return response()->json($validator->errors(), 422);
-        }
-        
-        $feedback = Feedback::create([
-            "grade" => $request->grade,
-            "user_id" => auth('api')->id(),
-            "coffee_pot_id" => $request->coffeePot
-        ]);
+        $data = $this->service->getFeedback($request);
 
-        $message = Message::create([
-            "text" => $request->text,
-            "user_id" => auth('api')->id(),
-            "feedback_id" => $feedback->id
-        ]);
-
-        return response()->json([
-            "feedback" => $feedback,
-            "message" => $message
-        ],201);
+        return response()->json($data['body'], $data['code']);
     }
 
     public function createMessage($id, Request $request)
     {   
-        $validator = Validator::make($request->all(),[
-            "text" => ["required", "string", "min:5"]
-        ]);
+        $data = $this->service->getFeedback($id, $request);
 
-        if($validator->fails()){
-            return response()->json($validator->errors(), 422);
-        }
-
-        if(auth('api')->user()->role->name == 'admin'){
-            $feedback = Feedback::find($id);
-        }       
-        else{
-            $feedback = Feedback::where("user_id", auth('api')->id())->find($id);
-        } 
-
-        if(!$feedback){
-            return response()->json([
-                "message" => "Проверьте данные, которые вы передаете"
-            ],422);
-        }
-
-        $message = Message::create([
-            "text" => $request->text,
-            "user_id" => auth('api')->id(),
-            "feedback_id" => $feedback->id
-        ]);
-
-        return response()->json(["message" => $message], 200);
+        return response()->json($data['body'], $data['code']);
     }
 }

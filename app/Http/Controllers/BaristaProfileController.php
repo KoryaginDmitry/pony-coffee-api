@@ -2,128 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CoffeePot;
-use App\Models\User;
-use App\Models\UserCoffeePot;
-use Carbon\Carbon;
+use App\Service\BaristaService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class BaristaProfileController extends Controller
 {
-    public function get()
+    public function __construct(protected BaristaService $service)
     {
-        $users = User::where("role_id", "2")
-            ->orderBy('created_at', "DESC")
-            ->with("userCoffeePot.coffeePot")
-            ->get();
         
-        $coffeePots = CoffeePot::orderBy('created_at', "DESC")
-            ->get();
+    }
+    
+    public function get()
+    {   
+        $data = $this->service->get();
 
-        return response()->json([
-            "users" => $users, 
-            "coffeePots" => $coffeePots
-        ], 200);
+        return response()->json($data['body'], $data['code']);
     }
 
     public function create(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            "name" => ["required", "string"],
-            "last_name" => ["nullable", "string"],
-            "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
-            "password" => ["required", "string"]
-        ]);
-        
-        if($validator->fails()){
-            return response()->json($validator->errors(), 422);
-        }
+        $data = $this->service->create($request);
 
-        $coffeePot = CoffeePot::find($request->coffeePot);
-
-        $user = User::create([
-            "name" => $request->name,
-            "last_name" => $request->last_name,
-            "phone" => $request->phone,
-            "phone_verified_at" => Carbon::now(),
-            "password" => Hash::make($request->password),
-            "agreement" => "1",
-            "role_id" => "2"
-        ]);
-
-        if($coffeePot){
-            UserCoffeePot::create([
-                "user_id" => $user->id,
-                "coffee_pot_id" => $coffeePot->id
-            ]);
-        }
-
-        return response()->json([
-            "user" => $user,
-            "coffeePot" => $request->coffeePot ? $coffeePot : null
-        ],201);
+        return response()->json($data['body'], $data['code']);
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            "name" => ["required", "string"],
-            "last_name" => ["nullable", "string"],
-            "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
-        ]);
+        $data = $this->service->update($request, $id);
 
-        $user = User::where("role_id", 2)->find($id);
-
-        if(!$user){
-            return response()->json([
-                "message" => "Такого баристы нет"
-            ], 422);
-        }
-
-        $user->update([
-            "name" => $request->name,
-            "last_name" => $request->last_name,
-            "phone" => $request->phone
-        ]);
-
-        if($request->coffeePot != 0){
-            $coffeePot = CoffeePot::find($request->coffeePot);
-
-            UserCoffeePot::updateOrCreate(
-                [
-                    "user_id" => $user->id
-                ],
-                [
-                    "coffee_pot_id" => $coffeePot->id
-                ]
-            );
-        }
-        else {
-            UserCoffeePot::where("user_id", $user->id)->delete();
-        }
-
-        return response()->json([
-            "user" => $user,
-            "coffeePot" => $request->coffeePot ? $coffeePot : null
-        ], 200);
+        return response()->json($data['body'], $data['code']);
     }
 
     public function delete($id)
     {
-        $user = User::where("role_id", 2)->find($id);
+        $data = $this->service->delete($id);
 
-        if(!$user){
-            return response()->json([
-                "message" => "Такого баристы нет"
-            ], 422);
-        }
-
-        UserCoffeePot::where("user_id", $user->id)->delete();
-
-        $user->delete();
-
-        return response()->json([], 204);
+        return response()->json($data['body'], $data['code']);
     }
 }
