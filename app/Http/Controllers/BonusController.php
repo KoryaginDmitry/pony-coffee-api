@@ -113,15 +113,15 @@ class BonusController extends Controller
             return response()->json([
                 "count" => $user->countActiveBonuses(),
                 "id" => $id,
-                "message" => "Недостаточно бонусов"
-            ], 422);
+                "message" => "Бонусы списаны"
+            ], 200);
         }
         else{
             return response()->json([
                 "count" => $user->countActiveBonuses(),
                 "id" => $id,
-                "message" => "Бонусы списаны"
-            ], 200);
+                "message" => "Недостаточно бонусов"
+            ], 422);
         }
     }
 }

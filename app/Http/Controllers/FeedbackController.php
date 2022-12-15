@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CoffeePot;
 use App\Models\Feedback;
 use App\Models\Message;
 use Illuminate\Http\Request;
@@ -9,10 +10,25 @@ use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
 {   
-    public function getFeedback()
+    public function getFeedback($coffeePot_id = 0)
     {
         if(auth('api')->user()->role->name == 'admin'){
-            $feedbacks = Feedback::with("messages")->get();
+            if($coffeePot_id != 0){
+                $coffeePot = CoffeePot::find($coffeePot_id);
+                
+                if(!$coffeePot){
+                    return response()->json([
+                        "message" => "Такой кофе точки нет"
+                    ], 422);
+                }
+
+                $feedbacks = Feedback::where("coffee_pot_id", $coffeePot_id)
+                    ->with('messages')
+                    ->get();
+            }
+            else{
+                $feedbacks = Feedback::with("messages")->get();
+            }
         }
         else{
             $feedbacks = Feedback::where('user_id', auth('api')->id())

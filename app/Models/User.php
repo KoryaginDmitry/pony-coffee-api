@@ -70,4 +70,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Bonus::class);
     }
+
+    public function bonusesCreate()
+    {
+        return $this->hasMany(Bonus::class, "user_id_create", "id");
+    }
+
+    public function bonusesWrote()
+    {
+        return $this->hasMany(Bonus::class, "user_id_wrote", "id");
+    }
+
+    public function userCoffeePot()
+    {
+        return $this->hasOne(UserCoffeePot::class);
+    }
 }

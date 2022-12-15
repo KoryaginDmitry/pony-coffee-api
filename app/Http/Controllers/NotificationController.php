@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class NotificationController extends Controller
 {
@@ -55,5 +56,55 @@ class NotificationController extends Controller
         return response()->json([
             "count" => $count
         ], 200);
+    }
+
+    public function getNotificationForAdmin()
+    {
+        $notifications = Notification::get();
+
+        return response()->json($notifications, 200);
+    }
+
+    public function createNotification(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "email" => ["sometimes", "accepted"],
+            "sms" => ["sometimes", "accepted"],
+            "site" => ["sometimes", "accepted"],
+            "telegram" => ["sometimes", "accepted"],
+            "text" => ["required", "string", "min:10"]
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 422);
+        }
+
+        if(!$request->email && !$request->sms && !$request->site && !$request->telegram){
+            return response()->json([
+                "message" => "Выберите метод рассылки"
+            ],422);
+        }
+
+        if($request->email){
+            //email рассылка
+        }
+
+        if($request->sms){
+            //sms рассылка
+        }
+
+        if($request->telegram){
+            //telegram рассылка
+        }
+         
+        $notification = Notification::create([
+            "email" => $request->email ? "1" : "0",
+            "sms" => $request->sms ? "1" : "0", 
+            "site" => $request->site ? "1" : "0",
+            "telegram" => $request->site ? "1" : "0",
+            "text" => $request->text
+        ]);
+
+        return response()->json($notification, 201);
     }
 }
