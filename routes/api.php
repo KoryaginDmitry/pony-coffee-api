@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BonusController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Symfony\Component\HttpKernel\Profiler\Profile;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,5 +30,21 @@ Route::middleware('user')->group(function(){
     Route::controller(ProfileController::class)->group(function(){
         Route::get("/profile", 'getUser');
         Route::post("/profile/update", 'update');
+    });
+
+    Route::controller(BonusController::class)->group(function(){
+        Route::get('/user/bonuses', 'getInfoBonuses');
+    });
+
+    Route::controller(NotificationController::class)->group(function(){
+        Route::get("/notification", 'getUserNotification');
+        Route::post("/notification/read/{id}", "read");
+        Route::get("notification/count", "getCount");
+    });
+
+    Route::controller(FeedbackController::class)->group(function(){
+        Route::get("feedback", 'getFeedback');
+        Route::post('feedback/create', 'create');
+        Route::post('feedback/{id}/createMessage', 'createMessage');
     });
 });
