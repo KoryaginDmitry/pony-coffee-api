@@ -48,3 +48,11 @@ Route::middleware('user')->group(function(){
         Route::post('feedback/{id}/createMessage', 'createMessage'); //Создание сообщения для определенного обращение, id обращения передается в адресной строке
     });
 });
+
+Route::middleware('barista')->group([
+    "controller" => BonusController::class
+],function(){
+    Route::get('search', 'search'); //Поиск гостя по id или номеру телефона
+    Route::post('bonus/{id}/create', 'create'); //Создание бонуса для гостя
+    Route::put('bonus/{id}/wrote', 'wrote'); //Списание бонусов у гостя
+});

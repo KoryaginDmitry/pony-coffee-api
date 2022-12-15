@@ -20,7 +20,7 @@ class FeedbackController extends Controller
                 ->get();
         }
 
-        return response()->json([$feedbacks], 200);
+        return response()->json($feedbacks, 200);
     }
 
     public function create(Request $request)
@@ -60,7 +60,7 @@ class FeedbackController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json([$validator->errors(), 422]);
+            return response()->json($validator->errors(), 422);
         }
 
         if(auth('api')->user()->role->name == 'admin'){
