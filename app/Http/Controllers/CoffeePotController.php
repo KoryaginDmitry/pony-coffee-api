@@ -11,7 +11,7 @@ class CoffeePotController extends Controller
 {
     public function getAddressCoffeePots()
     {
-        $coffeePots = CoffeePot::select('address')->get();
+        $coffeePots = CoffeePot::select('id', 'address')->get();
         
         return response()->json($coffeePots, 200);
     }

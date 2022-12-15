@@ -61,35 +61,35 @@ Route::controller(BonusController::class)->group(function(){
 
 Route::middleware('admin')->group(function(){
     Route::controller(StatisticController::class)->group(function(){
-        Route::get('/statistic', 'barista');
-        Route::get('statistic/users', 'user');
+        Route::get('/statistic', 'barista'); //Статистика барист
+        Route::get('statistic/users', 'user'); //статистика гостей
     });
     
     Route::controller(CoffeePotController::class)->group(function(){
-        Route::get('/coffeePot/address', 'getAddressCoffeePots');
+        Route::get('/coffeePot/address', 'getAddressCoffeePots'); //Возвращает адреса кофеточек и их id
     });
 
     Route::controller(FeedbackController::class)->group(function(){
-        Route::get('admin/feedback/{id?}', 'getFeedback');
-        Route::post('admin/feedback/{id}', 'createMessage');
+        Route::get('admin/feedback/{id?}', 'getFeedback'); //Возвращает все feedback
+        Route::post('admin/feedback/{id}', 'createMessage'); //создает сообщения для обратной связи
     });
 
     Route::controller(NotificationController::class)->group(function(){
-        Route::get('admin/notification', 'getNotificationForAdmin');
-        Route::post('admin/notification', 'createNotification');
+        Route::get('admin/notification', 'getNotificationForAdmin'); //Возвращает все уведомления
+        Route::post('admin/notification', 'createNotification'); //Создает уведомление
     });
 
     Route::controller(CoffeePotController::class)->group(function(){
-        Route::get('admin/coffeePot', 'getCoffeePots');
-        Route::post('admin/coffeePot', 'create');
-        Route::put('admin/coffeePot/{id}', 'update');
-        Route::delete('admin/coffeePot/{id}', 'delete');
+        Route::get('admin/coffeePot', 'getCoffeePots'); //Возвращает все кофеточки
+        Route::post('admin/coffeePot', 'create'); //Содает кофеточку
+        Route::put('admin/coffeePot/{id}', 'update'); //обновляет кофеточку
+        Route::delete('admin/coffeePot/{id}', 'delete'); //удаляет кофеточку
     });
 
     Route::controller(BaristaProfileController::class)->group(function(){
-        Route::get('barista', 'get');
-        Route::post('barista', 'create');
-        Route::put('barista/{id}', 'update');
-        Route::delete('barista/{id}', 'delete');
+        Route::get('barista', 'get'); //возвращает всех барист
+        Route::post('barista', 'create'); //создает баристу
+        Route::put('barista/{id}', 'update'); //редактирование баристы
+        Route::delete('barista/{id}', 'delete'); //удаление баристы
     });
 });
