@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 class AuthService
 {
     public function login($request)
-    {
+    {   
         $validator = Validator::make($request->all(), [
             "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "exists:users"],
             "password" => ["required", "string"]
