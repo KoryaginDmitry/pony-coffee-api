@@ -5,6 +5,7 @@ use App\Http\Controllers\BaristaProfileController;
 use App\Http\Controllers\BonusController;
 use App\Http\Controllers\CoffeePotController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatisticController;
@@ -22,29 +23,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get("/get/array", function(){
-    return response()->json([
-        "user" => [
-            [
-                "id" => 1,
-                "name" => 'Вася'
-            ],
-            [
-                "id" => 2,
-                "name" => 'Игорь'
-            ]
-        ],
-        "barista" => [
-            [
-                "id" => 1,
-                "name" => 'Ваня'
-            ]
-        ],
-        "errors" => [
-            
-        ]
-    ],200);
-});
 
 
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
@@ -52,6 +30,7 @@ Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']
 Route::middleware('guest')->controller(AuthController::class)->group(function(){
     Route::post('/login', 'login'); //Авторизация пользоватея
     Route::post('/register', 'register'); //Регистрация
+    Route::get("/header", [HomeController::class, 'get']);
 });
 
 Route::middleware('user')->group(function(){
