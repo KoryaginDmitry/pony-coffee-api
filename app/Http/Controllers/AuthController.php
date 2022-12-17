@@ -14,7 +14,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {   
-        return response()->jsno(['sd' => 12], 200);
         $data = $this->service->login($request);
 
         return response()->json($data['body'], $data['code']);
