@@ -26,11 +26,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
+Route::get("/header", [HomeController::class, 'get']);
 
 Route::middleware('guest')->controller(AuthController::class)->group(function(){
     Route::post('/login', 'login'); //Авторизация пользоватея
     Route::post('/register', 'register'); //Регистрация
-    Route::get("/header", [HomeController::class, 'get']);
 });
 
 Route::middleware('user')->group(function(){
