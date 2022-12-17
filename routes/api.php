@@ -22,6 +22,30 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get("/get/array", function(){
+    return response()->json([
+        "user" => [
+            [
+                "id" => 1,
+                "name" => 'Вася'
+            ],
+            [
+                "id" => 2,
+                "name" => 'Игорь'
+            ]
+        ],
+        "barista" => [
+            [
+                "id" => 1,
+                "name" => 'Ваня'
+            ]
+        ],
+        "errors" => [
+            
+        ]
+    ],200);
+});
+
 
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
 
