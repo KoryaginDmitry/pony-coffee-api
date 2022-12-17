@@ -48,7 +48,7 @@ class AuthService
 
         if($validator->fails()){
             return [
-                "body" => $validator->errors(),
+                "body" => $validator->errors()->all(),
                 "code" => 422
             ];
         }
