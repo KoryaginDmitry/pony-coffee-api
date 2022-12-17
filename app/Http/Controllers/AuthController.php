@@ -28,6 +28,8 @@ class AuthController extends Controller
 
     public function logout()
     {
-        
+        $data = $this->service->logout();
+
+        return response()->json($data['body'], $data['code']);
     }
 }

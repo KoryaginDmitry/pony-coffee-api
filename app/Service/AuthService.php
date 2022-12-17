@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -79,6 +80,11 @@ class AuthService
 
     public function logout()
     {
-        return auth('api')->user()->tokens;
+        DB::table('oauth_access_tokens')->where('user_id', auth('api')->id())->delete();
+
+        return [
+            "body" => [],
+            "code" => 204
+        ];
     }
 }
