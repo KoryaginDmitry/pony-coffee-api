@@ -70,9 +70,11 @@ class AuthService
             ];
         }
 
+        $token = $user->createToken('userToken');
+
         return [
             "body" => [
-                "message" => "Регистрация прошла успешно"
+                "token" => $token
             ],
             "code" => 201
         ];
