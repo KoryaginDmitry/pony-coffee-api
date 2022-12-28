@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Service\CoffeePotService;
 use Illuminate\Http\Request;
 
-class CoffeePotController extends Controller
+class CoffeePotController extends BaseController
 {
     public function __construct(protected CoffeePotService $service)
     {
@@ -14,36 +14,36 @@ class CoffeePotController extends Controller
 
     public function getAddressCoffeePots()
     {
-        $data = $this->service->getAddressCoffeePots();
-        
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->getAddressCoffeePots()
+        );
     }
 
     public function getCoffeePots()
     {
-        $data = $this->service->getAddressCoffeePots();
-        
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->getCoffeePots()
+        );
     }
 
     public function create(Request $request)
     {
-        $data = $this->service->getAddressCoffeePots($request);
-        
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->create($request)
+        );
     }
 
     public function update($id, Request $request)
     {   
-        $data = $this->service->getAddressCoffeePots($id, $request);
-        
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->update($id, $request)
+        );
     }
 
     public function delete($id)
     {
-        $data = $this->service->getAddressCoffeePots($id);
-        
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->delete($id)
+        );
     }
 }

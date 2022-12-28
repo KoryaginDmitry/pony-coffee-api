@@ -6,7 +6,7 @@ use App\Service\ProfileService;
 use Illuminate\Http\Request;
 
 
-class ProfileController extends Controller
+class ProfileController extends BaseController
 {
     public function __construct(protected ProfileService $service)
     {
@@ -15,15 +15,22 @@ class ProfileController extends Controller
 
     public function getUser()
     {
-        return response()->json([
-            "user" => $this->service->user()
-        ], 200);
+        return $this->sendResponse(
+            $this->service->user()
+        );
     }
 
     public function update(Request $request)
     {   
-        $response = $this->service->update($request);
+        return $this->sendResponse(
+            $this->service->update($request)
+        );
+    }
 
-        return response()->json($response['body'], $response['code']);
+    public function newPassword(Request $request)
+    {
+        return $this->sendResponse(
+            $this->service->newPassword($request)
+        );
     }
 }

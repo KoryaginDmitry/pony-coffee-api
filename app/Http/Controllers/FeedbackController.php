@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Service\FeedbackService;
 use Illuminate\Http\Request;
 
-class FeedbackController extends Controller
+class FeedbackController extends BaseController
 {   
     public function __construct(protected FeedbackService $service)
     {
@@ -13,22 +13,22 @@ class FeedbackController extends Controller
     }
     public function getFeedback($coffeePot_id = 0)
     {
-        $data = $this->service->getFeedback($coffeePot_id);
-
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->getFeedback($coffeePot_id)
+        );
     }
 
     public function create(Request $request)
     {
-        $data = $this->service->getFeedback($request);
-
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->create($request)
+        );
     }
 
     public function createMessage($id, Request $request)
     {   
-        $data = $this->service->getFeedback($id, $request);
-
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->createMessage($id, $request)
+        );
     }
 }

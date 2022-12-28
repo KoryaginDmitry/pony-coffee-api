@@ -8,11 +8,11 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class BonusService
+class BonusService extends BaseService
 {
     public function getInfoBonuses()
     {
-        $user = User::find(auth('api')->id());
+        $user = User::find(auth()->id());
 
         $countActiveBonuses = $user->bonuses()->where("usage", "0")
         ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
@@ -27,13 +27,12 @@ class BonusService
             ->orderBy("created_at", "DESC")
             ->first();
 
-        return [
-            "body" => [
-                "count" => $countActiveBonuses,
-                "dateBurn" => $bonusBurnDate ? Carbon::create($bonusBurnDate->created_at)->addDays(30)->format("d-m-Y") : null,
-            ],
-            "code" => 200
+        $this->data = [
+            "count" => $countActiveBonuses,
+            "dateBurn" => $bonusBurnDate ? Carbon::create($bonusBurnDate->created_at)->addDays(30)->format("d-m-Y") : null,
         ];
+
+        return $this->sendResponse();
     }
 
     public function search($request)
@@ -44,10 +43,7 @@ class BonusService
             ]);
 
             if($validator->fails()){
-                return [
-                    "body" => $validator->errors(),
-                    "code" => 422
-                ];
+                return $this->sendErrorResponse($validator->errors()->all());
             }
 
             $user = User::where("role_id", "3")
@@ -67,10 +63,9 @@ class BonusService
                 ->get();
         }
 
-        return [
-            "body" => $user,
-            "code" => 200
-        ];
+        $this->data = $user;
+
+        return $this->sendResponse();
     }
 
     public function create($id)
@@ -78,25 +73,21 @@ class BonusService
         $user = User::where("role_id", 3)->find($id);
 
         if(!$user){
-            return [
-                "body" => [
-                    "message" => "Такого пользователя нет"
-                ],
-                "code" => 422
-            ];
+            return $this->sendErrorResponse(['Такого пользователя нет']);
         }
 
         $user->bonuses()->create([
-            "user_id_create" => auth('api')->id()
+            "user_id_create" => auth()->id()
         ]);
 
-        return [
-            "body" => [
-                "count" => $user->countActiveBonuses(),
-                "id" => $id
-            ],
-            "code" => 201
+        $this->data = [
+            "count" => $user->countActiveBonuses(),
+            "id" => $id
         ];
+
+        $this->code = 201;
+
+        return $this->sendResponse();
     }
 
     public function wrote($id)
@@ -104,47 +95,36 @@ class BonusService
         $user = User::where("role_id", 3)->find($id);
 
         if(!$user){
-            return [
-                "body" => [
-                    "message" => "Такого пользователя нет"
-                ],
-                "code" => 422
-            ];
+            return $this->sendErrorResponse(['Такого пользователя нет']);
         }
         
         $bonuses = $user->bonuses()
                 ->where("usage", "0")
                 ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
                 ->orderBy("created_at", "DESC")
-                ->limit(3)
-                ->get();
+                ->limit(3);
         
-        if($bonuses->count() == 3){
-            foreach($bonuses as $bonus){
-                $bonus->usage = '1';
-                $bonus->user_id_wrote = auth('api')->id();
+        if($bonuses->get()->count() == 3){
+            $bonuses->update(
+                [
+                    'usage' => '1',
+                    'user_id_wrote' => auth()->id()
+                ]
+            );
 
-                $bonus->save();
-            }
+            $this->data = [
+                "count" => $user->countActiveBonuses(),
+                "id" => $id,
+            ];
+
+            return $this->sendResponse();
+        }
         
-            return [
-                "body" => [
-                    "count" => $user->countActiveBonuses(),
-                    "id" => $id,
-                    "message" => "Бонусы списаны"
-                ],
-                "code" => 200
-            ];
-        }
-        else{
-            return [
-                "body" => [
-                    "count" => $user->countActiveBonuses(),
-                    "id" => $id,
-                    "message" => "Недостаточно бонусов"
-                ],
-                "code" => 422
-            ];
-        }
+        $this->data = [
+            "count" => $user->countActiveBonuses(),
+            "id" => $id,
+        ];
+
+        return $this->sendErrorResponse(['Недостаточно бонусов']);
     }
 }

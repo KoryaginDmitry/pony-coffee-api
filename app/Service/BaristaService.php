@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class BaristaService
+class BaristaService extends BaseService
 {
     public function get()
     {
@@ -21,13 +21,12 @@ class BaristaService
         $coffeePots = CoffeePot::orderBy('created_at', "DESC")
             ->get();
 
-        return [
-            "body" => [
-                "users" => $users, 
-                "coffeePots" => $coffeePots
-            ],
-            "code" => 200
+        $this->data = [
+            "users" => $users,
+            "coffeePots" => $coffeePots
         ];
+        
+        return $this->sendResponse();
     }
 
     public function create($request)
@@ -40,10 +39,7 @@ class BaristaService
         ]);
         
         if($validator->fails()){
-            return [
-                "body" => $validator->errors(),
-                "code" => 422
-            ];
+            return $this->sendErrorResponse($validator->errors()->all());
         }
 
         $coffeePot = CoffeePot::find($request->coffeePot);
@@ -65,13 +61,14 @@ class BaristaService
             ]);
         }
 
-        return [
-            "body" => [
-                "user" => $user,
-                "coffeePot" => $request->coffeePot ? $coffeePot : null
-            ],
-            "code" =>201
+        $this->data = [
+            "user" => $user,
+            "coffeePot" => $request->coffeePot ? $coffeePot : null
         ];
+
+        $this->code = 201;
+        
+        return $this->sendResponse();
     }
 
     public function update($request, $id)
@@ -85,12 +82,7 @@ class BaristaService
         $user = User::where("role_id", 2)->find($id);
 
         if(!$user){
-            return [
-                "body" => [
-                    "message" => "Такого баристы нет" 
-                ],
-                "code" => 422
-            ];
+            return $this->sendErrorResponse(['Сотрудник не найден']);
         }
 
         $user->update([
@@ -101,6 +93,10 @@ class BaristaService
 
         if($request->coffeePot != 0){
             $coffeePot = CoffeePot::find($request->coffeePot);
+
+            if(!$coffeePot){
+                return $this->sendErrorResponse(['Такой кофейни нет']);
+            }
 
             UserCoffeePot::updateOrCreate(
                 [
@@ -115,13 +111,12 @@ class BaristaService
             UserCoffeePot::where("user_id", $user->id)->delete();
         }
 
-        return [
-            "body" => [
-                "user" => $user,
-                "coffeePot" => $request->coffeePot ? $coffeePot : null
-            ],
-            "code" => 200
+        $this->data = [
+            "user" => $user,
+            "coffeePot" => $request->coffeePot ? $coffeePot : null
         ];
+        
+        return $this->sendResponse();
     }
 
     public function delete($id)
@@ -129,21 +124,15 @@ class BaristaService
         $user = User::where("role_id", 2)->find($id);
 
         if(!$user){
-            return [
-                "body" => [
-                    "message" => "Такого баристы нет" 
-                ],
-                "code" => 422
-            ];
+            return $this->sendErrorResponse(['Сотрудник не найден']);
         }
 
         UserCoffeePot::where("user_id", $user->id)->delete();
 
         $user->delete();
 
-        return [
-            "body" => [],
-            "code" => 204
-        ];
+        $this->code = 204;
+
+        return $this->sendResponse();
     }
 }

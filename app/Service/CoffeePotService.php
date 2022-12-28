@@ -6,26 +6,24 @@ use App\Models\CoffeePot;
 use App\Models\UserCoffeePot;
 use Illuminate\Support\Facades\Validator;
 
-class CoffeePotService
+class CoffeePotService extends BaseService
 {
     public function getAddressCoffeePots()
     {
         $coffeePots = CoffeePot::select('id', 'address')->get();
         
-        return [
-            "body" => $coffeePots,
-            "code" => 200
-        ];
+        $this->data = $coffeePots;
+        
+        return $this->sendResponse();
     }
 
     public function getCoffeePots()
     {
         $coffeePots = CoffeePot::get();
 
-        return [
-            "body" => $coffeePots,
-            "code" => 200
-        ];
+        $this->data = $coffeePots;
+        
+        return $this->sendResponse();
     }
 
     public function create($request)
@@ -36,10 +34,7 @@ class CoffeePotService
         ]);
 
         if($validator->fails()){
-            return [
-                "body" => $validator->errors(),
-                "code" => 422
-            ];
+            return $this->sendErrorResponse($validator->errors()->all());
         }
 
         $coffeePot = CoffeePot::create([
@@ -47,10 +42,11 @@ class CoffeePotService
             "address" => $request->address
         ]);
 
-        return [
-            "body" => $coffeePot,
-            "code" => 201
-        ];
+        $this->data = $coffeePot;
+
+        $this->code = 201;
+        
+        return $this->sendResponse();
     }
 
     public function update($id, $request)
@@ -61,21 +57,13 @@ class CoffeePotService
         ]);
         
         if($validator->fails()){
-            return [
-                "body" => $validator->errors(),
-                "code" => 422
-            ];
+            return $this->sendErrorResponse($validator->errors()->all());
         }
 
         $coffeePot = CoffeePot::find($id);
 
         if(!$coffeePot){
-            return [
-                "body" => [
-                    "message" => "Такой кофе точки нет в БД"
-                ],
-                "code" => 422
-            ];
+            return $this->sendErrorResponse(['Такой кофейни нет']);
         }
 
         $coffeePot->update([
@@ -83,10 +71,9 @@ class CoffeePotService
             "address" => $request->address
         ]);
 
-        return [
-            "body" => $coffeePot,
-            "code" => 200
-        ];
+        $this->data = $coffeePot;
+        
+        return $this->sendResponse();
     }
 
     public function delete($id)
@@ -94,21 +81,15 @@ class CoffeePotService
         $coffeePot = CoffeePot::find($id);
 
         if(!$coffeePot){
-            return [
-                "body" => [
-                    "message" => "Такой кофе точки нет в БД"
-                ],
-                "code" => 422
-            ];
+            return $this->sendErrorResponse(['Такой кофейни нет']);
         }
 
         UserCoffeePot::where("coffee_pot_id", $id)->delete();
 
         $coffeePot->delete();
 
-        return [
-            "body" => [],
-            "code" => 204
-        ];
+        $this->code = 204;
+        
+        return $this->sendResponse();
     }
 }

@@ -5,37 +5,38 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Service\BonusService;
 
-class BonusController extends Controller
+class BonusController extends BaseController
 {   
     public function __construct(protected BonusService $service)
     {
         
     }
+    
     public function getInfoBonuses()
     {
-        $data = $this->service->getInfoBonuses();
-
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->getInfoBonuses()
+        );
     }
 
     public function search(Request $request)
     {
-        $data = $this->service->search($request);
-
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->search($request)
+        );
     }
 
     public function create($id)
     {
-        $data = $this->service->create($id);
-
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->create($id)
+        );
     }
 
     public function wrote($id)
     {
-        $data = $this->service->wrote($id);
-
-        return response()->json($data['body'], $data['code']);
+        return $this->sendResponse(
+            $this->service->wrote($id)
+        );
     }
 }

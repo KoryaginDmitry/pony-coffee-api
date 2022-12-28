@@ -4,11 +4,11 @@ namespace App\Service;
 
 use App\Models\User;
 
-class StatisticService
+class StatisticService extends BaseService
 {
     public function barista()
     {
-        $users = User::where("role_id", "2")
+        $this->data = User::where("role_id", "2")
                 ->with(["bonusesCreate" => function($query){
                     $query->selectRaw("*, DATE_FORMAT(created_at, '%d-%m-%Y') AS date");
                 }, 
@@ -17,12 +17,12 @@ class StatisticService
                 }])
                 ->get();
         
-        return $users;
+        $this->sendResponse();
     }
 
     public function user()
     {
-        $users = User::where("role_id", "3")
+        $this->data = User::where("role_id", "3")
                 ->with(["bonuses" => function($query){
                     $query->selectRaw("
                         *, DATE_FORMAT(created_at, '%d-%m-%Y') AS date, 
@@ -34,6 +34,6 @@ class StatisticService
                 }])
                 ->get();
         
-        return $users;
+        return $this->sendResponse();
     }
 }

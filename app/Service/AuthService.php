@@ -7,34 +7,26 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class AuthService
+class AuthService extends BaseService
 {
     public function login($request)
     {   
         $validator = Validator::make($request->all(), [
-            "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "exists:users"],
+            "phone" => ["required", "regex:/((\+7)|8)[0-9]{10}/", "exists:users"],
             "password" => ["required", "string"]
         ]);
 
         $user = User::where('phone', $request->phone)->first();
 
         if($validator->fails() || !Hash::check($request->password, $user->password)){
-            return [
-                "body" => [
-                    "message" => "Проверьте введенные данные"
-                ],
-                "code" => 422
-            ];
+            return $this->sendErrorResponse(['Проверьте введенные данные']);
         }
 
         $token = $user->createToken('userToken');
 
-        return [
-            "body" => [
-                "token" => $token
-            ],
-            "code" => 200
-        ];
+        $this->data = $token;
+        
+        return $this->sendResponse();
     }
 
     public function register($request)
@@ -47,10 +39,7 @@ class AuthService
         ]);
 
         if($validator->fails()){
-            return [
-                "body" => $validator->errors()->all(),
-                "code" => 422
-            ];
+            return $this->sendErrorResponse($validator->errors()->all());
         }
 
         $user = User::create([
@@ -62,31 +51,26 @@ class AuthService
         ]);
 
         if(!$user){
-            return [
-                "body" => [
-                    "message" => "Ошибка регистрации"
-                ],
-                "code" => 500
-            ];
+            return $this->sendErrorResponse(['Ошибка регистрации'], 500);
         }
 
         $token = $user->createToken('userToken');
 
-        return [
-            "body" => [
-                "token" => $token
-            ],
-            "code" => 201
-        ];
+        $this->data = $token;
+
+        $this->code = 201;
+        
+        return $this->sendResponse();
     }
 
     public function logout()
     {
-        DB::table('oauth_access_tokens')->where('user_id', auth('api')->id())->delete();
+        DB::table('oauth_access_tokens')
+            ->where('user_id', auth()->id())
+            ->delete();
 
-        return [
-            "body" => [],
-            "code" => 204
-        ];
+        $this->code = 204;
+
+        return $this->sendResponse();
     }
 }

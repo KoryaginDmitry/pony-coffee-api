@@ -3,13 +3,16 @@
 namespace App\Service;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class ProfileService
+class ProfileService extends BaseService
 {
     public function user()
     {
-        return auth('api')->user();
+        $this->data = auth()->user();
+
+        $this->sendResponse();
     }
 
     public function update($request)
@@ -22,22 +25,14 @@ class ProfileService
         ]);
 
         if($validator->fails()){
-            return [
-                "body" => $validator->errors(),
-                "code" => 422
-            ];
+            return $this->sendErrorResponse($validator->erros->all());
         }   
 
-        $user = User::find(auth('api')->id());
+        $user = User::find(auth()->id());
         
         if($user->email != $request->email){
             if(User::where("email", $request->email)->exists()){
-                return [
-                    "body" => [
-                        "message" => "Такой email уже занят"
-                    ],
-                    "code" => 422
-                ];
+                return $this->sendErrorResponse(['Такой email уже занят']);
             }
 
             $user->email = $request->email;
@@ -46,12 +41,7 @@ class ProfileService
 
         if($user->phone != $request->phone){
             if(User::where("phone", $request->phone)->exists()){
-                return [
-                    "body" => [
-                        "message" => "Такой номер телефона уже занят"
-                    ],
-                    "code" => 422
-                ];
+                return $this->sendErrorResponse(['Такой номер телефона уже занят']);
             }
 
             $user->phone = $request->phone;
@@ -62,9 +52,33 @@ class ProfileService
         $user->last_name = $request->last_name ? $request->last_name : NULL;
         $user->save();
 
-        return [
-            "body" => $user,
-            "code" => 200
+        $this->data = [
+            'user' => $user
         ];
+        
+        $this->sendResponse();
+    }
+
+    public function newPassword($request)
+    {
+        $validator = Validator::make($request->all(), [
+            "password" => ["required", "between:8, 255" , "confirmed"],
+        ]);
+
+        if($validator->fails()){
+            return $this->sendErrorResponse($validator->errros()->all());
+        } 
+
+        $user = auth()->user();
+
+        $user->password = Hash::make($request->password);
+
+        $user->save;
+
+        $this->data = [
+            "message" => "Пароль изменен"
+        ];
+        
+        return $this->sendResponse();
     }
 }

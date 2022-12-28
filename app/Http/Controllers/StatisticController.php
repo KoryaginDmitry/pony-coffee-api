@@ -4,19 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Service\StatisticService;
 
-class StatisticController extends Controller
+class StatisticController extends BaseController
 {
     public function __construct(protected StatisticService $service)
     {
         
     }
+    
     public function barista()
     {
-        return response()->json($this->service->barista, 200);
+        return $this->sendResponse(
+            $this->service->barista()
+        );
     }
 
     public function user()
     {
-        return response()->json($this->service->user, 200);
+        return $this->sendResponse(
+            $this->service->user()
+        );
     }
 }

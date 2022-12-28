@@ -7,30 +7,30 @@ use App\Models\Feedback;
 use App\Models\Message;
 use Illuminate\Support\Facades\Validator;
 
-class FeedbackService
-{
+class FeedbackService extends BaseService
+{   
+    private function getAdminFeedback($coffeePot_id)
+    {
+        if($coffeePot_id != 0){
+            $coffeePot = CoffeePot::find($coffeePot_id);
+            
+            if(!$coffeePot){
+                return null;
+            }
+
+            return Feedback::where("coffee_pot_id", $coffeePot_id)
+                ->with('messages')
+                ->get();
+        }
+        else{
+            return Feedback::with("messages")->get();
+        }
+    }
+
     public function getFeedback($coffeePot_id)
     {
-        if(auth('api')->user()->role->name == 'admin'){
-            if($coffeePot_id != 0){
-                $coffeePot = CoffeePot::find($coffeePot_id);
-                
-                if(!$coffeePot){
-                    return [
-                        "body" => [
-                            "message" => "Такой кофе точки нет"
-                        ],
-                        "code" => 422
-                    ];
-                }
-
-                $feedbacks = Feedback::where("coffee_pot_id", $coffeePot_id)
-                    ->with('messages')
-                    ->get();
-            }
-            else{
-                $feedbacks = Feedback::with("messages")->get();
-            }
+        if(auth()->user()->role->name == 'admin'){
+            $feedbacks = $this->getAdminFeedback($coffeePot_id);
         }
         else{
             $feedbacks = Feedback::where('user_id', auth('api')->id())
@@ -38,10 +38,9 @@ class FeedbackService
                 ->get();
         }
 
-        return [
-            "body" => $feedbacks,
-            "code" => 200
-        ];
+        $this->data = $feedbacks;
+
+        return $this->sendResponse();
     }
 
     public function create($request)
@@ -53,31 +52,29 @@ class FeedbackService
         ]);
         
         if($validator->fails()){
-            return [
-                "body" => $validator->errros(),
-                "code" => 422
-            ];
+            return $this->sendErrorResponse($validator->errors()->all());
         }
         
         $feedback = Feedback::create([
             "grade" => $request->grade,
-            "user_id" => auth('api')->id(),
+            "user_id" => auth()->id(),
             "coffee_pot_id" => $request->coffeePot
         ]);
 
         $message = Message::create([
             "text" => $request->text,
-            "user_id" => auth('api')->id(),
+            "user_id" => auth()->id(),
             "feedback_id" => $feedback->id
         ]);
 
-        return [
-            "body" => [
-                "feedback" => $feedback,
-                "message" => $message
-            ],
-            "code" => 201
+        $this->data = [
+            "feedback" => $feedback,
+            "message" => $message
         ];
+
+        $this->code = 201;
+        
+        return $this->sendResponse();
     }
 
     public function createMessage($id, $request)
@@ -87,26 +84,18 @@ class FeedbackService
         ]);
 
         if($validator->fails()){
-            return [
-                "body" => $validator->errros(),
-                "code" => 422
-            ];
+            return $this->sendErrorResponse($validator->errors()->all());
         }
 
-        if(auth('api')->user()->role->name == 'admin'){
+        if(auth()->user()->role->name == 'admin'){
             $feedback = Feedback::find($id);
         }       
         else{
-            $feedback = Feedback::where("user_id", auth('api')->id())->find($id);
+            $feedback = Feedback::where("user_id", auth()->id())->find($id);
         } 
 
         if(!$feedback){
-            return [
-                "body" => [
-                    "message" =>  "Проверьте данные, которые вы передаете"
-                ],
-                "code" => 422
-            ];
+            return $this->sendErrorResponse(['Проверьтеданные, которые вы передаете']);
         }
 
         $message = Message::create([
@@ -115,11 +104,8 @@ class FeedbackService
             "feedback_id" => $feedback->id
         ]);
 
-        return [
-            "body" => [
-                "message" => $message
-            ],
-            "code" => 200
-        ];
+        $this->data = $message;
+        
+        return $this->sendResponse();
     }
 }
