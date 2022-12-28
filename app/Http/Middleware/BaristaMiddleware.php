@@ -15,14 +15,8 @@ class BaristaMiddleware
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
-    {
-        if(!auth('api')->check()){
-            return response()->json([
-                "message" => "Недостаточно прав"
-            ], 403);
-        }
-
-        if (auth('api')->user()->role->name != 'barista') {
+    {   
+        if(auth()->user()?->role->name !== 'barista'){
             return response()->json([
                 "message" => "Недостаточно прав"
             ], 403);

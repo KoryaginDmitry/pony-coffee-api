@@ -15,14 +15,8 @@ class AdminMiddleware
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
-    {
-        if(!auth('api')->check()){
-            return response()->json([
-                "message" => "Недостаточно прав"
-            ], 403);
-        }
-
-        if (auth('api')->user()->role->name != 'admin') {
+    {   
+        if(auth()->user()?->role->name !== 'admin'){
             return response()->json([
                 "message" => "Недостаточно прав"
             ], 403);

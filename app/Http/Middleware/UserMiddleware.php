@@ -16,13 +16,7 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next)
     {   
-        if(!auth('api')->check()){
-            return response()->json([
-                "message" => "Недостаточно прав"
-            ], 403);
-        }
-
-        if (auth('api')->user()->role->name != 'user') {
+        if(auth()->user()?->role->name !== 'user'){
             return response()->json([
                 "message" => "Недостаточно прав"
             ], 403);
