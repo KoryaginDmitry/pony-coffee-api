@@ -8,7 +8,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AuthService extends BaseService
-{
+{   
+    /**
+     * Authorization method
+     * 
+     * @param Request $request
+     */
     public function login($request)
     {   
         $validator = Validator::make($request->all(), [
@@ -29,6 +34,11 @@ class AuthService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Registration method
+     * 
+     * @param Request $request
+     */
     public function register($request)
     {
         $validator = Validator::make($request->all(),[
@@ -63,6 +73,9 @@ class AuthService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Logout method
+     */ 
     public function logout()
     {
         DB::table('oauth_access_tokens')

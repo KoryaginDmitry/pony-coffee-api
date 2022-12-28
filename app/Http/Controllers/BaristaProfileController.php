@@ -15,7 +15,7 @@ class BaristaProfileController extends BaseController
     public function get()
     {   
         return $this->sendResponse(
-            $this->service->get()
+            $this->service->getBaristas()
         );
     }
 

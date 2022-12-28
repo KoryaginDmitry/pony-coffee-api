@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class BaristaService extends BaseService
 {
-    public function get()
+    /**
+     * return all baristas and coffee cups
+     */
+    public function getBaristas()
     {
         $users = User::where("role_id", "2")
             ->orderBy('created_at', "DESC")
@@ -29,6 +32,12 @@ class BaristaService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * create profile barista
+     * 
+     * @param Request $request
+     * 
+     */
     public function create($request)
     {
         $validator = Validator::make($request->all(), [
@@ -71,7 +80,13 @@ class BaristaService extends BaseService
         return $this->sendResponse();
     }
 
-    public function update($request, $id)
+    /**
+     * update profile barista
+     * 
+     * @param Request $request
+     * @param int $id
+     */
+    public function update($request, int $id)
     {
         $request->validate([
             "name" => ["required", "string"],
@@ -119,7 +134,12 @@ class BaristaService extends BaseService
         return $this->sendResponse();
     }
 
-    public function delete($id)
+    /**
+     * delete profile barista
+     * 
+     * @param int $id
+     */
+    public function delete(int $id)
     {
         $user = User::where("role_id", 2)->find($id);
 
