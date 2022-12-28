@@ -14,7 +14,7 @@ class ProfileController extends BaseController
     }
 
     public function getUser()
-    {
+    {   
         return $this->sendResponse(
             $this->service->user()
         );

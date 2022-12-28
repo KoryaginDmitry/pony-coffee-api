@@ -11,7 +11,7 @@ class NotificationService extends BaseService
     {
         $user_id = auth()->id();
 
-        $this->data = Notification::where("site", "1")
+        $this->data['notifications'] = Notification::where("site", "1")
                 ->where("users_read_id", NULL)
                 ->orWhere("users_read_id", "NOT LIKE", "%[$user_id]%")
                 ->orderBy("created_at", "DESC")
@@ -45,7 +45,7 @@ class NotificationService extends BaseService
     {
         $user_id = auth()->id();
         
-        $this->data = Notification::where("site", "1")
+        $this->data['count'] = Notification::where("site", "1")
                 ->where("users_read_id", NULL)
                 ->orWhere("users_read_id", "NOT LIKE", "%[$user_id]%")
                 ->count();
@@ -55,7 +55,9 @@ class NotificationService extends BaseService
 
     public function getNotificationForAdmin()
     {
-        $this->data = Notification::get();
+        $this->data = [
+            "notifications" => Notification::get()
+        ];
 
         return $this->sendResponse();
     }
@@ -86,7 +88,9 @@ class NotificationService extends BaseService
             "text" => $request->text
         ]);
 
-        $this->data = $notification;
+        $this->data = [
+            'notification' => $notification
+        ];
 
         return $this->sendResponse();
     }

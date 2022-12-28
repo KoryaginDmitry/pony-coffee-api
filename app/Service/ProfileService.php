@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Validator;
 class ProfileService extends BaseService
 {
     public function user()
-    {
-        $this->data = auth()->user();
-
-        $this->sendResponse();
+    {   
+        $this->data = [
+            'user' => auth()->user()
+        ];
+    
+        return $this->sendResponse();
     }
 
     public function update($request)

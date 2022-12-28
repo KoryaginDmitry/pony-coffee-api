@@ -37,14 +37,15 @@ Route::middleware('user')->group(function(){
     Route::controller(ProfileController::class)->group(function(){
         Route::get("/profile", 'getUser'); //Возвращает данные профиля
         Route::put("/profile", 'update'); //Редактирование профиля
+        Route::put("/profile/passport", 'newPassword'); //Обновление пароля
     });
 
     Route::controller(BonusController::class)->group(function(){
-        Route::get('/user/bonuses', 'getInfoBonuses'); //Возврашает кол-во активных пользователей и сгорание бонусов
+        Route::get('/user/bonuses', 'getInfoBonuses'); //Возврашает кол-во активных бонусов и сгорание бонусов
     });
 
     Route::controller(NotificationController::class)->group(function(){
-        Route::get("/notification", 'getUserNotification'); //Возвращает уведомления для пользователя
+        Route::get("/notification", 'getUserNotifications'); //Возвращает уведомления для пользователя
         Route::put("/notification/{id}", "read"); //Убирает сообщение для пользователя(делает его прочитанным)
         Route::get("notification/count", "getCount"); //Возвращает кол-во уведомлений
     });

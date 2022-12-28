@@ -38,7 +38,9 @@ class FeedbackService extends BaseService
                 ->get();
         }
 
-        $this->data = $feedbacks;
+        $this->data = [
+            'feedbacks' => $feedbacks
+        ];
 
         return $this->sendResponse();
     }
@@ -95,7 +97,7 @@ class FeedbackService extends BaseService
         } 
 
         if(!$feedback){
-            return $this->sendErrorResponse(['Проверьтеданные, которые вы передаете']);
+            return $this->sendErrorResponse(['Проверьте данные, которые вы передаете']);
         }
 
         $message = Message::create([
@@ -104,7 +106,9 @@ class FeedbackService extends BaseService
             "feedback_id" => $feedback->id
         ]);
 
-        $this->data = $message;
+        $this->data = [
+            'message' => $message
+        ];
         
         return $this->sendResponse();
     }

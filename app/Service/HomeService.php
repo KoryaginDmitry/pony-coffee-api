@@ -41,7 +41,9 @@ class HomeService extends BaseService
             $role = 'guest';
         }
 
-        $this->data = $this->headers[$role];
+        $this->data = [
+            'header' => $this->headers[$role]
+        ];
 
         return $this->sendResponse();
     }

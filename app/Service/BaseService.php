@@ -19,7 +19,7 @@ class BaseService
         $errors = $this->getLastErrors();
 
         $this->errros = [];
-
+        
         return [
             "status" => $this->status,
             "data" => $this->data,

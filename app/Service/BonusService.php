@@ -63,7 +63,9 @@ class BonusService extends BaseService
                 ->get();
         }
 
-        $this->data = $user;
+        $this->data = [
+            "user" => $user
+        ];
 
         return $this->sendResponse();
     }

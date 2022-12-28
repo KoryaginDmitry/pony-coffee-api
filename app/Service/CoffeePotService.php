@@ -12,7 +12,9 @@ class CoffeePotService extends BaseService
     {
         $coffeePots = CoffeePot::select('id', 'address')->get();
         
-        $this->data = $coffeePots;
+        $this->data = [
+            "coffeePots" => $coffeePots
+        ];
         
         return $this->sendResponse();
     }
@@ -21,7 +23,9 @@ class CoffeePotService extends BaseService
     {
         $coffeePots = CoffeePot::get();
 
-        $this->data = $coffeePots;
+        $this->data = [
+            "coffeePots" => $coffeePots
+        ];
         
         return $this->sendResponse();
     }
@@ -42,7 +46,9 @@ class CoffeePotService extends BaseService
             "address" => $request->address
         ]);
 
-        $this->data = $coffeePot;
+        $this->data = [
+            'coffeePot' => $coffeePot
+        ];
 
         $this->code = 201;
         
@@ -71,7 +77,9 @@ class CoffeePotService extends BaseService
             "address" => $request->address
         ]);
 
-        $this->data = $coffeePot;
+        $this->data = [
+            'coffeePot' => $coffeePot
+        ];
         
         return $this->sendResponse();
     }
