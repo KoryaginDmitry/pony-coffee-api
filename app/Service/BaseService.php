@@ -31,9 +31,9 @@ class BaseService
     /**
      * Method return array errors
      *
-     * @return array
+     * @return array|null
      */
-    protected function getLastErrors() :array
+    protected function getLastErrors()
     {
         return count($this->errors) > 0 ? $this->errors : null;   
     }

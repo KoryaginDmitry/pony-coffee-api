@@ -105,7 +105,7 @@ Route::group(
 
 Route::group(
     [
-        'middleware' => 'admin'
+    'middleware' => 'admin'
     ],
     function () {
         Route::group(
