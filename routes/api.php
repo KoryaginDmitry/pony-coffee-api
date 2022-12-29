@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
 
 Route::get("/header", [HomeController::class, 'get']);
+//Возвращает адреса кофеточек и их id
+Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
 
 Route::group(
     [
@@ -86,9 +88,6 @@ Route::group(
                 Route::post('feedback/{id}', 'createMessage'); 
             }
         );
-
-        //Возвращает адреса кофеточек и их id
-        Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
     }
 );
 
@@ -120,9 +119,6 @@ Route::group(
                 Route::get('statistic/users', 'user');
             }
         );
-    
-        //Возвращает адреса кофеточек и их id
-        Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
 
         Route::group(
             [
