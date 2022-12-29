@@ -11,6 +11,7 @@ class NotificationController extends BaseController
     {
         
     }
+    
     public function getUserNotifications()
     {   
         return $this->sendResponse(

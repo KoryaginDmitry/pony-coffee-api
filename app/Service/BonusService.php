@@ -7,23 +7,39 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Request;
 
-class BonusService extends BaseService
-{
+/**
+ * App\service
+ * 
+ * @method array getInfoBonuses()
+ * @method array search()
+ * @method array create()
+ * @method array wrote()
+ */
+class BonusService extends BaseService 
+{   
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function getInfoBonuses()
     {
         $user = User::find(auth()->id());
 
         $countActiveBonuses = $user->bonuses()->where("usage", "0")
-        ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
-        ->get()
-        ->count();
+            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
+            ->get()
+            ->count();
 
         $bonusBurnDate = Bonus::select("created_at")
-            ->where([
-                "user_id" => auth()->id(),
-                "usage" => "0"
-            ])->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
+            ->where(
+                [
+                    "user_id" => auth()->id(),
+                    "usage" => "0"
+                ]
+            )->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
             ->orderBy("created_at", "DESC")
             ->first();
 
@@ -35,31 +51,43 @@ class BonusService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return void
+     */
     public function search($request)
     {
-        if(!empty($request->value)){
-            $validator = Validator::make($request->all(), [
+        if (!empty($request->value)) {
+            $validator = Validator::make(
+                $request->all(), [
                 "value" => ["required", "string", "min:1", "max:12"]
-            ]);
+                ]
+            );
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return $this->sendErrorResponse($validator->errors()->all());
             }
 
             $user = User::where("role_id", "3")
                 ->where("id", $request->value)
                 ->orWhere("phone", $request->value)
-                ->with(['bonuses' => function($query){
-                    $query->where("usage", "0")
-                        ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30");
-                }])
+                ->with(
+                    ['bonuses' => function ($query) {
+                        $query->where("usage", "0")
+                            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30");
+                    }]
+                )
                 ->get();
-        }
-        else{
-            $user = User::where("role_id", 3)->with(['bonuses' => function($query){
-                    $query->where("usage", "0")
-                        ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30");
-                }])
+        } else {
+            $user = User::where("role_id", 3)
+                ->with(
+                    ['bonuses' => function ($query) {
+                        $query->where("usage", "0")
+                            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30");
+                    }]
+                )
                 ->get();
         }
 
@@ -70,17 +98,25 @@ class BonusService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param int $id
+     * @return void
+     */
     public function create($id)
     {
         $user = User::where("role_id", 3)->find($id);
 
-        if(!$user){
+        if (!$user) {
             return $this->sendErrorResponse(['Такого пользователя нет']);
         }
 
-        $user->bonuses()->create([
+        $user->bonuses()->create(
+            [
             "user_id_create" => auth()->id()
-        ]);
+            ]
+        );
 
         $this->data = [
             "count" => $user->countActiveBonuses(),
@@ -92,21 +128,27 @@ class BonusService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param int $id
+     * @return void
+     */
     public function wrote($id)
     {
         $user = User::where("role_id", 3)->find($id);
 
-        if(!$user){
+        if (!$user) {
             return $this->sendErrorResponse(['Такого пользователя нет']);
         }
         
         $bonuses = $user->bonuses()
-                ->where("usage", "0")
-                ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
-                ->orderBy("created_at", "DESC")
-                ->limit(3);
+            ->where("usage", "0")
+            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
+            ->orderBy("created_at", "DESC")
+            ->limit(3);
         
-        if($bonuses->get()->count() == 3){
+        if ($bonuses->get()->count() == 3) {
             $bonuses->update(
                 [
                     'usage' => '1',

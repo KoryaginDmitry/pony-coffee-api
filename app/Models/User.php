@@ -4,6 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -100,7 +103,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function countActiveBonuses()
+    public function countActiveBonuses() : int
     {  
         return $this->bonuses()
                 ->where("usage", "0")
@@ -109,27 +112,27 @@ class User extends Authenticatable
                 ->count();
     }
 
-    public function role()
+    public function role() : BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
-    public function bonuses()
+    public function bonuses() : HasMany
     {
         return $this->hasMany(Bonus::class);
     }
 
-    public function bonusesCreate()
+    public function bonusesCreate() : HasMany
     {
         return $this->hasMany(Bonus::class, "user_id_create", "id");
     }
 
-    public function bonusesWrote()
+    public function bonusesWrote() : HasMany
     {
         return $this->hasMany(Bonus::class, "user_id_wrote", "id");
     }
 
-    public function userCoffeePot()
+    public function userCoffeePot() : HasOne
     {
         return $this->hasOne(UserCoffeePot::class);
     }

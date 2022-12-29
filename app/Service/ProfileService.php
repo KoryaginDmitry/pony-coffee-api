@@ -6,8 +6,16 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * Undocumented class
+ */
 class ProfileService extends BaseService
-{
+{   
+    /**
+     * Undocumented function
+     *
+     * @return User
+     */
     public function user()
     {   
         $this->data = [
@@ -17,37 +25,46 @@ class ProfileService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $request
+     * @return void
+     */
     public function update($request)
     {
-        $validator = Validator::make($request->all(), [
-            "name" => ["required", "string", "min:3"],
-            "last_name" => ["nullable", "string"],
-            "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
-            "email" => ["nullable", "email"]
-        ]);
+        $validator = Validator::make(
+            $request->all(), 
+            [
+                "name" => ["required", "string", "min:3"],
+                "last_name" => ["nullable", "string"],
+                "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
+                "email" => ["nullable", "email"]
+            ]
+        );
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendErrorResponse($validator->erros->all());
         }   
 
         $user = User::find(auth()->id());
         
-        if($user->email != $request->email){
-            if(User::where("email", $request->email)->exists()){
+        if ($user->email != $request->email) {
+            if (User::where("email", $request->email)->exists()) {
                 return $this->sendErrorResponse(['Такой email уже занят']);
             }
 
             $user->email = $request->email;
-            $user->email_verified_at = NULL;
+            $user->email_verified_at = null;
         }
 
-        if($user->phone != $request->phone){
-            if(User::where("phone", $request->phone)->exists()){
+        if ($user->phone != $request->phone) {
+            if (User::where("phone", $request->phone)->exists()) {
                 return $this->sendErrorResponse(['Такой номер телефона уже занят']);
             }
 
             $user->phone = $request->phone;
-            $user->phone_verified_at = NULL;
+            $user->phone_verified_at = null;
         }
 
         $user->name = $request->name;
@@ -61,13 +78,23 @@ class ProfileService extends BaseService
         $this->sendResponse();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * 
+     * @return void
+     */
     public function newPassword($request)
     {
-        $validator = Validator::make($request->all(), [
-            "password" => ["required", "between:8, 255" , "confirmed"],
-        ]);
+        $validator = Validator::make(
+            $request->all(), 
+            [
+                "password" => ["required", "between:8, 255" , "confirmed"],
+            ]
+        );
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendErrorResponse($validator->errros()->all());
         } 
 

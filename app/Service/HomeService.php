@@ -2,9 +2,12 @@
 
 namespace App\Service;
 
+/**
+ * Undocumented class
+ */
 class HomeService extends BaseService
 {   
-    private array $headers = [
+    private array $_headers = [
         "user" => [
             ['href' => '/', 'text' => 'Главная страница'],
             ['href' => '/profile', 'text' => 'Профиль'],
@@ -33,9 +36,14 @@ class HomeService extends BaseService
         ]
     ];
 
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function get()
     {
-        if(auth()->check()){
+        if (auth()->check()) {
             $role = auth()->user()->role->name;
         } else {
             $role = 'guest';

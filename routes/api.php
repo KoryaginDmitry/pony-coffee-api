@@ -9,9 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatisticController;
-use App\Models\CoffeePot;
 use Illuminate\Support\Facades\Route;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -26,74 +24,157 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
+
 Route::get("/header", [HomeController::class, 'get']);
 
-Route::middleware('guest')->controller(AuthController::class)->group(function(){
-    Route::post('/login', 'login'); //Авторизация пользоватея
-    Route::post('/register', 'register'); //Регистрация
-});
+Route::group(
+    [
+        'controller' => AuthController::class,
+        'middleware' => ['guest']
+    ], 
+    function () {
+        Route::post('/login', 'login'); //Авторизация пользоватея
+        Route::post('/register', 'register'); //Регистрация
+    }
+);
 
-Route::middleware('user')->group(function(){
-    Route::controller(ProfileController::class)->group(function(){
-        Route::get("/profile", 'getUser'); //Возвращает данные профиля
-        Route::put("/profile", 'update'); //Редактирование профиля
-        Route::put("/profile/passport", 'newPassword'); //Обновление пароля
-    });
+Route::group(
+    [
+        'middleware' => 'user'
+    ],
+    function () {
+        Route::group(
+            [
+                'controller' => ProfileController::class
+            ],
+            function () {
+                Route::get("/profile", 'getUser'); //Возвращает данные профиля
+                Route::put("/profile", 'update'); //Редактирование профиля
+                Route::put("/profile/passport", 'newPassword'); //Обновление пароля
+            }
+        );
 
-    Route::controller(BonusController::class)->group(function(){
-        Route::get('/user/bonuses', 'getInfoBonuses'); //Возврашает кол-во активных бонусов и сгорание бонусов
-    });
+        Route::get('/user/bonuses', [BonusController::class, 'getInfoBonuses']);
 
-    Route::controller(NotificationController::class)->group(function(){
-        Route::get("/notification", 'getUserNotifications'); //Возвращает уведомления для пользователя
-        Route::put("/notification/{id}", "read"); //Убирает сообщение для пользователя(делает его прочитанным)
-        Route::get("notification/count", "getCount"); //Возвращает кол-во уведомлений
-    });
+        Route::group(
+            [
+                'controller' => NotificationController::class
+            ], 
+            function () {
+                //Возвращает уведомления для пользователя
+                Route::get("/notification", 'getUserNotifications');
+                //Убирает сообщение для пользователя(делает его прочитанным)
+                Route::put("/notification/{id}", "read");
+                //Возвращает кол-во уведомлений
+                Route::get("notification/count", "getCount");
+            }
+        );
 
-    Route::controller(FeedbackController::class)->group(function(){
-        Route::get("feedback", 'getFeedback'); //Возвращает все все обращения пользователя в обратную связь, если делать запрос с профился админа, то просто вернет все обращаения и сообщеня
-        Route::post('feedback', 'create'); //Создание обращения в обратную связь
-        Route::post('feedback/{id}', 'createMessage'); //Создание сообщения для определенного обращение, id обращения передается в адресной строке
-    });
-});
+        Route::group(
+            [
+                'controller' => FeedbackController::class
+            ], 
+            function () {
+                //Возвращает все все обращения пользователя в обратную связь,
+                // если делать запрос с профился админа, то просто вернет все 
+                // обращаения и сообщеня
+                Route::get("feedback", 'getFeedback');
+                //Создание обращения в обратную связь
+                Route::post('feedback', 'create');
+                //Создание сообщения для определенного обращение, id обращения 
+                // передается в адресной строке
+                Route::post('feedback/{id}', 'createMessage'); 
+            }
+        );
+    }
+);
 
-Route::controller(BonusController::class)->group(function(){
-    Route::get('search', 'search'); //Поиск гостя по id или номеру телефона
-    Route::post('bonus/{id}', 'create'); //Создание бонуса для гостя
-    Route::put('bonus/{id}', 'wrote'); //Списание бонусов у гостя
-})->middleware('barista');
+Route::group(
+    [
+        'controller' => BonusController::class,
+        'middleware' => 'barista'
+    ], 
+    function () {
+        Route::get('search', 'search'); //Поиск гостя по id или номеру телефона
+        Route::post('bonus/{id}', 'create'); //Создание бонуса для гостя
+        Route::put('bonus/{id}', 'wrote'); //Списание бонусов у гостя
+    }
+);
 
-Route::middleware('admin')->group(function(){
-    Route::controller(StatisticController::class)->group(function(){
-        Route::get('/statistic', 'barista'); //Статистика барист
-        Route::get('statistic/users', 'user'); //статистика гостей
-    });
+Route::group(
+    [
+        'middleware' => 'admin'
+    ],
+    function () {
+        Route::group(
+            [
+                'controller' => StatisticController::class
+            ],
+            function () {
+                //Статистика барист
+                Route::get('/statistic', 'barista');
+                //статистика гостей
+                Route::get('statistic/users', 'user');
+            }
+        );
     
-    Route::controller(CoffeePotController::class)->group(function(){
-        Route::get('/coffeePot/address', 'getAddressCoffeePots'); //Возвращает адреса кофеточек и их id
-    });
+        //Возвращает адреса кофеточек и их id
+        Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
 
-    Route::controller(FeedbackController::class)->group(function(){
-        Route::get('admin/feedback/{id?}', 'getFeedback'); //Возвращает все feedback
-        Route::post('admin/feedback/{id}', 'createMessage'); //создает сообщения для обратной связи
-    });
+        Route::group(
+            [
+                'controller' => FeedbackController::class
+            ],
+            function () {
+                //Возвращает все feedback
+                Route::get('admin/feedback/{id?}', 'getFeedback');
+                //создает сообщения для обратной связи
+                Route::post('admin/feedback/{id}', 'createMessage');
+            }
+        );
 
-    Route::controller(NotificationController::class)->group(function(){
-        Route::get('admin/notification', 'getNotificationForAdmin'); //Возвращает все уведомления
-        Route::post('admin/notification', 'createNotification'); //Создает уведомление
-    });
+        Route::group(
+            [
+                'controller' => NotificationController::class
+            ],
+            function () {
+                //Возвращает все уведомления
+                Route::get('admin/notification', 'getNotificationForAdmin');
+                //Создает уведомление
+                Route::post('admin/notification', 'createNotification');
+            }
+        );
 
-    Route::controller(CoffeePotController::class)->group(function(){
-        Route::get('admin/coffeePot', 'getCoffeePots'); //Возвращает все кофеточки
-        Route::post('admin/coffeePot', 'create'); //Содает кофеточку
-        Route::put('admin/coffeePot/{id}', 'update'); //обновляет кофеточку
-        Route::delete('admin/coffeePot/{id}', 'delete'); //удаляет кофеточку
-    });
+        Route::group(
+            [
+                'controller' => CoffeePotController::class
+            ],
+            function () {
+                //Возвращает все кофеточки
+                Route::get('admin/coffeePot', 'getCoffeePots');
+                //Содает кофеточку
+                Route::post('admin/coffeePot', 'create');
+                //обновляет кофеточку
+                Route::put('admin/coffeePot/{id}', 'update');
+                //удаляет кофеточку
+                Route::delete('admin/coffeePot/{id}', 'delete');
+            }
+        );
 
-    Route::controller(BaristaProfileController::class)->group(function(){
-        Route::get('barista', 'get'); //возвращает всех барист
-        Route::post('barista', 'create'); //создает баристу
-        Route::put('barista/{id}', 'update'); //редактирование баристы
-        Route::delete('barista/{id}', 'delete'); //удаление баристы
-    });
-});
+        Route::group(
+            [
+                'controller' => BaristaProfileController::class
+            ],
+            function () {
+                //возвращает всех барист
+                Route::get('barista', 'get');
+                //создает баристу
+                Route::post('barista', 'create');
+                //редактирование баристы
+                Route::put('barista/{id}', 'update');
+                //удаление баристы
+                Route::delete('barista/{id}', 'delete');
+            }
+        );
+    }
+);
