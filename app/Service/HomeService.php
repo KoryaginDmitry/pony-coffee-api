@@ -50,7 +50,7 @@ class HomeService extends BaseService
         }
 
         $this->data = [
-            'header' => $this->headers[$role]
+            'header' => $this->_headers[$role]
         ];
 
         return $this->sendResponse();

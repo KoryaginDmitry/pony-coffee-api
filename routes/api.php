@@ -50,7 +50,7 @@ Route::group(
             function () {
                 Route::get("/profile", 'getUser'); //Возвращает данные профиля
                 Route::put("/profile", 'update'); //Редактирование профиля
-                Route::put("/profile/passport", 'newPassword'); //Обновление пароля
+                Route::put("/profile/password", 'newPassword'); //Обновление пароля
             }
         );
 
@@ -75,17 +75,20 @@ Route::group(
                 'controller' => FeedbackController::class
             ], 
             function () {
-                //Возвращает все все обращения пользователя в обратную связь,
+                // Возвращает все все обращения пользователя в обратную связь,
                 // если делать запрос с профился админа, то просто вернет все 
                 // обращаения и сообщеня
                 Route::get("feedback", 'getFeedback');
-                //Создание обращения в обратную связь
+                // Создание обращения в обратную связь
                 Route::post('feedback', 'create');
-                //Создание сообщения для определенного обращение, id обращения 
+                // Создание сообщения для определенного обращение, id обращения 
                 // передается в адресной строке
                 Route::post('feedback/{id}', 'createMessage'); 
             }
         );
+
+        //Возвращает адреса кофеточек и их id
+        Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
     }
 );
 

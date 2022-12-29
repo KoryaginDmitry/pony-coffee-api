@@ -32,14 +32,16 @@ class ProfileService extends BaseService
      * @return void
      */
     public function update($request)
-    {
+    {   
+        $id = auth()->id();
+
         $validator = Validator::make(
             $request->all(), 
             [
                 "name" => ["required", "string", "min:3"],
                 "last_name" => ["nullable", "string"],
-                "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
-                "email" => ["nullable", "email"]
+                "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "unique:users,phone," . $id],
+                "email" => ["nullable", "email", "unique:users,email," . $id]
             ]
         );
 
@@ -47,28 +49,20 @@ class ProfileService extends BaseService
             return $this->sendErrorResponse($validator->erros->all());
         }   
 
-        $user = User::find(auth()->id());
+        $user = User::find($id);
         
         if ($user->email != $request->email) {
-            if (User::where("email", $request->email)->exists()) {
-                return $this->sendErrorResponse(['Такой email уже занят']);
-            }
-
             $user->email = $request->email;
             $user->email_verified_at = null;
         }
 
         if ($user->phone != $request->phone) {
-            if (User::where("phone", $request->phone)->exists()) {
-                return $this->sendErrorResponse(['Такой номер телефона уже занят']);
-            }
-
             $user->phone = $request->phone;
             $user->phone_verified_at = null;
         }
 
         $user->name = $request->name;
-        $user->last_name = $request->last_name ? $request->last_name : NULL;
+        $user->last_name = $request->last_name ?: null;
         $user->save();
 
         $this->data = [

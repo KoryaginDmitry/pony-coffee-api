@@ -16,14 +16,17 @@ class AuthService extends BaseService
      */
     public function login($request)
     {   
-        $validator = Validator::make($request->all(), [
-            "phone" => ["required", "regex:/((\+7)|8)[0-9]{10}/", "exists:users"],
-            "password" => ["required", "string"]
-        ]);
+        $validator = Validator::make(
+            $request->all(), 
+            [
+                "phone" => ["required", "regex:/((\+7)|8)[0-9]{10}/", "exists:users"],
+                "password" => ["required", "string"]
+            ]
+        );
 
         $user = User::where('phone', $request->phone)->first();
 
-        if($validator->fails() || !Hash::check($request->password, $user->password)){
+        if ($validator->fails() || !Hash::check($request->password, $user->password)) {
             return $this->sendErrorResponse(['Проверьте введенные данные']);
         }
 
@@ -41,26 +44,31 @@ class AuthService extends BaseService
      */
     public function register($request)
     {
-        $validator = Validator::make($request->all(),[
-            "name" => ["required", "string", "max:255"],
-            "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "unique:users"],
-            "password" => ["required", "between:8, 255" , "confirmed"],
-            "agreement" => ["required", "accepted"]
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "name" => ["required", "string", "max:255"],
+                "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "unique:users"],
+                "password" => ["required", "between:8, 255" , "confirmed"],
+                "agreement" => ["required", "accepted"]
+            ]
+        );
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendErrorResponse($validator->errors()->all());
         }
 
-        $user = User::create([
-            "name" => $request->name,
-            "phone" => $request->phone,
-            "password" => Hash::make($request->password),
-            "agreement" => $request->agreement ? "1" : "0", 
-            "role_id" => 3
-        ]);
+        $user = User::create(
+            [
+                "name" => $request->name,
+                "phone" => $request->phone,
+                "password" => Hash::make($request->password),
+                "agreement" => $request->agreement ? "1" : "0", 
+                "role_id" => 3
+            ]
+        );
 
-        if(!$user){
+        if (!$user) {
             return $this->sendErrorResponse(['Ошибка регистрации'], 500);
         }
 

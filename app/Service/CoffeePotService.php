@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Validator;
 
 class CoffeePotService extends BaseService
 {
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function getAddressCoffeePots()
     {
         $coffeePots = CoffeePot::select('id', 'address')->get();
@@ -19,6 +24,11 @@ class CoffeePotService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function getCoffeePots()
     {
         $coffeePots = CoffeePot::get();
@@ -30,21 +40,33 @@ class CoffeePotService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param Request $request comment no comment
+     * 
+     * @return void
+     */
     public function create($request)
     {
-        $validator = Validator::make($request->all(),[
-            "name" => ["nullable", "string"],
-            "address" => ["required", "string"]
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "name" => ["nullable", "string"],
+                "address" => ["required", "string"]
+            ]
+        );
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendErrorResponse($validator->errors()->all());
         }
 
-        $coffeePot = CoffeePot::create([
-            "name" => $request->name,
-            "address" => $request->address
-        ]);
+        $coffeePot = CoffeePot::create(
+            [
+                "name" => $request->name,
+                "address" => $request->address
+            ]
+        );
 
         $this->data = [
             'coffeePot' => $coffeePot
@@ -55,27 +77,39 @@ class CoffeePotService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $id
+     * @param [type] $request
+     * @return void
+     */
     public function update($id, $request)
     {   
-        $validator = Validator::make($request->all(),[
-            "name" => ["nullable", "string"],
-            "address" => ["required", "string"]
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "name" => ["nullable", "string"],
+                "address" => ["required", "string"]
+            ]
+        );
         
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendErrorResponse($validator->errors()->all());
         }
 
         $coffeePot = CoffeePot::find($id);
 
-        if(!$coffeePot){
+        if (!$coffeePot) {
             return $this->sendErrorResponse(['Такой кофейни нет']);
         }
 
-        $coffeePot->update([
-            "name" => $request->name,
-            "address" => $request->address
-        ]);
+        $coffeePot->update(
+            [
+                "name" => $request->name,
+                "address" => $request->address
+            ]
+        );
 
         $this->data = [
             'coffeePot' => $coffeePot
@@ -84,11 +118,17 @@ class CoffeePotService extends BaseService
         return $this->sendResponse();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $id
+     * @return void
+     */
     public function delete($id)
     {
         $coffeePot = CoffeePot::find($id);
 
-        if(!$coffeePot){
+        if (!$coffeePot) {
             return $this->sendErrorResponse(['Такой кофейни нет']);
         }
 

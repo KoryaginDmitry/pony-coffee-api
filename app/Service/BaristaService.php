@@ -9,10 +9,15 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * Barista class
+ */
 class BaristaService extends BaseService
 {
     /**
-     * return all baristas and coffee cups
+     * Get baristas
+     * 
+     * @return User
      */
     public function getBaristas()
     {
@@ -33,41 +38,49 @@ class BaristaService extends BaseService
     }
 
     /**
-     * create profile barista
+     * Create profile barista
      * 
-     * @param Request $request
+     * @param Request $request comment object Request class
      * 
+     * @return User
      */
     public function create($request)
     {
-        $validator = Validator::make($request->all(), [
-            "name" => ["required", "string"],
-            "last_name" => ["nullable", "string"],
-            "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
-            "password" => ["required", "string"]
-        ]);
+        $validator = Validator::make(
+            $request->all(), 
+            [
+                "name" => ["required", "string"],
+                "last_name" => ["nullable", "string"],
+                "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
+                "password" => ["required", "string"]
+            ]
+        );
         
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendErrorResponse($validator->errors()->all());
         }
 
         $coffeePot = CoffeePot::find($request->coffeePot);
 
-        $user = User::create([
-            "name" => $request->name,
-            "last_name" => $request->last_name,
-            "phone" => $request->phone,
-            "phone_verified_at" => Carbon::now(),
-            "password" => Hash::make($request->password),
-            "agreement" => "1",
-            "role_id" => "2"
-        ]);
+        $user = User::create(
+            [
+                "name" => $request->name,
+                "last_name" => $request->last_name,
+                "phone" => $request->phone,
+                "phone_verified_at" => Carbon::now(),
+                "password" => Hash::make($request->password),
+                "agreement" => "1",
+                "role_id" => "2"
+            ]
+        );
 
-        if($coffeePot){
-            UserCoffeePot::create([
-                "user_id" => $user->id,
-                "coffee_pot_id" => $coffeePot->id
-            ]);
+        if ($coffeePot) {
+            UserCoffeePot::create(
+                [
+                    "user_id" => $user->id,
+                    "coffee_pot_id" => $coffeePot->id
+                ]
+            );
         }
 
         $this->data = [
@@ -81,35 +94,41 @@ class BaristaService extends BaseService
     }
 
     /**
-     * update profile barista
+     * Update profile barista
      * 
-     * @param Request $request
-     * @param int $id
+     * @param Request $request comment object Request class
+     * @param int     $id      comment id barista
+     * 
+     * @return User
      */
     public function update($request, int $id)
     {
-        $request->validate([
-            "name" => ["required", "string"],
-            "last_name" => ["nullable", "string"],
-            "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
-        ]);
+        $request->validate(
+            [
+                "name" => ["required", "string"],
+                "last_name" => ["nullable", "string"],
+                "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
+            ]
+        );
 
         $user = User::where("role_id", 2)->find($id);
 
-        if(!$user){
+        if (!$user) {
             return $this->sendErrorResponse(['Сотрудник не найден']);
         }
 
-        $user->update([
-            "name" => $request->name,
-            "last_name" => $request->last_name,
-            "phone" => $request->phone
-        ]);
+        $user->update(
+            [
+                "name" => $request->name,
+                "last_name" => $request->last_name,
+                "phone" => $request->phone
+            ]
+        );
 
-        if($request->coffeePot != 0){
+        if ($request->coffeePot !== 0) {
             $coffeePot = CoffeePot::find($request->coffeePot);
 
-            if(!$coffeePot){
+            if (!$coffeePot) {
                 return $this->sendErrorResponse(['Такой кофейни нет']);
             }
 
@@ -121,8 +140,7 @@ class BaristaService extends BaseService
                     "coffee_pot_id" => $coffeePot->id
                 ]
             );
-        }
-        else {
+        } else {
             UserCoffeePot::where("user_id", $user->id)->delete();
         }
 
@@ -135,15 +153,17 @@ class BaristaService extends BaseService
     }
 
     /**
-     * delete profile barista
+     * Delete profile barista
      * 
-     * @param int $id
+     * @param int $id comment id barista
+     * 
+     * @return array
      */
     public function delete(int $id)
     {
         $user = User::where("role_id", 2)->find($id);
 
-        if(!$user){
+        if (!$user) {
             return $this->sendErrorResponse(['Сотрудник не найден']);
         }
 
