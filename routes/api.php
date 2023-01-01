@@ -22,9 +22,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('type', function(){
-    return auth()->user()?->role->name;
-});
+Route::get(
+    'type',
+    function () {
+        return auth()->user()?->role->name;
+    }
+);
 
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
 

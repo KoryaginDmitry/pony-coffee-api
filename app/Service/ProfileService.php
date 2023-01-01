@@ -28,7 +28,8 @@ class ProfileService extends BaseService
     /**
      * Undocumented function
      *
-     * @param [type] $request
+     * @param Request $request comment sda
+     * 
      * @return void
      */
     public function update($request)
@@ -64,12 +65,12 @@ class ProfileService extends BaseService
         $user->name = $request->name;
         $user->last_name = $request->last_name ?: null;
         $user->save();
-
+        
         $this->data = [
             'user' => $user
         ];
         
-        $this->sendResponse();
+        return $this->sendResponse();
     }
 
     /**
