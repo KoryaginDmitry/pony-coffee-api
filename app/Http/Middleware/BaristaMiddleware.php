@@ -16,10 +16,12 @@ class BaristaMiddleware
      */
     public function handle(Request $request, Closure $next)
     {   
+        $role = auth()->user()?->role->name; 
+
         if (auth()->user()?->role->name !== 'barista') {
             return response()->json(
                 [
-                    "message" => "Недостаточно прав"
+                    "message" => "Недостаточно прав. Роль этого пользователя - $role, а дожлна быть 'barista'"
                 ],
                 403
             );

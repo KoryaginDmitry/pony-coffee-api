@@ -16,11 +16,13 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {   
+        $role = auth()->user()?->role->name; 
+
         if (auth()->user()?->role->name !== 'admin') {
             return response()
                 ->json(
                     [
-                        "message" => "Недостаточно прав"
+                        "message" => "Недостаточно прав. Роль этого пользователя - $role, а дожлна быть 'admin'"
                     ],
                     403
                 );
