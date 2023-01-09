@@ -52,9 +52,10 @@ class BonusService extends BaseService
     {
         $user = User::find(auth()->id());
 
-        $countActiveBonuses = $user->bonuses()->where("usage", "0")
-            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
+        $countActiveBonuses = $user->bonuses()
+            ->where("usage", "0")
             ->get()
+            ->where('burnt', '0')
             ->count();
 
         $bonusBurnDate = Bonus::select("created_at")
@@ -63,8 +64,10 @@ class BonusService extends BaseService
                     "user_id" => auth()->id(),
                     "usage" => "0"
                 ]
-            )->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
+            )
             ->orderBy("created_at", "DESC")
+            ->get()
+            ->where('burnt', '0')
             ->first();
 
         $this->data = [

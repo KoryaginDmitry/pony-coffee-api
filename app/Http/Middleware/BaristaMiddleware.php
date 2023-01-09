@@ -21,7 +21,7 @@ class BaristaMiddleware
                 [
                     'data' => null,
                     'error' => [
-                        'message' => "Недостаточно прав"
+                        'message' => "Недостаточно прав. Тип пользователя - $type"
                     ],
                     'status' => false
                 ],
