@@ -1,24 +1,47 @@
 <?php
-
+/**
+ * BaseController controller
+ * php version 8.1.2
+ * 
+ * @category Controllers
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 /**
- * Base controller class
+ * BaristaController class
  * 
  * @method array sendResponse()
+ * 
+ * @category Controllers
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
  */
 class BaseController extends Controller
 {
     /**
      * SendResponse
      *
-     * @param array $response commetn description
+     * @param array $response array response
      * 
-     * @return array
+     * @return JsonResponse
      */
-    protected function sendResponse($response)
+    protected function sendResponse(array $response) : JsonResponse
     {
         return response()->json(
             [   

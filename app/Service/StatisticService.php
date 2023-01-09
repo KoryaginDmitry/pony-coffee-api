@@ -1,20 +1,47 @@
 <?php
 
+/**
+ * Statistic service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Service;
 
 use App\Models\User;
 
 /**
- * Undocumented class
+ * StatisticService class
+ * 
+ * @method mixed barista()
+ * @method mixed user()
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
  */
 class StatisticService extends BaseService
-{   
+{
     /**
-     * Undocumented function
+     * Get a collection of bonuses for barista statistics
      *
-     * @return void
+     * @return mixed
      */
-    public function barista()
+    public function barista() : mixed
     {
         $this->data['barista'] = User::where("role_id", "2")
             ->with(
@@ -33,11 +60,11 @@ class StatisticService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Get a collection of bonuses for user statistics
      *
-     * @return void
+     * @return mixed
      */
-    public function user()
+    public function user() : mixed
     {
         $this->data['user'] = User::where("role_id", "3")
             ->with(

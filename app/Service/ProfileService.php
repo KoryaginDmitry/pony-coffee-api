@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Profile service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Service;
 
 use App\Models\User;
@@ -7,16 +21,30 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 /**
- * Undocumented class
+ * ProfileService class
+ * 
+ * @method mixed user()
+ * @method mixed update()
+ * @method mixed newPassword()
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
  */
 class ProfileService extends BaseService
-{   
+{
     /**
-     * Undocumented function
+     * Get auth user
      *
-     * @return User
+     * @return mixed
      */
-    public function user()
+    public function user() : mixed
     {   
         $this->data = [
             'user' => auth()->user()
@@ -26,13 +54,13 @@ class ProfileService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Update auth user
      *
-     * @param Request $request comment sda
+     * @param Request $request object Request class
      * 
-     * @return void
+     * @return mixed
      */
-    public function update($request)
+    public function update($request) : mixed
     {   
         $id = auth()->id();
 
@@ -47,7 +75,7 @@ class ProfileService extends BaseService
         );
 
         if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->erros->all());
+            return $this->sendErrorResponse($validator->errors()->all());
         }   
 
         $user = User::find($id);
@@ -74,13 +102,13 @@ class ProfileService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Update password auth user
      *
-     * @param Request $request
+     * @param Request $request object Request class
      * 
-     * @return void
+     * @return mixed
      */
-    public function newPassword($request)
+    public function newPassword($request) : mixed
     {
         $validator = Validator::make(
             $request->all(), 

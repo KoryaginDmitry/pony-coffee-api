@@ -3,15 +3,15 @@
  * Auth controller
  * php version 8.1.2
  * 
- * @category Description
+ * @category Controllers
  * 
  * @package Category
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
  * 
- * @license http://url.com MIT
+ * @license http://href.com MIT
  * 
- * @link http://url.com
+ * @link http://href.com
  */
 namespace App\Http\Controllers;
 
@@ -26,15 +26,15 @@ use Illuminate\Http\Request;
  * @method array logout()
  * @method array login()
  * 
- * @category Description
+ * @category Controllers
  * 
  * @package Category
  * 
  * @author DmitryKoryagin <kor.dima97@email.ru>
  * 
- * @license http://url.com MIT
+ * @license http://href.com MIT
  * 
- * @link http://url.com
+ * @link http://href.com
  */
 class AuthController extends BaseController
 {

@@ -1,5 +1,18 @@
 <?php
-
+/**
+ * Auth service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Service;
 
 use App\Models\User;
@@ -7,19 +20,43 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * AuthService class
+ * 
+ * @method array login()
+ * @method array register()
+ * @method array logout()
+ * @method array login()
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 class AuthService extends BaseService
-{   
+{
     /**
      * Authorization method
      * 
-     * @param Request $request
+     * @param object $request object Request method
+     * 
+     * @return mixed
      */
-    public function login($request)
+    public function login(object $request) : mixed
     {   
         $validator = Validator::make(
             $request->all(), 
             [
-                "phone" => ["required", "regex:/((\+7)|8)[0-9]{10}/", "exists:users"],
+                "phone" => [
+                    "required",
+                    "regex:/((\+7)|8)[0-9]{10}/",
+                    "exists:users"
+                ],
                 "password" => ["required", "string"]
             ]
         );
@@ -40,9 +77,11 @@ class AuthService extends BaseService
     /**
      * Registration method
      * 
-     * @param Request $request
+     * @param object $request object Request class
+     * 
+     * @return mixed
      */
-    public function register($request)
+    public function register(object $request) : mixed
     {
         $validator = Validator::make(
             $request->all(),
@@ -83,8 +122,10 @@ class AuthService extends BaseService
 
     /**
      * Logout method
+     * 
+     * @return mixed
      */ 
-    public function logout()
+    public function logout() : mixed
     {
         DB::table('oauth_access_tokens')
             ->where('user_id', auth()->id())

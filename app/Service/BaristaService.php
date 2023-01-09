@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Barista service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Service;
 
 use App\Models\CoffeePot;
@@ -10,16 +24,31 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 /**
- * Barista class
+ * BaristaService class
+ * 
+ * @method array getBaristas()
+ * @method array create()
+ * @method array update()
+ * @method array delete()
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
  */
 class BaristaService extends BaseService
 {
     /**
      * Get baristas
      * 
-     * @return User
+     * @return mixed
      */
-    public function getBaristas()
+    public function getBaristas() : mixed
     {
         $users = User::where("role_id", "2")
             ->orderBy('created_at', "DESC")
@@ -40,11 +69,11 @@ class BaristaService extends BaseService
     /**
      * Create profile barista
      * 
-     * @param Request $request comment object Request class
+     * @param object $request object Request class
      * 
-     * @return User
+     * @return mixed
      */
-    public function create($request)
+    public function create(object $request) : mixed
     {
         $validator = Validator::make(
             $request->all(), 
@@ -96,12 +125,12 @@ class BaristaService extends BaseService
     /**
      * Update profile barista
      * 
-     * @param Request $request comment object Request class
-     * @param int     $id      comment id barista
+     * @param object $request object Request class
+     * @param int    $id      id barista
      * 
      * @return User
      */
-    public function update($request, int $id)
+    public function update(object $request, int $id)
     {
         $request->validate(
             [
@@ -155,11 +184,11 @@ class BaristaService extends BaseService
     /**
      * Delete profile barista
      * 
-     * @param int $id comment id barista
+     * @param int $id id barista
      * 
-     * @return array
+     * @return mixed
      */
-    public function delete(int $id)
+    public function delete(int $id) : mixed
     {
         $user = User::where("role_id", 2)->find($id);
 

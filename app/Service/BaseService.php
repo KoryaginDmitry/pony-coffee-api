@@ -1,24 +1,79 @@
 <?php
 
+/**
+ * Base service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Service;
 
+/**
+ * BaseService class
+ * 
+ * @method array sendReponse()
+ * @method array getLastErrors()
+ * @method array logErrorValidate()
+ * @method array sendErrorResponse()
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 class BaseService
 {
+    /**
+     * Response code
+     *
+     * @var integer
+     */
     protected int $code = 200;
+
+    /**
+     * Data response
+     *
+     * @var mixed
+     */
     protected mixed $data = null;
+
+    /**
+     * Array errors response
+     *
+     * @var array
+     */
     protected array $errors = [];
+
+    /**
+     * Status reponse
+     *
+     * @var boolean
+     */
     protected bool $status = true;
 
     /**
-     * Undocumented function
+     * Send response
      *
-     * @return void
+     * @return array
      */
-    protected function sendResponse()
+    protected function sendResponse() : array
     {   
         $errors = $this->getLastErrors();
 
-        $this->errros = [];
+        $this->errors = [];
         
         return [
             "status" => $this->status,
@@ -29,11 +84,11 @@ class BaseService
     }
 
     /**
-     * Method return array errors
+     * Get lust errors
      *
      * @return array|null
      */
-    protected function getLastErrors()
+    protected function getLastErrors() : array|null
     {
         return count($this->errors) > 0 ? $this->errors : null;   
     }
@@ -41,32 +96,30 @@ class BaseService
     /**
      * Fill errors param
      *
-     * @param mixed  $messages comment sad
-     * @param string $type     comment sd
+     * @param array|string $messages array errors messages
      * 
      * @return void
      */
-    public function logErrorValidate(array|string $messages, string $type = 'error'): void
+    public function logErrorValidate(array|string $messages) : void
     {
         $messages = (array)$messages;
 
         foreach ($messages as $message) {
             $this->errors[] = [
-                'type' => $type,
                 'message' => $message,
             ];
         }
     }
 
     /**
-     * Undocumented function
+     * Send errors response
      *
-     * @param array   $errorArray comment da
-     * @param integer $code       commetn sad
+     * @param array   $errorArray array errors messages
+     * @param integer $code       number response code
      * 
-     * @return void
+     * @return array
      */
-    public function sendErrorResponse(array $errorArray, int $code = 422)
+    public function sendErrorResponse(array $errorArray, int $code = 422) : array
     {
         $this->logErrorValidate($errorArray);
         $this->status = false;

@@ -1,12 +1,43 @@
 <?php
 
+/**
+ * Home service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Service;
 
 /**
- * Undocumented class
+ * HomeService class
+ * 
+ * @method mixed get()
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
  */
 class HomeService extends BaseService
-{   
+{
+    /**
+     * Array links header
+     *
+     * @var array
+     */
     private array $_headers = [
         "user" => [
             ['href' => '/', 'text' => 'Главная страница'],
@@ -37,11 +68,11 @@ class HomeService extends BaseService
     ];
 
     /**
-     * Undocumented function
+     * Get header for user role
      *
-     * @return void
+     * @return array
      */
-    public function get()
+    public function get() : array
     {
         if (auth()->check()) {
             $role = auth()->user()->role->name;

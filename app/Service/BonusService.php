@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Bonus service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Service;
 
 use App\Models\Bonus;
@@ -10,21 +24,31 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
 
 /**
- * App\service
+ * BonusService class
  * 
- * @method array getInfoBonuses()
- * @method array search()
- * @method array create()
- * @method array wrote()
+ * @method mixed getInfoBonuses()
+ * @method mixed search()
+ * @method mixed create()
+ * @method mixed wrote()
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
  */
-class BonusService extends BaseService 
-{   
+class BonusService extends BaseService
+{
     /**
-     * Undocumented function
+     * Get information about auth user bonuses
      *
-     * @return void
+     * @return mixed
      */
-    public function getInfoBonuses()
+    public function getInfoBonuses() : mixed
     {
         $user = User::find(auth()->id());
 
@@ -52,12 +76,13 @@ class BonusService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Serch user
      *
-     * @param Request $request
-     * @return void
+     * @param object $request object Request class
+     * 
+     * @return mixed
      */
-    public function search($request)
+    public function search(object $request) : mixed
     {
         if (!empty($request->value)) {
             $validator = Validator::make(
@@ -99,12 +124,13 @@ class BonusService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Create bonus for user
      *
-     * @param int $id
-     * @return void
+     * @param int $id id user
+     * 
+     * @return mixed
      */
-    public function create($id)
+    public function create(int $id) : mixed
     {
         $user = User::where("role_id", 3)->find($id);
 
@@ -129,12 +155,13 @@ class BonusService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Wrote bonuses user
      *
-     * @param int $id
-     * @return void
+     * @param int $id id user
+     * 
+     * @return mixed
      */
-    public function wrote($id)
+    public function wrote(int $id) : mixed
     {
         $user = User::where("role_id", 3)->find($id);
 

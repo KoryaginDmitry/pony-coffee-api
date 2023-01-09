@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Feedback service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Service;
 
 use App\Models\CoffeePot;
@@ -8,27 +22,42 @@ use App\Models\Message;
 use Illuminate\Support\Facades\Validator;
 
 /**
- * Undocumented class
+ * FeedbackService class
+ * 
+ * @method mixed _getAdminFeedback()
+ * @method mixed getFeedback()
+ * @method mixed create()
+ * @method mixed createMessage()
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
  */
 class FeedbackService extends BaseService
 {
     /**
-     * Undocumented function
+     * Get all feedbacks for admin
      *
-     * @param int $coffeePot_id comment id coffee shop
+     * @param int $id id coffee pot
      * 
-     * @return void
+     * @return Feedback
      */
-    private function _getAdminFeedback($coffeePot_id)
+    private function _getAdminFeedback(int $id) : Feedback
     {
-        if ($coffeePot_id != 0) {
-            $coffeePot = CoffeePot::find($coffeePot_id);
+        if ($id !== 0) {
+            $coffeePot = CoffeePot::find($id);
 
             if (!$coffeePot) {
                 return null;
             }
 
-            return Feedback::where("coffee_pot_id", $coffeePot_id)
+            return Feedback::where("coffee_pot_id", $id)
                 ->with('messages')
                 ->get();
         } else {
@@ -39,16 +68,16 @@ class FeedbackService extends BaseService
     /**
      * Get feedbacks
      *
-     * @param int $coffeePot_id comment id coffee shop
+     * @param int $id id coffee pot
      * 
-     * @return array
+     * @return mixed
      */
-    public function getFeedback($coffeePot_id)
+    public function getFeedback(int $id) : mixed
     {
-        if (auth()->user()->role->name == 'admin') {
-            $feedbacks = $this->_getAdminFeedback($coffeePot_id);
+        if (auth()->user()->role->name === 'admin') {
+            $feedbacks = $this->_getAdminFeedback($id);
         } else {
-            $feedbacks = Feedback::where('user_id', auth('api')->id())
+            $feedbacks = Feedback::where('user_id', auth()->id())
                 ->with("messages")
                 ->get();
         }
@@ -63,11 +92,11 @@ class FeedbackService extends BaseService
     /**
      * Create feedback and message
      *
-     * @param Request $request comment class Request object
+     * @param object $request class Request object
      * 
-     * @return array
+     * @return mixed
      */
-    public function create($request)
+    public function create(object $request) : mixed
     {
         $validator = Validator::make(
             $request->all(),
@@ -109,14 +138,14 @@ class FeedbackService extends BaseService
     }
 
     /**
-     * Create message
+     * Create message for feedback
      * 
-     * @param int     $id      comment id feedback
-     * @param Request $request comment class Request object
+     * @param int    $id      id feedback
+     * @param object $request class Request object
      * 
-     * @return array
+     * @return mixed
      */
-    public function createMessage($id, $request)
+    public function createMessage(int $id, object $request) : mixed
     {
         $validator = Validator::make(
             $request->all(),
@@ -146,7 +175,7 @@ class FeedbackService extends BaseService
         $message = Message::create(
             [
                 "text" => $request->text,
-                "user_id" => auth('api')->id(),
+                "user_id" => auth()->id(),
                 "feedback_id" => $feedback->id
             ]
         );

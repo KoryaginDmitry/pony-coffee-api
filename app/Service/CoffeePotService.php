@@ -1,19 +1,52 @@
 <?php
 
+/**
+ * Coffee pot service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 namespace App\Service;
 
 use App\Models\CoffeePot;
 use App\Models\UserCoffeePot;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * CoffeePotService class
+ * 
+ * @method mixed getAddressCoffeePots()
+ * @method mixed getCoffeePots()
+ * @method mixed create()
+ * @method mixed update()
+ * @method mixed delete()
+ * 
+ * @category Services
+ * 
+ * @package Category
+ * 
+ * @author DmitryKoryagin <kor.dima97@email.ru>
+ * 
+ * @license http://href.com MIT
+ * 
+ * @link http://href.com
+ */
 class CoffeePotService extends BaseService
 {
     /**
-     * Undocumented function
+     * Get address coffee pots
      *
-     * @return void
+     * @return mixed
      */
-    public function getAddressCoffeePots()
+    public function getAddressCoffeePots() : mixed
     {
         $coffeePots = CoffeePot::select('id', 'address')->get();
         
@@ -25,11 +58,11 @@ class CoffeePotService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Get coffee pots
      *
-     * @return void
+     * @return mixed
      */
-    public function getCoffeePots()
+    public function getCoffeePots() : mixed
     {
         $coffeePots = CoffeePot::get();
 
@@ -41,13 +74,13 @@ class CoffeePotService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Create coffee pot
      *
-     * @param Request $request comment no comment
+     * @param object $request object Request class
      * 
-     * @return void
+     * @return mixed
      */
-    public function create($request)
+    public function create($request) : mixed
     {
         $validator = Validator::make(
             $request->all(),
@@ -78,13 +111,14 @@ class CoffeePotService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Update coffee pot
      *
-     * @param [type] $id
-     * @param [type] $request
-     * @return void
+     * @param int    $id      id coffee pot
+     * @param object $request object request class
+     * 
+     * @return mixed
      */
-    public function update($id, $request)
+    public function update(int $id, object $request) : mixed
     {   
         $validator = Validator::make(
             $request->all(),
@@ -119,12 +153,13 @@ class CoffeePotService extends BaseService
     }
 
     /**
-     * Undocumented function
+     * Delete coffee pot 
      *
-     * @param [type] $id
-     * @return void
+     * @param int $id id coffee pot
+     * 
+     * @return mixed
      */
-    public function delete($id)
+    public function delete(int $id) : mixed
     {
         $coffeePot = CoffeePot::find($id);
 
