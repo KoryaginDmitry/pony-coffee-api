@@ -24,7 +24,7 @@ class AdminMiddleware
                     [
                         'data' => null,
                         'error' => [
-                            'message' => "Недостаточно прав. Тип пользователя - $type"
+                            'message' => "Недостаточно прав. Тип пользователя - $role"
                         ],
                         'status' => false
                     ],
