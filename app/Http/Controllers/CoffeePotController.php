@@ -17,16 +17,17 @@
 namespace App\Http\Controllers;
 
 use App\Service\CoffeePotService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
  * CoffeePotController class
  * 
- * @method array getAddressCoffeePots()
- * @method array getCoffeePots()
- * @method array create()
- * @method array update()
- * @method array delete()
+ * @method JsonResponse getAddressCoffeePots()
+ * @method JsonResponse getCoffeePots()
+ * @method JsonResponse create()
+ * @method JsonResponse update()
+ * @method JsonResponse delete()
  * 
  * @category Controllers
  * 
@@ -53,9 +54,9 @@ class CoffeePotController extends BaseController
     /**
      * Method get address coffee pots
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function getAddressCoffeePots() : array
+    public function getAddressCoffeePots() : JsonResponse
     {
         return $this->sendResponse(
             $this->service->getAddressCoffeePots()
@@ -65,9 +66,9 @@ class CoffeePotController extends BaseController
     /**
      * Method get coffee pots
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function getCoffeePots() : array
+    public function getCoffeePots() : JsonResponse
     {
         return $this->sendResponse(
             $this->service->getCoffeePots()
@@ -79,9 +80,9 @@ class CoffeePotController extends BaseController
      *
      * @param Request $request object Request class
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function create(Request $request) : array
+    public function create(Request $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->create($request)
@@ -94,9 +95,9 @@ class CoffeePotController extends BaseController
      * @param int     $id      id coffee pot
      * @param Request $request object Request class
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function update(int $id, Request $request) : array
+    public function update(int $id, Request $request) : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->update($id, $request)
@@ -108,9 +109,9 @@ class CoffeePotController extends BaseController
      *
      * @param int $id id coffee pot
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function delete(int $id) : array
+    public function delete(int $id) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->delete($id)

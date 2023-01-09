@@ -22,10 +22,10 @@ use Illuminate\Http\Request;
 /**
  * BaristaController class
  * 
- * @method array get()
- * @method array create()
- * @method array update()
- * @method array delete()
+ * @method JsonResponse get()
+ * @method JsonResponse create()
+ * @method JsonResponse update()
+ * @method JsonResponse delete()
  * 
  * @category Controllers
  * 
@@ -52,9 +52,9 @@ class BaristaProfileController extends BaseController
     /**
      * Method get users baristas
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function get() : array
+    public function get() : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->getBaristas()
@@ -66,9 +66,9 @@ class BaristaProfileController extends BaseController
      *
      * @param Request $request comment object Request class
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function create(Request $request) : array
+    public function create(Request $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->create($request)
@@ -81,9 +81,9 @@ class BaristaProfileController extends BaseController
      * @param Request $request comment object Request class
      * @param int     $id      comment id barista
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function update(Request $request, int $id) : array
+    public function update(Request $request, int $id) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->update($request, $id)

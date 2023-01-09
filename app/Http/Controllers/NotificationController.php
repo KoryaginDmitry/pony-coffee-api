@@ -16,16 +16,17 @@
 namespace App\Http\Controllers;
 
 use App\Service\NotificationService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
  * NotificationController class
  * 
- * @method array getUserNotifications()
- * @method array read()
- * @method array getCount()
- * @method array getNotificationForAdmin()
- * @method array createNotification()
+ * @method JsonResponse getUserNotifications()
+ * @method JsonResponse read()
+ * @method JsonResponse getCount()
+ * @method JsonResponse getNotificationForAdmin()
+ * @method JsonResponse createNotification()
  * 
  * @category Controllers
  * 
@@ -54,9 +55,9 @@ class NotificationController extends BaseController
     /**
      * Get notification for user
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function getUserNotifications() : array
+    public function getUserNotifications() : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->getUserNotifications()
@@ -68,9 +69,9 @@ class NotificationController extends BaseController
      *
      * @param int $id id notification
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function read(int $id) : array
+    public function read(int $id) : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->read($id)
@@ -80,9 +81,9 @@ class NotificationController extends BaseController
     /**
      * Get count notifications for user
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function getCount() : array
+    public function getCount() : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->getCount()
@@ -92,9 +93,9 @@ class NotificationController extends BaseController
     /**
      * Get notifications for admin
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function getNotificationForAdmin() : array
+    public function getNotificationForAdmin() : JsonResponse
     {
         return $this->sendResponse(
             $this->service->getNotificationForAdmin()
@@ -106,9 +107,9 @@ class NotificationController extends BaseController
      *
      * @param Request $request object Request class
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function createNotification(Request $request) : array
+    public function createNotification(Request $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->createNotification($request)

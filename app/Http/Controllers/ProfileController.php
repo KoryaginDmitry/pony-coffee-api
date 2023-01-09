@@ -17,14 +17,15 @@
 namespace App\Http\Controllers;
 
 use App\Service\ProfileService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
  * NotificationController class
  * 
- * @method array getUser()
- * @method array update()
- * @method array newPassword()
+ * @method JsonResponse getUser()
+ * @method JsonResponse update()
+ * @method JsonResponse newPassword()
  * 
  * @category Controllers
  * 
@@ -53,9 +54,9 @@ class ProfileController extends BaseController
     /**
      * Get auth user
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function getUser() : array
+    public function getUser() : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->user()
@@ -67,9 +68,9 @@ class ProfileController extends BaseController
      *
      * @param Request $request object Request class
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function update(Request $request) : array
+    public function update(Request $request) : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->update($request)
@@ -81,9 +82,9 @@ class ProfileController extends BaseController
      *
      * @param Request $request object Request class
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function newPassword(Request $request) : array
+    public function newPassword(Request $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->newPassword($request)

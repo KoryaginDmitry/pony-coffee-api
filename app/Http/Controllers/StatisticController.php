@@ -17,12 +17,13 @@
 namespace App\Http\Controllers;
 
 use App\Service\StatisticService;
+use Illuminate\Http\JsonResponse;
 
 /**
  * StatisticController class
  * 
- * @method array barista()
- * @method array user()
+ * @method JsonResponse barista()
+ * @method JsonResponse user()
  * 
  * @category Controllers
  * 
@@ -53,9 +54,9 @@ class StatisticController extends BaseController
      * 
      * Get statistic baristas
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function barista() : array
+    public function barista() : JsonResponse
     {
         return $this->sendResponse(
             $this->service->barista()
@@ -67,9 +68,9 @@ class StatisticController extends BaseController
      * 
      * Get statistic users
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function user() : array
+    public function user() : JsonResponse
     {
         return $this->sendResponse(
             $this->service->user()

@@ -23,10 +23,10 @@ use Illuminate\Http\JsonResponse;
 /**
  * BonusController class
  * 
- * @method array getInfoBonuses()
- * @method array search()
- * @method array create()
- * @method array wrote()
+ * @method JsonResponse getInfoBonuses()
+ * @method JsonResponse search()
+ * @method JsonResponse create()
+ * @method JsonResponse wrote()
  * 
  * @category Controllers
  * 

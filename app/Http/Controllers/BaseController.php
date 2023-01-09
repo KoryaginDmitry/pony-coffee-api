@@ -20,7 +20,7 @@ use Illuminate\Http\JsonResponse;
 /**
  * BaristaController class
  * 
- * @method array sendResponse()
+ * @method JsonResponse sendResponse()
  * 
  * @category Controllers
  * 

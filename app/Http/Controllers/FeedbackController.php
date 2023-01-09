@@ -22,9 +22,9 @@ use Illuminate\Http\Request;
 /**
  * FeedbackController class
  * 
- * @method array getFeedback()
- * @method array create()
- * @method array createMessage()
+ * @method JsonResponse getFeedback()
+ * @method JsonResponse create()
+ * @method JsonResponse createMessage()
  * 
  * @category Controllers
  * 
@@ -82,9 +82,9 @@ class FeedbackController extends BaseController
      * @param int     $id      id feedback
      * @param Request $request object Request class
      * 
-     * @return void
+     * @return JsonResponse
      */
-    public function createMessage(int $id, Request $request)
+    public function createMessage(int $id, Request $request) : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->createMessage($id, $request)

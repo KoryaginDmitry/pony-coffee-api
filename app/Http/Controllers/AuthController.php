@@ -16,15 +16,16 @@
 namespace App\Http\Controllers;
 
 use App\Service\AuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
  * AuthController class
  * 
- * @method array login()
- * @method array register()
- * @method array logout()
- * @method array login()
+ * @method JsonResponse login()
+ * @method JsonResponse register()
+ * @method JsonResponse logout()
+ * @method JsonResponse login()
  * 
  * @category Controllers
  * 
@@ -53,9 +54,9 @@ class AuthController extends BaseController
      *
      * @param Request $request comment Request class odject
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function login(Request $request)
+    public function login(Request $request) : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->login($request)
@@ -67,9 +68,9 @@ class AuthController extends BaseController
      *
      * @param Request $request comment Request class odject
      * 
-     * @return array
+     * @return JsonResponse
      */
-    public function register(Request $request)
+    public function register(Request $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->register($request)
@@ -79,9 +80,9 @@ class AuthController extends BaseController
     /**
      * Logoout
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function logout()
+    public function logout() : JsonResponse
     {
         return $this->sendResponse(
             $this->service->logout()

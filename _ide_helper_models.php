@@ -32,6 +32,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdCreate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdWrote($value)
  * @mixin \Eloquent
+ * @property-read string $burnt
+ * @property-read string $create_date
+ * @property-read string $update_date
  */
 	class Bonus extends \Eloquent {}
 }

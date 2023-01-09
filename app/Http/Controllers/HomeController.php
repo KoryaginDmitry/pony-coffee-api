@@ -16,12 +16,13 @@
 namespace App\Http\Controllers;
 
 use App\Service\HomeService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
  * HomeController class
  * 
- * @method array get()
+ * @method JsonResponse get()
  * 
  * @category Controllers
  * 
@@ -50,9 +51,9 @@ class HomeController extends BaseController
     /**
      * Get header for role user
      *
-     * @return array
+     * @return JsonResponse
      */
-    public function get() : array
+    public function get() : JsonResponse
     {
         return $this->sendResponse(
             $this->service->get()
