@@ -46,10 +46,20 @@ class FeedbackService extends BaseService
             }
 
             return Feedback::where("coffee_pot_id", $id)
-                ->with('messages')
+                ->with(
+                    [
+                        'messages',
+                        'coffeePot'
+                    ]
+                )
                 ->get();
         } else {
-            return Feedback::with("messages")->get();
+            return Feedback::with(
+                [
+                    'messages',
+                    'coffeePot'
+                ]
+            )->get();
         }
     }
 
@@ -66,7 +76,12 @@ class FeedbackService extends BaseService
             $feedbacks = $this->_getAdminFeedback($id);
         } else {
             $feedbacks = Feedback::where('user_id', auth()->id())
-                ->with("messages")
+                ->with(
+                    [
+                        'messages',
+                        'coffeePot'
+                    ]
+                )
                 ->get();
         }
 

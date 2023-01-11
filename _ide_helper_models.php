@@ -83,6 +83,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\CoffeePot|null $coffeePot
  */
 	class Feedback extends \Eloquent {}
 }

@@ -32,9 +32,9 @@ class CoffeePotService extends BaseService
     /**
      * Get address coffee pots
      *
-     * @return mixed
+     * @return array
      */
-    public function getAddressCoffeePots() : mixed
+    public function getAddressCoffeePots() : array
     {
         $coffeePots = CoffeePot::select('id', 'address')->get();
         
@@ -48,9 +48,9 @@ class CoffeePotService extends BaseService
     /**
      * Get coffee pots
      *
-     * @return mixed
+     * @return array
      */
-    public function getCoffeePots() : mixed
+    public function getCoffeePots() : array
     {
         $coffeePots = CoffeePot::get();
 
@@ -66,9 +66,9 @@ class CoffeePotService extends BaseService
      *
      * @param int $id id coffee pot
      * 
-     * @return mixed
+     * @return array
      */
-    public function getCoffeePot(int $id) : mixed
+    public function getCoffeePot(int $id) : array
     {   
 
         $coffeePot = CoffeePot::find($id);
@@ -89,9 +89,9 @@ class CoffeePotService extends BaseService
      *
      * @param object $request object Request class
      * 
-     * @return mixed
+     * @return array
      */
-    public function create($request) : mixed
+    public function create($request) : array
     {
         $validator = Validator::make(
             $request->all(),
@@ -127,9 +127,9 @@ class CoffeePotService extends BaseService
      * @param int    $id      id coffee pot
      * @param object $request object request class
      * 
-     * @return mixed
+     * @return array
      */
-    public function update(int $id, object $request) : mixed
+    public function update(int $id, object $request) : array
     {   
         $validator = Validator::make(
             $request->all(),
@@ -168,9 +168,9 @@ class CoffeePotService extends BaseService
      *
      * @param int $id id coffee pot
      * 
-     * @return mixed
+     * @return array
      */
-    public function delete(int $id) : mixed
+    public function delete(int $id) : array
     {
         $coffeePot = CoffeePot::find($id);
 

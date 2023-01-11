@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\Feedback
@@ -52,8 +54,23 @@ class Feedback extends Model
         'id',
     ];
 
+    /**
+     * Hasmany Messages
+     *
+     * @return HasMany
+     */
     public function messages() : HasMany
     {
         return $this->hasMany(Message::class);
+    }
+
+    /**
+     * HasOne coffeePot
+     *
+     * @return BelongsTo
+     */
+    public function coffeePot() : BelongsTo
+    {
+        return $this->belongsTo(CoffeePot::class);
     }
 }
