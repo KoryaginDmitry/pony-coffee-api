@@ -78,7 +78,7 @@ class CoffeePotService extends BaseService
         }
 
         $this->data = [
-            "coffeePots" => $coffeePot
+            "coffeePot" => $coffeePot
         ];
         
         return $this->sendResponse();
