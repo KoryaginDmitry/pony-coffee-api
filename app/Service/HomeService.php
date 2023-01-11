@@ -6,13 +6,7 @@
  * 
  * @category Services
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 namespace App\Service;
 
@@ -23,13 +17,7 @@ namespace App\Service;
  * 
  * @category Services
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@email.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 class HomeService extends BaseService
 {

@@ -6,13 +6,7 @@
  * 
  * @category Services
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 namespace App\Service;
 
@@ -21,7 +15,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Request;
 
 /**
  * BonusService class
@@ -33,13 +26,7 @@ use Illuminate\Support\Facades\Request;
  * 
  * @category Services
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@email.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 class BonusService extends BaseService
 {
@@ -72,7 +59,9 @@ class BonusService extends BaseService
 
         $this->data = [
             "count" => $countActiveBonuses,
-            "dateBurn" => $bonusBurnDate ? Carbon::create($bonusBurnDate->created_at)->addDays(30)->format("d-m-Y") : null,
+            "dateBurn" => $bonusBurnDate ? Carbon::create(
+                $bonusBurnDate->created_at
+            )->addDays(30)->format("d-m-Y") : null,
         ];
 
         return $this->sendResponse();
@@ -90,7 +79,7 @@ class BonusService extends BaseService
         if (!empty($request->value)) {
             $validator = Validator::make(
                 $request->all(), [
-                "value" => ["required", "string", "min:1", "max:12"]
+                    "value" => ["required", "string", "min:1", "max:12"]
                 ]
             );
 
@@ -102,19 +91,27 @@ class BonusService extends BaseService
                 ->where("id", $request->value)
                 ->orWhere("phone", $request->value)
                 ->with(
-                    ['bonuses' => function ($query) {
-                        $query->where("usage", "0")
-                            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30");
-                    }]
+                    [
+                        'bonuses' => function ($query) {
+                            $query->where("usage", "0")
+                                ->where(
+                                    DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30"
+                                );
+                        }
+                    ]
                 )
                 ->get();
         } else {
             $user = User::where("role_id", 3)
                 ->with(
-                    ['bonuses' => function ($query) {
-                        $query->where("usage", "0")
-                            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30");
-                    }]
+                    [
+                        'bonuses' => function ($query) {
+                            $query->where("usage", "0")
+                                ->where(
+                                    DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30"
+                                );
+                        }
+                    ]
                 )
                 ->get();
         }
@@ -176,9 +173,10 @@ class BonusService extends BaseService
             ->where("usage", "0")
             ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
             ->orderBy("created_at", "DESC")
-            ->limit(3);
+            ->limit(3)
+            ->get();
         
-        if ($bonuses->get()->count() == 3) {
+        if ($bonuses->count() == 3) {
             $bonuses->update(
                 [
                     'usage' => '1',

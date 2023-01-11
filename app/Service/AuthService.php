@@ -5,13 +5,7 @@
  * 
  * @category Services
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 namespace App\Service;
 
@@ -30,13 +24,7 @@ use Illuminate\Support\Facades\Validator;
  * 
  * @category Services
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@email.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 class AuthService extends BaseService
 {

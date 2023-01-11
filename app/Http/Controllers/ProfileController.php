@@ -6,13 +6,7 @@
  * 
  * @category Controllers
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 namespace App\Http\Controllers;
 
@@ -29,13 +23,7 @@ use Illuminate\Http\Request;
  * 
  * @category Controllers
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@email.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 class ProfileController extends BaseController
 {
@@ -64,16 +52,44 @@ class ProfileController extends BaseController
     }
 
     /**
-     * Update auth user
+     * Update name auth user
      *
      * @param Request $request object Request class
      * 
      * @return JsonResponse
      */
-    public function update(Request $request) : JsonResponse
+    public function updateName(Request $request) : JsonResponse
     {   
         return $this->sendResponse(
-            $this->service->update($request)
+            $this->service->updateName($request)
+        );
+    }
+    
+    /**
+     * Update phone auth user
+     *
+     * @param Request $request object Request class
+     * 
+     * @return JsonResponse
+     */
+    public function updatePhone(Request $request) : JsonResponse
+    {   
+        return $this->sendResponse(
+            $this->service->updatePhone($request)
+        );
+    }
+
+    /**
+     * Update email auth user
+     *
+     * @param Request $request object Request class
+     * 
+     * @return JsonResponse
+     */
+    public function updateEmail(Request $request) : JsonResponse
+    {   
+        return $this->sendResponse(
+            $this->service->updateEmail($request)
         );
     }
 

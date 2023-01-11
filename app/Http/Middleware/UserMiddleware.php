@@ -16,14 +16,12 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next)
     {   
-        $role = auth()->user()?->role->name; 
-        
         if (auth()->user()?->role->name !== 'user') {
             return response()->json(
                 [
                     'data' => null,
                     'error' => [
-                        'message' => "Недостаточно прав. Тип пользователя - $role"
+                        'message' => "Недостаточно прав"
                     ],
                     'status' => false
                 ],

@@ -5,13 +5,7 @@
  * 
  * @category Controllers
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 
 namespace App\Http\Controllers;
@@ -31,13 +25,7 @@ use Illuminate\Http\Request;
  * 
  * @category Controllers
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@email.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 class CoffeePotController extends BaseController
 {
@@ -72,6 +60,20 @@ class CoffeePotController extends BaseController
     {
         return $this->sendResponse(
             $this->service->getCoffeePots()
+        );
+    }
+
+    /**
+     * Method get coffee pot
+     *
+     * @param int $id id coffee pot
+     * 
+     * @return JsonResponse
+     */
+    public function getCoffeePot(int $id) : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->getCoffeePot($id)
         );
     }
 

@@ -6,13 +6,7 @@
  * 
  * @category Services
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 namespace App\Service;
 
@@ -31,13 +25,7 @@ use Illuminate\Support\Facades\Validator;
  * 
  * @category Services
  * 
- * @package Category
- * 
  * @author DmitryKoryagin <kor.dima97@email.ru>
- * 
- * @license http://href.com MIT
- * 
- * @link http://href.com
  */
 class CoffeePotService extends BaseService
 {
@@ -68,6 +56,29 @@ class CoffeePotService extends BaseService
 
         $this->data = [
             "coffeePots" => $coffeePots
+        ];
+        
+        return $this->sendResponse();
+    }
+
+    /**
+     * Get coffee pot
+     *
+     * @param int $id id coffee pot
+     * 
+     * @return mixed
+     */
+    public function getCoffeePot(int $id) : mixed
+    {   
+
+        $coffeePot = CoffeePot::find($id);
+
+        if (!$coffeePot) {
+            return $this->sendErrorResponse(['Такой кофейни нет']);
+        }
+
+        $this->data = [
+            "coffeePots" => $coffeePot
         ];
         
         return $this->sendResponse();

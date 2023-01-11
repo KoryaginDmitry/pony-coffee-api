@@ -57,7 +57,9 @@ Route::group(
             ],
             function () {
                 Route::get("/profile", 'getUser'); //Возвращает данные профиля
-                Route::put("/profile", 'update'); //Редактирование профиля
+                Route::put('profile/name', 'updateName');
+                Route::put('profile/phone', 'updatePhone');
+                Route::put('profile/email', 'updateEmail');
                 Route::put("/profile/password", 'newPassword'); //Обновление пароля
             }
         );
@@ -157,6 +159,8 @@ Route::group(
             function () {
                 //Возвращает все кофеточки
                 Route::get('admin/coffeePot', 'getCoffeePots');
+                //Возвращает данные по одной кофейне
+                Route::get('admin/coffeePot/{id}', 'getCoffeePot');
                 //Содает кофеточку
                 Route::post('admin/coffeePot', 'create');
                 //обновляет кофеточку
