@@ -35,9 +35,9 @@ class BaristaService extends BaseService
     /**
      * Get baristas
      * 
-     * @return mixed
+     * @return array
      */
-    public function getBaristas() : mixed
+    public function getBaristas() : array
     {
         $users = User::where("role_id", "2")
             ->orderBy('created_at', "DESC")
@@ -56,13 +56,41 @@ class BaristaService extends BaseService
     }
 
     /**
+     * Get barista
+     * 
+     * @param int $id id barista user
+     * 
+     * @return array
+     */
+    public function getBarista(int $id) : array
+    {
+        $user = User::where("role_id", "2")
+            ->with("userCoffeePot.coffeePot")
+            ->find($id);
+
+        if (!$user) {
+            return $this->sendErrorResponse(['Твкого баристы нет']);
+        }
+        
+        $coffeePots = CoffeePot::orderBy('created_at', "DESC")
+            ->get();
+
+        $this->data = [
+            "user" => $user,
+            "coffeePots" => $coffeePots
+        ];
+        
+        return $this->sendResponse();
+    }
+
+    /**
      * Create profile barista
      * 
      * @param object $request object Request class
      * 
-     * @return mixed
+     * @return array
      */
-    public function create(object $request) : mixed
+    public function create(object $request) : array
     {
         $validator = Validator::make(
             $request->all(), 
@@ -117,9 +145,9 @@ class BaristaService extends BaseService
      * @param object $request object Request class
      * @param int    $id      id barista
      * 
-     * @return User
+     * @return array
      */
-    public function update(object $request, int $id)
+    public function update(object $request, int $id) : array
     {
         $request->validate(
             [
@@ -175,9 +203,9 @@ class BaristaService extends BaseService
      * 
      * @param int $id id barista
      * 
-     * @return mixed
+     * @return array
      */
-    public function delete(int $id) : mixed
+    public function delete(int $id) : array
     {
         $user = User::where("role_id", 2)->find($id);
 

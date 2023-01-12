@@ -13,7 +13,7 @@ namespace App\Service;
 /**
  * HomeService class
  * 
- * @method mixed get()
+ * @method array get()
  * 
  * @category Services
  * 

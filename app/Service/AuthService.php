@@ -33,9 +33,9 @@ class AuthService extends BaseService
      * 
      * @param object $request object Request method
      * 
-     * @return mixed
+     * @return array
      */
-    public function login(object $request) : mixed
+    public function login(object $request) : array
     {   
         $validator = Validator::make(
             $request->all(), 
@@ -67,9 +67,9 @@ class AuthService extends BaseService
      * 
      * @param object $request object Request class
      * 
-     * @return mixed
+     * @return array
      */
-    public function register(object $request) : mixed
+    public function register(object $request) : array
     {
         $validator = Validator::make(
             $request->all(),
@@ -111,9 +111,9 @@ class AuthService extends BaseService
     /**
      * Logout method
      * 
-     * @return mixed
+     * @return array
      */ 
-    public function logout() : mixed
+    public function logout() : array
     {
         DB::table('oauth_access_tokens')
             ->where('user_id', auth()->id())

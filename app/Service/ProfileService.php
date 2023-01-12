@@ -17,9 +17,11 @@ use Illuminate\Support\Facades\Validator;
 /**
  * ProfileService class
  * 
- * @method mixed user()
- * @method mixed update()
- * @method mixed newPassword()
+ * @method array user()
+ * @method array updateName()
+ * @method array updatePhone()
+ * @method array updateEmail()
+ * @method array newPassword()
  * 
  * @category Services
  * 
@@ -30,77 +32,14 @@ class ProfileService extends BaseService
     /**
      * Get auth user
      *
-     * @return mixed
+     * @return array
      */
-    public function user() : mixed
+    public function user() : array
     {   
         $this->data = [
             'user' => auth()->user()
         ];
     
-        return $this->sendResponse();
-    }
-
-    /**
-     * Update auth user
-     *
-     * @param Request $request object Request class
-     * 
-     * @return mixed
-     */
-    public function update($request) : mixed
-    {   
-        $id = auth()->id();
-
-        $validator = Validator::make(
-            $request->all(), 
-            [
-                "name" => [
-                    "required",
-                    "string",
-                    "min:3"
-                ],
-                "last_name" => [
-                    "nullable",
-                    "string"
-                ],
-                "phone" => [
-                    "required",
-                    "regex:/(\+7)[0-9]{10}/",
-                    "unique:users,phone," . $id
-                ],
-                "email" => [
-                    "nullable",
-                    "email",
-                    "unique:users,email," . $id
-                    ]
-            ]
-        );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->errors()->all());
-        }   
-
-        $user = User::find($id);
-        
-        if ($user->email != $request->email) {
-            $user->email = $request->email;
-            $user->email_verified_at = null;
-        }
-
-        if ($user->phone != $request->phone) {
-            $user->phone = $request->phone;
-            $user->phone_verified_at = null;
-        }
-
-        $user->name = $request->name;
-        $user->last_name = $request->last_name ?: null;
-        $user->save();
-        
-        $this->data = [
-            'user' => $user
-        ];
-        
         return $this->sendResponse();
     }
 
@@ -165,6 +104,8 @@ class ProfileService extends BaseService
 
         $user->phone = $request->phone;
 
+        $user->phone_verified_at = null;
+
         $user->save();
 
         $this->data = [
@@ -200,6 +141,8 @@ class ProfileService extends BaseService
 
         $user->email = $request->email;
 
+        $user->email_verified_at = null;
+
         $user->save();
 
         $this->data = [
@@ -214,9 +157,9 @@ class ProfileService extends BaseService
      *
      * @param Request $request object Request class
      * 
-     * @return mixed
+     * @return array
      */
-    public function newPassword($request) : mixed
+    public function newPassword($request) : array
     {
         $validator = Validator::make(
             $request->all(), 

@@ -22,16 +22,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get(
-    'type',
-    function () {
-        return auth()->user()?->role->name;
-    }
-);
-
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
 
 Route::get("/header", [HomeController::class, 'get']);
+
 //Возвращает адреса кофеточек и их id
 Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
 
@@ -133,7 +127,7 @@ Route::group(
                 'controller' => FeedbackController::class
             ],
             function () {
-                //Возвращает все feedback
+                //Возвращает все feedback, либо обращения по конкрентной кофейни
                 Route::get('admin/feedback/{id?}', 'getFeedback');
                 //создает сообщения для обратной связи
                 Route::post('admin/feedback/{id}', 'createMessage');
@@ -177,6 +171,8 @@ Route::group(
             function () {
                 //возвращает всех барист
                 Route::get('barista', 'get');
+                //возвращает определенного баристу
+                Route::get('barista/{id}', 'getBarista');
                 //создает баристу
                 Route::post('barista', 'create');
                 //редактирование баристы

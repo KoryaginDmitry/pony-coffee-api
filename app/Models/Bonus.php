@@ -17,6 +17,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * 
+ * @property-read string $burnt
+ * @property-read string $create_date
+ * @property-read string $update_date
+ * 
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus query()
@@ -27,8 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdCreate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdWrote($value)
- * 
- * @mixin \Eloquent
+ * @mixin  \Eloquent
  */
 class Bonus extends Model
 {

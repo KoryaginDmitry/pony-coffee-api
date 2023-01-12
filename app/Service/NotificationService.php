@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Request;
 /**
  * NotificationService class
  * 
- * @method mixed getUserNotifications()
- * @method mixed read()
- * @method mixed getCount()
- * @method mixed getNotificationForAdmin()
- * @method mixed createNotification()
+ * @method array getUserNotifications()
+ * @method array read()
+ * @method array getCount()
+ * @method array getNotificationForAdmin()
+ * @method array createNotification()
  * 
  * @category Services
  * 
@@ -32,9 +32,9 @@ class NotificationService extends BaseService
     /**
      * Get notifications for auth user 
      *
-     * @return mixed
+     * @return array
      */
-    public function getUserNotifications() : mixed
+    public function getUserNotifications() : array
     {
         $user_id = auth()->id();
 
@@ -52,9 +52,9 @@ class NotificationService extends BaseService
      *
      * @param int $id id notification
      * 
-     * @return mixed
+     * @return array
      */
-    public function read(int $id) : mixed
+    public function read(int $id) : array
     {
         $user_id = auth()->id();
 
@@ -85,9 +85,9 @@ class NotificationService extends BaseService
     /**
      * Get count notifications for auth user
      *
-     * @return mixed
+     * @return array
      */
-    public function getCount() : mixed
+    public function getCount() : array
     {
         $user_id = auth()->id();
         
@@ -102,9 +102,9 @@ class NotificationService extends BaseService
     /**
      * Get all notifications for admin
      *
-     * @return mixed
+     * @return array
      */
-    public function getNotificationForAdmin() : mixed
+    public function getNotificationForAdmin() : array
     {
         $this->data = [
             "notifications" => Notification::get()
@@ -118,9 +118,9 @@ class NotificationService extends BaseService
      *
      * @param object $request object Request class
      * 
-     * @return mixed
+     * @return array
      */
-    public function createNotification(object $request) : mixed
+    public function createNotification(object $request) : array
     {
         $validator = Validator::make(
             $request->all(), 
@@ -140,8 +140,8 @@ class NotificationService extends BaseService
         }
 
         if ($request->telegram) {
-            $idChannel = '-1001541569040';
-            $botToken = '5939917205:AAGvsJ9vfVcRhEGbjLqE0Pujslv6wgvaf6g';
+            $idChannel = config('telegram_bot_config.id');
+            $botToken = config('telegram_bot_config.token');
 
             $message = urlencode($request->text);
            

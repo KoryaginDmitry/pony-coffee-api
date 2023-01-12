@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,6 +27,7 @@ use Laravel\Passport\HasApiTokens;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * 
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $bonuses
  * @property-read int|null $bonuses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $bonusesCreate
@@ -42,6 +42,7 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
  * @property-read int|null $tokens_count
  * @property-read \App\Models\UserCoffeePot|null $userCoffeePot
+ * 
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -59,7 +60,7 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin  \Eloquent
  */
 class User extends Authenticatable
 {
@@ -103,35 +104,65 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Receives the number of user's active bonuses
+     *
+     * @return int
+     */
     public function countActiveBonuses() : int
     {  
         return $this->bonuses()
-                ->where("usage", "0")
-                ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
-                ->get()
-                ->count();
+            ->where("usage", "0")
+            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
+            ->get()
+            ->count();
     }
 
+    /**
+     * Relationship role
+     *
+     * @return BelongsTo
+     */
     public function role() : BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
+    /**
+     * Relationship bonuses
+     *
+     * @return HasMany
+     */
     public function bonuses() : HasMany
     {
         return $this->hasMany(Bonus::class);
     }
 
+    /**
+     * Relationship bonuses create
+     *
+     * @return HasMany
+     */
     public function bonusesCreate() : HasMany
     {
         return $this->hasMany(Bonus::class, "user_id_create", "id");
     }
 
+    /**
+     * Relationship bonuses wrote
+     *
+     * @return HasMany
+     */
     public function bonusesWrote() : HasMany
     {
         return $this->hasMany(Bonus::class, "user_id_wrote", "id");
     }
 
+    /**
+     * Relationship user coffee pot
+     *
+     * @return HasOne
+     */
     public function userCoffeePot() : HasOne
     {
         return $this->hasOne(UserCoffeePot::class);

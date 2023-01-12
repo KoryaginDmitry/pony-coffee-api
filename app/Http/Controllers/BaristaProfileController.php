@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
  * BaristaController class
  * 
  * @method JsonResponse get()
+ * @method JsonResponse getBarista()
  * @method JsonResponse create()
  * @method JsonResponse update()
  * @method JsonResponse delete()
@@ -46,6 +47,20 @@ class BaristaProfileController extends BaseController
     {   
         return $this->sendResponse(
             $this->service->getBaristas()
+        );
+    }
+
+    /**
+     * Method get one user baristas
+     *  
+     * @param int $id id barista
+     * 
+     * @return JsonResponse
+     */
+    public function getBarista(int $id) : JsonResponse
+    {   
+        return $this->sendResponse(
+            $this->service->getBarista($id)
         );
     }
 

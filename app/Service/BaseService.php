@@ -13,9 +13,14 @@ namespace App\Service;
 /**
  * BaseService class
  * 
+ * @property int $code code response
+ * @property mixed $data data response
+ * @property array $errors array errors response
+ * @property bool $status status response
+ * 
  * @method array sendReponse()
- * @method array getLastErrors()
- * @method array logErrorValidate()
+ * @method array|null getLastErrors()
+ * @method void logErrorValidate()
  * @method array sendErrorResponse()
  * 
  * @category Services
@@ -27,7 +32,7 @@ class BaseService
     /**
      * Response code
      *
-     * @var integer
+     * @var int
      */
     protected int $code = 200;
 
@@ -72,7 +77,7 @@ class BaseService
     }
 
     /**
-     * Get lust errors
+     * Get last errors
      *
      * @return array|null
      */

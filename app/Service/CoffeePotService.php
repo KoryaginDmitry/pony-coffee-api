@@ -17,11 +17,12 @@ use Illuminate\Support\Facades\Validator;
 /**
  * CoffeePotService class
  * 
- * @method mixed getAddressCoffeePots()
- * @method mixed getCoffeePots()
- * @method mixed create()
- * @method mixed update()
- * @method mixed delete()
+ * @method array getAddressCoffeePots()
+ * @method array getCoffeePots()
+ * @method array getCoffeePot()
+ * @method array create()
+ * @method array update()
+ * @method array delete()
  * 
  * @category Services
  * 

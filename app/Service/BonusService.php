@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Validator;
 /**
  * BonusService class
  * 
- * @method mixed getInfoBonuses()
- * @method mixed search()
- * @method mixed create()
- * @method mixed wrote()
+ * @method array getInfoBonuses()
+ * @method array search()
+ * @method array create()
+ * @method array wrote()
  * 
  * @category Services
  * 
@@ -33,9 +33,9 @@ class BonusService extends BaseService
     /**
      * Get information about auth user bonuses
      *
-     * @return mixed
+     * @return array
      */
-    public function getInfoBonuses() : mixed
+    public function getInfoBonuses() : array
     {
         $user = User::find(auth()->id());
 
@@ -72,9 +72,9 @@ class BonusService extends BaseService
      *
      * @param object $request object Request class
      * 
-     * @return mixed
+     * @return array
      */
-    public function search(object $request) : mixed
+    public function search(object $request) : array
     {
         if (!empty($request->value)) {
             $validator = Validator::make(
@@ -128,9 +128,9 @@ class BonusService extends BaseService
      *
      * @param int $id id user
      * 
-     * @return mixed
+     * @return array
      */
-    public function create(int $id) : mixed
+    public function create(int $id) : array
     {
         $user = User::where("role_id", 3)->find($id);
 
@@ -159,9 +159,9 @@ class BonusService extends BaseService
      *
      * @param int $id id user
      * 
-     * @return mixed
+     * @return array
      */
-    public function wrote(int $id) : mixed
+    public function wrote(int $id) : array
     {
         $user = User::where("role_id", 3)->find($id);
 

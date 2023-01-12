@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\Validator;
 /**
  * FeedbackService class
  * 
- * @method mixed _getAdminFeedback()
- * @method mixed getFeedback()
- * @method mixed create()
- * @method mixed createMessage()
+ * @method App\Models\Feedback _getAdminFeedback()
+ * @method array getFeedback()
+ * @method array create()
+ * @method array createMessage()
  * 
  * @category Services
  * 
@@ -68,9 +68,9 @@ class FeedbackService extends BaseService
      *
      * @param int $id id coffee pot
      * 
-     * @return mixed
+     * @return array
      */
-    public function getFeedback(int $id) : mixed
+    public function getFeedback(int $id) : array
     {
         if (auth()->user()->role->name === 'admin') {
             $feedbacks = $this->_getAdminFeedback($id);
@@ -97,9 +97,9 @@ class FeedbackService extends BaseService
      *
      * @param object $request class Request object
      * 
-     * @return mixed
+     * @return array
      */
-    public function create(object $request) : mixed
+    public function create(object $request) : array
     {
         $validator = Validator::make(
             $request->all(),
@@ -146,9 +146,9 @@ class FeedbackService extends BaseService
      * @param int    $id      id feedback
      * @param object $request class Request object
      * 
-     * @return mixed
+     * @return array
      */
-    public function createMessage(int $id, object $request) : mixed
+    public function createMessage(int $id, object $request) : array
     {
         $validator = Validator::make(
             $request->all(),

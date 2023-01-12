@@ -14,7 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $coffee_pot_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * 
  * @property-read \App\Models\CoffeePot|null $coffeePot
+ * 
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot query()
@@ -23,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereUserId($value)
- * @mixin \Eloquent
+ * @mixin  \Eloquent
  */
 class UserCoffeePot extends Model
 {
@@ -39,6 +41,11 @@ class UserCoffeePot extends Model
         'coffee_pot_id',
     ];
 
+    /**
+     * Relationship coffee pot
+     *
+     * @return BelongsTo
+     */
     public function coffeePot() : BelongsTo
     {
         return $this->belongsTo(CoffeePot::class);

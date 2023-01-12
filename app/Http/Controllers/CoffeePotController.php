@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
  * 
  * @method JsonResponse getAddressCoffeePots()
  * @method JsonResponse getCoffeePots()
+ * @method JsonResponse getCoffeePot()
  * @method JsonResponse create()
  * @method JsonResponse update()
  * @method JsonResponse delete()

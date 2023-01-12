@@ -17,8 +17,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $coffee_pot_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * 
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Message[] $messages
  * @property-read int|null $messages_count
+ * @property-read \App\Models\CoffeePot|null $coffeePot
+ * 
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback query()
@@ -28,13 +31,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUserId($value)
- * @mixin \Eloquent
+ * @mixin  \Eloquent
  */
 class Feedback extends Model
 {
     use HasFactory;
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>

@@ -15,8 +15,8 @@ use App\Models\User;
 /**
  * StatisticService class
  * 
- * @method mixed barista()
- * @method mixed user()
+ * @method array barista()
+ * @method array user()
  * 
  * @category Services
  * 
@@ -27,9 +27,9 @@ class StatisticService extends BaseService
     /**
      * Get a collection of bonuses for barista statistics
      *
-     * @return mixed
+     * @return array
      */
-    public function barista() : mixed
+    public function barista() : array
     {
         $this->data['barista'] = User::where("role_id", "2")
             ->with(
@@ -46,9 +46,9 @@ class StatisticService extends BaseService
     /**
      * Get a collection of bonuses for user statistics
      *
-     * @return mixed
+     * @return array
      */
-    public function user() : mixed
+    public function user() : array
     {
         $this->data['user'] = User::where("role_id", "3")
             ->with("bonuses")
