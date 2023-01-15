@@ -30,7 +30,7 @@ class AuthController extends BaseController
     /**
      * Server connection
      *
-     * @param AuthService $service comment connection service class
+     * @param AuthService $service connection service class
      */
     public function __construct(protected AuthService $service)
     {
@@ -40,7 +40,7 @@ class AuthController extends BaseController
     /**
      * Login
      *
-     * @param Request $request comment Request class odject
+     * @param Request $request Request class odject
      * 
      * @return JsonResponse
      */
@@ -54,7 +54,7 @@ class AuthController extends BaseController
     /**
      * Register
      *
-     * @param Request $request comment Request class odject
+     * @param Request $request Request class odject
      * 
      * @return JsonResponse
      */

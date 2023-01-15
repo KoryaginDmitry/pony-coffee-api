@@ -31,7 +31,7 @@ class BaristaProfileController extends BaseController
     /**
      * Connect service class
      *
-     * @param BaristaService $service comment service param
+     * @param BaristaService $service service param
      */
     public function __construct(protected BaristaService $service)
     {
@@ -67,7 +67,7 @@ class BaristaProfileController extends BaseController
     /**
      * Method create user barista
      *
-     * @param Request $request comment object Request class
+     * @param Request $request object Request class
      * 
      * @return JsonResponse
      */
@@ -81,8 +81,8 @@ class BaristaProfileController extends BaseController
     /**
      * Method update user barista
      *
-     * @param Request $request comment object Request class
-     * @param int     $id      comment id barista
+     * @param Request $request object Request class
+     * @param int     $id      id barista
      * 
      * @return JsonResponse
      */
@@ -96,7 +96,7 @@ class BaristaProfileController extends BaseController
     /**
      * Method delete user barista
      *
-     * @param int $id comment id user barista
+     * @param int $id id user barista
      * 
      * @return JsonResponse
      */
