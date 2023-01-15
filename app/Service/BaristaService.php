@@ -172,7 +172,7 @@ class BaristaService extends BaseService
             return $this->sendErrorResponse(['Сотрудник не найден']);
         }
 
-        if ($request->coffeePot !== 0) {
+        if ($request->coffeePot != 0) {
             $coffeePot = CoffeePot::find($request->coffeePot);
 
             if (!$coffeePot) {
@@ -198,7 +198,7 @@ class BaristaService extends BaseService
                 "phone" => $request->phone
             ]
         );
-        
+
         $this->data = [
             "user" => $user,
             "coffeePot" => $request->coffeePot ? $coffeePot : null
