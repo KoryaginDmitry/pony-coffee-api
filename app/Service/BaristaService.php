@@ -156,7 +156,8 @@ class BaristaService extends BaseService
             [
                 "name" => ["required", "string"],
                 "last_name" => ["nullable", "string"],
-                "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],    
+                "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
+                "coffeePot_id" => ["required", "exists:coffee_pots,id"]
             ]
         );
         
@@ -172,25 +173,6 @@ class BaristaService extends BaseService
             return $this->sendErrorResponse(['Сотрудник не найден']);
         }
 
-        if ($request->coffeePot != 0) {
-            $coffeePot = CoffeePot::find($request->coffeePot);
-
-            if (!$coffeePot) {
-                return $this->sendErrorResponse(['Такой кофейни нет']);
-            }
-
-            UserCoffeePot::updateOrCreate(
-                [
-                    "user_id" => $user->id
-                ],
-                [
-                    "coffee_pot_id" => $coffeePot->id
-                ]
-            );
-        } else {
-            UserCoffeePot::where("user_id", $user->id)->delete();
-        }
-
         $user->update(
             [
                 "name" => $request->name,
@@ -199,9 +181,20 @@ class BaristaService extends BaseService
             ]
         );
 
+        $coffeePot = CoffeePot::find($request->coffeePot_id);
+
+        UserCoffeePot::updateOrCreate(
+            [
+                "user_id" => $user->id
+            ],
+            [
+                "coffee_pot_id" => $coffeePot->id
+            ]
+        );
+
         $this->data = [
             "user" => $user,
-            "coffeePot" => $request->coffeePot ? $coffeePot : null
+            "coffeePot" => $coffeePot
         ];
         
         return $this->sendResponse();
