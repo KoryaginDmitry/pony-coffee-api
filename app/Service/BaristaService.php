@@ -98,7 +98,7 @@ class BaristaService extends BaseService
             [
                 "name" => ["required", "string"],
                 "last_name" => ["nullable", "string"],
-                "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
+                "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "unique:users"],
                 "password" => ["required", "string", "confirmed"],
                 "coffeePot_id" => ["required", "exists:coffee_pots,id"]
             ]
