@@ -112,26 +112,17 @@ class BaristaService extends BaseService
 
         $coffeePot = CoffeePot::find($request->coffeePot_id);
 
-        try {
-            $user = User::create(
-                [
-                    "name" => $request->name,
-                    "last_name" => $request->last_name,
-                    "phone" => $request->phone,
-                    "phone_verified_at" => Carbon::now(),
-                    "password" => Hash::make($request->password),
-                    "agreement" => "1",
-                    "role_id" => "2"
-                ]
-            );
-        } catch (\Throwable $th) {
-            return $this->sendErrorResponse(
-                [
-                    "Ошибка создания пользователя"
-                ],
-                500
-            );
-        }
+        $user = User::create(
+            [
+                "name" => $request->name,
+                "last_name" => $request->last_name,
+                "phone" => $request->phone,
+                "phone_verified_at" => Carbon::now(),
+                "password" => Hash::make($request->password),
+                "agreement" => "1",
+                "role_id" => "2"
+            ]
+        );
         
 
         UserCoffeePot::create(
@@ -166,7 +157,7 @@ class BaristaService extends BaseService
             [
                 "name" => ["required", "string"],
                 "last_name" => ["nullable", "string"],
-                "phone" => ["required", "regex:/(\+7)[0-9]{10}/"],
+                "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "unique:users,phone," . $id],
                 "coffeePot_id" => ["required", "exists:coffee_pots,id"]
             ]
         );
