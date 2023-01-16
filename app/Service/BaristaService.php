@@ -135,7 +135,7 @@ class BaristaService extends BaseService
             "coffeePot" => $coffeePot
         ];
 
-        $this->code = 201;
+        $this->code = 201; 
         
         return $this->sendResponse();
     }
