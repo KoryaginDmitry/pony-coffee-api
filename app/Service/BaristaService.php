@@ -17,6 +17,7 @@ use App\Models\UserCoffeePot;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Stmt\TryCatch;
 
 /**
  * BaristaService class
@@ -92,12 +93,6 @@ class BaristaService extends BaseService
      */
     public function create(object $request) : array
     {
-        $this->data = [
-            "data" => true
-        ];
-        
-        return $this->sendResponse();
-        
         $validator = Validator::make(
             $request->all(), 
             [
@@ -117,17 +112,27 @@ class BaristaService extends BaseService
 
         $coffeePot = CoffeePot::find($request->coffeePot_id);
 
-        $user = User::create(
-            [
-                "name" => $request->name,
-                "last_name" => $request->last_name,
-                "phone" => $request->phone,
-                "phone_verified_at" => Carbon::now(),
-                "password" => Hash::make($request->password),
-                "agreement" => "1",
-                "role_id" => "2"
-            ]
-        );
+        try {
+            $user = User::create(
+                [
+                    "name" => $request->name,
+                    "last_name" => $request->last_name,
+                    "phone" => $request->phone,
+                    "phone_verified_at" => Carbon::now(),
+                    "password" => Hash::make($request->password),
+                    "agreement" => "1",
+                    "role_id" => "2"
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->sendErrorResponse(
+                [
+                    "Ошибка создания пользователя"
+                ],
+                500
+            );
+        }
+        
 
         UserCoffeePot::create(
             [
