@@ -18,10 +18,10 @@ use Illuminate\Http\Request;
  * NotificationController class
  * 
  * @method JsonResponse getUser()
- * @method JsonResponse updateName()
- * @method JsonResponse updatePhone()
- * @method JsonResponse updateEmail()
- * @method JsonResponse newPassword()
+ * @method JsonResponse updateName(Request $request)
+ * @method JsonResponse updatePhone(Request $request)
+ * @method JsonResponse updateEmail(Request $request)
+ * @method JsonResponse newPassword(Request $request)
  * 
  * @category Controllers
  * 

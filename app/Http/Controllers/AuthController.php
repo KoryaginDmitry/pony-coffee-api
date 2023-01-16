@@ -16,10 +16,9 @@ use Illuminate\Http\Request;
 /**
  * AuthController class
  * 
- * @method JsonResponse login()
- * @method JsonResponse register()
+ * @method JsonResponse login(Request $request)
+ * @method JsonResponse register(Request $request)
  * @method JsonResponse logout()
- * @method JsonResponse login()
  * 
  * @category Controllers
  * 

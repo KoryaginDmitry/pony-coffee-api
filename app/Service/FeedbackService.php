@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\Validator;
 /**
  * FeedbackService class
  * 
- * @method App\Models\Feedback _getAdminFeedback()
- * @method array getFeedback()
- * @method array create()
- * @method array createMessage()
+ * @method App\Models\Feedback _getAdminFeedback(int $id)
+ * @method array getFeedback(int $id)
+ * @method array create(object $request)
+ * @method array createMessage(int $id, object $request)
  * 
  * @category Services
  * 

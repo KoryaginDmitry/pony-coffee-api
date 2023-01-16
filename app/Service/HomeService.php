@@ -26,34 +26,15 @@ class HomeService extends BaseService
      *
      * @var array
      */
-    private array $_headers = [
-        "user" => [
-            ['href' => '/', 'text' => 'Главная страница'],
-            ['href' => '/profile', 'text' => 'Профиль'],
-            ['href' => '/notifications', 'text' => 'Уведомления'],
-            ['href' => '/feedback', 'text' => 'Обратная связь'],
-            ['href' => '/logout', 'text' => 'Выход'],
-        ],
-        "barista" => [
-            ['href' => '/', 'text' => 'Главная страница'],
-            ['href' => '/bonuses', 'text' => 'Бонусы'],
-            ['href' => '/logout', 'text' => 'Выход'],
-        ],
-        "admin" => [
-            ['href' => '/', 'text' => 'Главная страница'],
-            ['href' => '/statistic/barista', 'text' => 'Статистика сотрудников'],
-            ['href' => '/statistic/user', 'text' => 'Статистика гостей'],
-            ['href' => '/feedback', 'text' => 'Обратная связь'],
-            ['href' => '/seending', 'text' => 'Рассылка'],
-            ['href' => '/coffeePot', 'text' => 'Кофейни'],
-            ['href' => '/barista', 'text' => 'Сотрудники'],
-            ['href' => '/logout', 'text' => 'Выход'],
-        ],
-        "guest" => [
-            ['href' => '/login', 'text' => 'Вход'],
-            ['href' => '/register', 'text' => 'Регистрация'],
-        ]
-    ];
+    private array $_header;
+
+    /**
+     * Get array header
+     */
+    public function __construct()
+    {
+        $this->_header = config('param_config.header');
+    }
 
     /**
      * Get header for user role
@@ -62,14 +43,14 @@ class HomeService extends BaseService
      */
     public function get() : array
     {
-        if (auth()->check()) {
-            $role = auth()->user()->role->name;
-        } else {
+        $role = auth()->user()?->role->name;
+        
+        if (!$role) {
             $role = 'guest';
         }
 
         $this->data = [
-            'header' => $this->_headers[$role]
+            'header' => $this->_header[$role]
         ];
 
         return $this->sendResponse();

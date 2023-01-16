@@ -17,10 +17,10 @@ use Illuminate\Http\Request;
  * NotificationController class
  * 
  * @method JsonResponse getUserNotifications()
- * @method JsonResponse read()
+ * @method JsonResponse read(int $id)
  * @method JsonResponse getCount()
  * @method JsonResponse getNotificationForAdmin()
- * @method JsonResponse createNotification()
+ * @method JsonResponse createNotification(Request $request)
  * 
  * @category Controllers
  * 

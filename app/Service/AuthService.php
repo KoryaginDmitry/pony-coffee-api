@@ -10,6 +10,7 @@
 namespace App\Service;
 
 use App\Models\User;
+use App\Support\Helper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -17,10 +18,9 @@ use Illuminate\Support\Facades\Validator;
 /**
  * AuthService class
  * 
- * @method array login()
- * @method array register()
+ * @method array login(object $request)
+ * @method array register(object $request)
  * @method array logout()
- * @method array login()
  * 
  * @category Services
  * 
@@ -37,14 +37,14 @@ class AuthService extends BaseService
      */
     public function login(object $request) : array
     {   
+        $phone_regex = config('param_config.phone_regex');
+
+        $request->phone = Helper::editPhoneNumber($request->phone);
+
         $validator = Validator::make(
             $request->all(), 
             [
-                "phone" => [
-                    "required",
-                    "regex:/((\+7)|8)[0-9]{10}/",
-                    "exists:users"
-                ],
+                "phone" => ["required", "regex:/$phone_regex/"],
                 "password" => ["required", "string"]
             ]
         );
@@ -71,11 +71,15 @@ class AuthService extends BaseService
      */
     public function register(object $request) : array
     {
+        $phone_regex = config('param_config.phone_regex');
+
+        $request->phone = Helper::editPhoneNumber($request->phone);
+
         $validator = Validator::make(
             $request->all(),
             [
                 "name" => ["required", "string", "max:255"],
-                "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "unique:users"],
+                "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
                 "password" => ["required", "between:8, 255" , "confirmed"],
                 "agreement" => ["required", "accepted"]
             ]
@@ -88,7 +92,7 @@ class AuthService extends BaseService
         $user = User::create(
             [
                 "name" => $request->name,
-                "phone" => $request->phone,
+                "phone" => Helper::editPhoneNumber($request->phone),
                 "password" => Hash::make($request->password),
                 "agreement" => $request->agreement ? "1" : "0", 
                 "role_id" => 3

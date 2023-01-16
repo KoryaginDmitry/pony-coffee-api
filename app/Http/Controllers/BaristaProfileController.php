@@ -17,10 +17,10 @@ use Illuminate\Http\Request;
  * BaristaController class
  * 
  * @method JsonResponse get()
- * @method JsonResponse getBarista()
- * @method JsonResponse create()
- * @method JsonResponse update()
- * @method JsonResponse delete()
+ * @method JsonResponse getBarista($id)
+ * @method JsonResponse create(Request $request)
+ * @method JsonResponse update(Request $request, int $id)
+ * @method JsonResponse delete($id)
  * 
  * @category Controllers
  * 

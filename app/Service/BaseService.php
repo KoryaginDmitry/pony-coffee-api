@@ -20,8 +20,8 @@ namespace App\Service;
  * 
  * @method array sendReponse()
  * @method array|null getLastErrors()
- * @method void logErrorValidate()
- * @method array sendErrorResponse()
+ * @method void logErrorValidate(array|string $messages)
+ * @method array sendErrorResponse(array $errorArray, int $code = 422)
  * 
  * @category Services
  * 

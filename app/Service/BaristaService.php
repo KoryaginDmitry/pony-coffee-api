@@ -14,18 +14,19 @@ namespace App\Service;
 use App\Models\CoffeePot;
 use App\Models\User;
 use App\Models\UserCoffeePot;
+use App\Support\Helper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Stmt\TryCatch;
 
 /**
  * BaristaService class
  * 
  * @method array getBaristas()
- * @method array create()
- * @method array update()
- * @method array delete()
+ * @method array getBaristas(int $id)
+ * @method array create(object $request)
+ * @method array update(object $request)
+ * @method array delete(int $id)
  * 
  * @category Services
  * 
@@ -93,12 +94,16 @@ class BaristaService extends BaseService
      */
     public function create(object $request) : array
     {
+        $phone_regex = config('param_config.phone_regex');
+
+        $request->phone = Helper::editPhoneNumber($request->phone);
+
         $validator = Validator::make(
             $request->all(), 
             [
                 "name" => ["required", "string"],
                 "last_name" => ["nullable", "string"],
-                "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "unique:users"],
+                "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
                 "password" => ["required", "string", "confirmed"],
                 "coffeePot_id" => ["required", "exists:coffee_pots,id"]
             ]
@@ -124,7 +129,6 @@ class BaristaService extends BaseService
             ]
         );
         
-
         UserCoffeePot::create(
             [
                 "user_id" => $user->id,
@@ -152,12 +156,16 @@ class BaristaService extends BaseService
      */
     public function update(object $request, int $id) : array
     {
+        $phone_regex = config('param_config.phone_regex');
+
+        $request->phone = Helper::editPhoneNumber($request->phone);
+
         $validator = Validator::make(
             $request->all(),
             [
                 "name" => ["required", "string"],
                 "last_name" => ["nullable", "string"],
-                "phone" => ["required", "regex:/(\+7)[0-9]{10}/", "unique:users,phone," . $id],
+                "phone" => ["required", "regex:/$phone_regex/", "unique:users,phone," . $id],
                 "coffeePot_id" => ["required", "exists:coffee_pots,id"]
             ]
         );

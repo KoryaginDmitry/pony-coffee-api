@@ -19,10 +19,10 @@ use Illuminate\Http\Request;
  * 
  * @method JsonResponse getAddressCoffeePots()
  * @method JsonResponse getCoffeePots()
- * @method JsonResponse getCoffeePot()
- * @method JsonResponse create()
- * @method JsonResponse update()
- * @method JsonResponse delete()
+ * @method JsonResponse getCoffeePot(int $id)
+ * @method JsonResponse create(Request $request)
+ * @method JsonResponse update(int $id, Request $request)
+ * @method JsonResponse delete(int $id)
  * 
  * @category Controllers
  * 

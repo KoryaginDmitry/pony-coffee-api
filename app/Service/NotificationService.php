@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\Request;
  * NotificationService class
  * 
  * @method array getUserNotifications()
- * @method array read()
+ * @method array read(int $id)
  * @method array getCount()
  * @method array getNotificationForAdmin()
- * @method array createNotification()
+ * @method array createNotification(object $request)
  * 
  * @category Services
  * 
@@ -140,8 +140,8 @@ class NotificationService extends BaseService
         }
 
         if ($request->telegram) {
-            $idChannel = config('telegram_bot_config.id');
-            $botToken = config('telegram_bot_config.token');
+            $idChannel = config('param_config.channel_id');
+            $botToken = config('param_config.bot_token');
 
             $message = urlencode($request->text);
            

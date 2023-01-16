@@ -16,9 +16,9 @@ use Illuminate\Http\Request;
 /**
  * FeedbackController class
  * 
- * @method JsonResponse getFeedback()
- * @method JsonResponse create()
- * @method JsonResponse createMessage()
+ * @method JsonResponse getFeedback(int $id = 0)
+ * @method JsonResponse create(Request $request)
+ * @method JsonResponse createMessage(int $id, Request $request)
  * 
  * @category Controllers
  * 

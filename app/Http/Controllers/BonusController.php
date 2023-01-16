@@ -18,9 +18,9 @@ use Illuminate\Http\JsonResponse;
  * BonusController class
  * 
  * @method JsonResponse getInfoBonuses()
- * @method JsonResponse search()
- * @method JsonResponse create()
- * @method JsonResponse wrote()
+ * @method JsonResponse search(Request $request)
+ * @method JsonResponse create(int $id)
+ * @method JsonResponse wrote(int $id)
  * 
  * @category Controllers
  * 

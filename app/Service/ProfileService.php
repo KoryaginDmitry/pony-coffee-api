@@ -11,6 +11,7 @@
 namespace App\Service;
 
 use App\Models\User;
+use App\Support\Helper;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,10 +19,10 @@ use Illuminate\Support\Facades\Validator;
  * ProfileService class
  * 
  * @method array user()
- * @method array updateName()
- * @method array updatePhone()
- * @method array updateEmail()
- * @method array newPassword()
+ * @method array updateName(object $request)
+ * @method array updatePhone(object $request)
+ * @method array updateEmail(object $request)
+ * @method array newPassword(object $request)
  * 
  * @category Services
  * 
@@ -50,7 +51,7 @@ class ProfileService extends BaseService
      * 
      * @return array
      */
-    public function updateName($request) : array
+    public function updateName(object $request) : array
     {
         $validator = Validator::make(
             $request->all(), 
@@ -85,12 +86,16 @@ class ProfileService extends BaseService
      * 
      * @return array
      */
-    public function updatePhone($request) : array
+    public function updatePhone(object $request) : array
     {
+        $phone_regex = config('param_config.phone_regex');
+
+        $request->phone = Helper::editPhoneNumber($request->phone);
+
         $validator = Validator::make(
             $request->all(), 
             [
-                "phone" => ["request", 'regex:/(\+7)[0-9]{10}/', 'unique']
+                "phone" => ["request", "regex:/$phone_regex/", "unique"]
             ]
         );
 
@@ -122,7 +127,7 @@ class ProfileService extends BaseService
      *
      * @return array
      */
-    public function updateEmail($request) : array
+    public function updateEmail(object $request) : array
     {
         $validator = Validator::make(
             $request->all(), 
@@ -159,7 +164,7 @@ class ProfileService extends BaseService
      * 
      * @return array
      */
-    public function newPassword($request) : array
+    public function newPassword(object $request) : array
     {
         $validator = Validator::make(
             $request->all(), 

@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Validator;
  * 
  * @method array getAddressCoffeePots()
  * @method array getCoffeePots()
- * @method array getCoffeePot()
- * @method array create()
- * @method array update()
- * @method array delete()
+ * @method array getCoffeePot(int $id)
+ * @method array create(object $request)
+ * @method array update(int $id, object $request)
+ * @method array delete(int $id)
  * 
  * @category Services
  * 
@@ -92,7 +92,7 @@ class CoffeePotService extends BaseService
      * 
      * @return array
      */
-    public function create($request) : array
+    public function create(object $request) : array
     {
         $validator = Validator::make(
             $request->all(),

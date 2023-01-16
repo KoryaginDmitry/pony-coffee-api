@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 /**
  * BaristaController class
  * 
- * @method JsonResponse sendResponse()
+ * @method JsonResponse sendResponse(array $response)
  * 
  * @category Controllers
  * 

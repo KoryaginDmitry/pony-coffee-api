@@ -20,9 +20,9 @@ use Illuminate\Support\Facades\Validator;
  * BonusService class
  * 
  * @method array getInfoBonuses()
- * @method array search()
- * @method array create()
- * @method array wrote()
+ * @method array search(object $request)
+ * @method array create(int id)
+ * @method array wrote(int $id)
  * 
  * @category Services
  * 
@@ -102,18 +102,17 @@ class BonusService extends BaseService
                 )
                 ->get();
         } else {
-            $user = User::where("role_id", 3)
-                ->with(
-                    [
-                        'bonuses' => function ($query) {
-                            $query->where("usage", "0")
-                                ->where(
-                                    DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30"
-                                );
-                        }
-                    ]
-                )
-                ->get();
+            $user = User::where("role_id", 3)->with(
+                [
+                    'bonuses' => function ($query) {
+                        $query->where("usage", "0")
+                            ->where(
+                                DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30"
+                            );
+                    }
+                ]
+            )
+            ->get();
         }
 
         $this->data = [
