@@ -92,6 +92,12 @@ class BaristaService extends BaseService
      */
     public function create(object $request) : array
     {
+        $this->data = [
+            "data" => true
+        ];
+        
+        return $this->sendResponse();
+        
         $validator = Validator::make(
             $request->all(), 
             [
