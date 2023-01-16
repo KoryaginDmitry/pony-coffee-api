@@ -39,8 +39,10 @@ class AuthService extends BaseService
     {   
         $phone_regex = config('param_config.phone_regex');
 
-        $request->phone = Helper::editPhoneNumber($request->phone);
-
+        if ($request->phone) {
+            $request->phone = Helper::editPhoneNumber($request->phone);
+        }
+    
         $validator = Validator::make(
             $request->all(), 
             [
@@ -73,7 +75,9 @@ class AuthService extends BaseService
     {
         $phone_regex = config('param_config.phone_regex');
 
-        $request->phone = Helper::editPhoneNumber($request->phone);
+        if ($request->phone) {
+            $request->phone = Helper::editPhoneNumber($request->phone);
+        }
 
         $validator = Validator::make(
             $request->all(),

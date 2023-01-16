@@ -104,7 +104,7 @@ class FeedbackService extends BaseService
         $validator = Validator::make(
             $request->all(),
             [
-                "coffeePot" => ["required", "exists:coffee_pots,id"],
+                "coffeePot_id" => ["required", "exists:coffee_pots,id"],
                 "grade" => ["nullable", "min:1", "max:5"],
                 "text" => ["required", "string", "min:15"]
             ]
@@ -118,7 +118,7 @@ class FeedbackService extends BaseService
             [
                 "grade" => $request->grade,
                 "user_id" => auth()->id(),
-                "coffee_pot_id" => $request->coffeePot
+                "coffee_pot_id" => $request->coffeePot_id
             ]
         );
 
