@@ -97,7 +97,7 @@ class ProfileService extends BaseService
         $validator = Validator::make(
             $request->all(), 
             [
-                "phone" => ["request", "regex:/$phone_regex/", "unique"]
+                "phone" => ["request", "regex:/$phone_regex/", "unique:users"]
             ]
         );
 
@@ -134,7 +134,7 @@ class ProfileService extends BaseService
         $validator = Validator::make(
             $request->all(), 
             [
-                "email" => ["request", 'email', 'unique']
+                "email" => ["request", 'email', 'unique:users']
             ]
         );
 
@@ -179,11 +179,11 @@ class ProfileService extends BaseService
             return $this->sendErrorResponse($validator->errros()->all());
         } 
 
-        $user = auth()->user();
+        $user = User::find(auth()->id());
 
         $user->password = Hash::make($request->password);
 
-        $user->save;
+        $user->save();
 
         $this->data = [
             "message" => "Пароль изменен"

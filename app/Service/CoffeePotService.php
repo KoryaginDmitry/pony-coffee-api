@@ -37,10 +37,8 @@ class CoffeePotService extends BaseService
      */
     public function getAddressCoffeePots() : array
     {
-        $coffeePots = CoffeePot::select('id', 'address')->get();
-        
         $this->data = [
-            "coffeePots" => $coffeePots
+            "coffeePots" => CoffeePot::select('id', 'address')->get()
         ];
         
         return $this->sendResponse();
@@ -53,10 +51,8 @@ class CoffeePotService extends BaseService
      */
     public function getCoffeePots() : array
     {
-        $coffeePots = CoffeePot::get();
-
         $this->data = [
-            "coffeePots" => $coffeePots
+            "coffeePots" => CoffeePot::get()
         ];
         
         return $this->sendResponse();

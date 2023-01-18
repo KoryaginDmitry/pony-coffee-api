@@ -10,9 +10,9 @@
  */
 namespace App\Service;
 
-use App\Models\CoffeePot;
 use App\Models\Feedback;
 use App\Models\Message;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -34,33 +34,22 @@ class FeedbackService extends BaseService
      *
      * @param int $id id coffee pot
      * 
-     * @return Feedback
+     * @return Collection
      */
-    private function _getAdminFeedback(int $id) : Feedback
+    private function _getAdminFeedback(int $id) : Collection
     {
-        if ($id !== 0) {
-            $coffeePot = CoffeePot::find($id);
-
-            if (!$coffeePot) {
-                return null;
+        return Feedback::when(
+            ($id !== 0),
+            function ($query) use ($id) {
+                return $query->where("coffee_pot_id", $id);
             }
-
-            return Feedback::where("coffee_pot_id", $id)
-                ->with(
-                    [
-                        'messages',
-                        'coffeePot'
-                    ]
-                )
-                ->get();
-        } else {
-            return Feedback::with(
-                [
-                    'messages',
-                    'coffeePot'
-                ]
-            )->get();
-        }
+        )->with(
+            [
+                'messages',
+                'coffeePot'
+            ]
+        )
+        ->get();
     }
 
     /**
@@ -72,7 +61,7 @@ class FeedbackService extends BaseService
      */
     public function getFeedback(int $id) : array
     {
-        if (auth()->user()->role->name === 'admin') {
+        if (auth()->user()->isAdmin()) {
             $feedbacks = $this->_getAdminFeedback($id);
         } else {
             $feedbacks = Feedback::where('user_id', auth()->id())
@@ -161,7 +150,7 @@ class FeedbackService extends BaseService
             return $this->sendErrorResponse($validator->errors()->all());
         }
 
-        if (auth()->user()->role->name == 'admin') {
+        if (auth()->user()->isAdmin()) {
             $feedback = Feedback::find($id);
         } else {
             $feedback = Feedback::where("user_id", auth()->id())->find($id);

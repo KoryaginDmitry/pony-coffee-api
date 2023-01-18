@@ -10,6 +10,8 @@
  */
 namespace App\Service;
 
+use Illuminate\Support\Facades\Validator;
+
 /**
  * BaseService class
  * 
@@ -112,7 +114,7 @@ class BaseService
      * 
      * @return array
      */
-    public function sendErrorResponse(array $errorArray, int $code = 422) : array
+    protected function sendErrorResponse(array $errorArray, int $code = 422) : array
     {
         $this->logErrorValidate($errorArray);
         $this->status = false;

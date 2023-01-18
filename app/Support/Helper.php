@@ -35,8 +35,10 @@ class Helper
     {
         $phone = Str::remove(['-','(',')'], $phone);
 
-        if (mb_substr($phone, 0, 1) === '8') {
-            $phone = Str::replaceFirst('8', '+7', $phone);
+        $firstSim = mb_substr($phone, 0, 1);
+
+        if ($firstSim === '8' || $firstSim === '7') {
+            $phone = Str::replaceFirst($firstSim, '+7', $phone);
         }
 
         return $phone;

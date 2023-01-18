@@ -167,4 +167,18 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserCoffeePot::class);
     }
+
+    /**
+     * Check if the user is an admin
+     *
+     * @return boolean
+     */
+    public function isAdmin() : bool
+    {
+        if (auth()->user()->role->name === 'admin') {
+            return true;
+        }
+
+        return false;
+    }
 }

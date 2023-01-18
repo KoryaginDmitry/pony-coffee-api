@@ -18,6 +18,7 @@ use App\Support\Helper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 /**
  * BaristaService class
@@ -131,7 +132,7 @@ class BaristaService extends BaseService
             ]
         );
         
-        UserCoffeePot::create(
+        UserCoffeePot::firstOrCreate(
             [
                 "user_id" => $user->id,
                 "coffee_pot_id" => $coffeePot->id
@@ -158,6 +159,12 @@ class BaristaService extends BaseService
      */
     public function update(object $request, int $id) : array
     {
+        $user = User::where("role_id", 2)->find($id);
+
+        if (!$user) {
+            return $this->sendErrorResponse(['Сотрудник не найден']);
+        }
+
         $phone_regex = config('param_config.phone_regex');
 
         if ($request->phone) {
@@ -169,7 +176,11 @@ class BaristaService extends BaseService
             [
                 "name" => ["required", "string"],
                 "last_name" => ["nullable", "string"],
-                "phone" => ["required", "regex:/$phone_regex/", "unique:users,phone," . $id],
+                "phone" => [
+                    "required",
+                    "regex:/$phone_regex/",
+                    Rule::unique('users')->ignore($id, 'user_id')
+                ],
                 "coffeePot_id" => ["required", "exists:coffee_pots,id"]
             ]
         );
@@ -178,12 +189,6 @@ class BaristaService extends BaseService
             return $this->sendErrorResponse(
                 $validator->errors()->all()
             );
-        }
-
-        $user = User::where("role_id", 2)->find($id);
-
-        if (!$user) {
-            return $this->sendErrorResponse(['Сотрудник не найден']);
         }
 
         $user->update(

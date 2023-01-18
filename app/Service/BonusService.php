@@ -10,7 +10,6 @@
  */
 namespace App\Service;
 
-use App\Models\Bonus;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -39,29 +38,21 @@ class BonusService extends BaseService
     {
         $user = User::find(auth()->id());
 
-        $countActiveBonuses = $user->bonuses()
-            ->where("usage", "0")
-            ->get()
-            ->where('burnt', '0')
-            ->count();
+        $userBonuses = $user->bonuses()
+            ->where('usage', '0')
+            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
-        $bonusBurnDate = Bonus::select("created_at")
-            ->where(
-                [
-                    "user_id" => auth()->id(),
-                    "usage" => "0"
-                ]
-            )
-            ->orderBy("created_at", "DESC")
-            ->get()
-            ->where('burnt', '0')
+        $bonusBurnDate = $userBonuses
+            ->pluck('created_at')
             ->first();
 
         $this->data = [
-            "count" => $countActiveBonuses,
+            "count" => $userBonuses->count(),
             "dateBurn" => $bonusBurnDate ? Carbon::create(
-                $bonusBurnDate->created_at
-            )->addDays(30)->format("d-m-Y") : null,
+                $bonusBurnDate
+            )->addDays(30)->format("d-m-Y") : null
         ];
 
         return $this->sendResponse();
@@ -76,33 +67,28 @@ class BonusService extends BaseService
      */
     public function search(object $request) : array
     {
-        if (!empty($request->value)) {
-            $validator = Validator::make(
-                $request->all(), [
-                    "value" => ["required", "string", "min:1", "max:12"]
-                ]
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "value" => ["sometimes", "required", "string", "min:1", "max:12"]
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $this->sendErrorResponse(
+                $validator->errors()->all()
             );
+        }
 
-            if ($validator->fails()) {
-                return $this->sendErrorResponse($validator->errors()->all());
-            }
-
-            $user = User::where("role_id", "3")
-                ->where("id", $request->value)
-                ->orWhere("phone", $request->value)
-                ->with(
-                    [
-                        'bonuses' => function ($query) {
-                            $query->where("usage", "0")
-                                ->where(
-                                    DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30"
-                                );
-                        }
-                    ]
-                )
-                ->get();
-        } else {
-            $user = User::where("role_id", 3)->with(
+        $user = User::where("role_id", "3")
+            ->when(
+                isset($request->value),
+                function ($query) use ($request) {
+                    return $query->where("id", $request->value)
+                        ->orWhere("phone", $request->value);
+                }
+            )
+            ->with(
                 [
                     'bonuses' => function ($query) {
                         $query->where("usage", "0")
@@ -113,7 +99,6 @@ class BonusService extends BaseService
                 ]
             )
             ->get();
-        }
 
         $this->data = [
             "user" => $user
@@ -139,7 +124,7 @@ class BonusService extends BaseService
 
         $user->bonuses()->create(
             [
-            "user_id_create" => auth()->id()
+                "user_id_create" => auth()->id()
             ]
         );
 

@@ -92,7 +92,7 @@ class NotificationService extends BaseService
         $user_id = auth()->id();
         
         $this->data['count'] = Notification::where("site", "1")
-            ->where("users_read_id", null)
+            ->whereNull("users_read_id")
             ->orWhere("users_read_id", "NOT LIKE", "%[$user_id]%")
             ->count();
     

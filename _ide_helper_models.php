@@ -21,6 +21,9 @@ namespace App\Models{
  * @property string $usage
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $burnt
+ * @property-read string $create_date
+ * @property-read string $update_date
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus query()
@@ -32,9 +35,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdCreate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdWrote($value)
  * @mixin \Eloquent
- * @property-read string $burnt
- * @property-read string $create_date
- * @property-read string $update_date
  */
 	class Bonus extends \Eloquent {}
 }
@@ -73,6 +73,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Message[] $messages
  * @property-read int|null $messages_count
+ * @property-read \App\Models\CoffeePot|null $coffeePot
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback query()
@@ -83,7 +84,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUserId($value)
  * @mixin \Eloquent
- * @property-read \App\Models\CoffeePot|null $coffeePot
  */
 	class Feedback extends \Eloquent {}
 }
@@ -98,6 +98,8 @@ namespace App\Models{
  * @property int $feedback_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $belongToAuthUser
+ * @property-read int $belong_to_auth_user
  * @method static \Illuminate\Database\Eloquent\Builder|Message newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message query()
