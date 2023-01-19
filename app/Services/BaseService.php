@@ -11,8 +11,9 @@
 namespace App\Services;
 
 use App\Exceptions\ValidateException;
-use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
+use Illuminate\Validation\ValidationException;
 
 /**
  * BaseService class
@@ -132,16 +133,16 @@ class BaseService
      * @param array $params array of parameters for validation
      * @param array $rules  array of validation rules
      * 
-     * @throws ValidateException
+     * @throws ValidationException
      * 
      * @return boolean
      */
-    protected function validate(array $params, array $rules) : bool|ValidateException
+    protected function validate(array $params, array $rules) : bool|MessageBag
     {
-        $validate = Validator::make($params, $rules);
+        $validator = Validator::make($params, $rules);
 
-        if ($validate->fails()) {
-            return throw new ValidateException($validate->errors());
+        if ($validator->fails()) {
+            return throw new ValidationException($validator);
         }
 
         return true;
