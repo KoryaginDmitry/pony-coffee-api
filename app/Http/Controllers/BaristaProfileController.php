@@ -9,7 +9,7 @@
  */
 namespace App\Http\Controllers;
 
-use App\Service\BaristaService;
+use App\Services\BaristaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

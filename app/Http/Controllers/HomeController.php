@@ -9,7 +9,7 @@
  */
 namespace App\Http\Controllers;
 
-use App\Service\HomeService;
+use App\Services\HomeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

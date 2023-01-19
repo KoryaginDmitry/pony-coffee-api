@@ -9,7 +9,7 @@
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
  * 
  */
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\CoffeePot;
 use App\Models\User;
@@ -17,7 +17,6 @@ use App\Models\UserCoffeePot;
 use App\Support\Helper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 /**
@@ -69,14 +68,9 @@ class BaristaService extends BaseService
     {
         $user = User::where("role_id", "2")
             ->with("userCoffeePot.coffeePot")
-            ->find($id);
-
-        if (!$user) {
-            return $this->sendErrorResponse(['Такого баристы нет']);
-        }
+            ->findOrFail($id);
         
-        $coffeePots = CoffeePot::orderBy('created_at', "DESC")
-            ->get();
+        $coffeePots = CoffeePot::orderBy('created_at', "DESC")->get();
 
         $this->data = [
             "user" => $user,
@@ -97,12 +91,10 @@ class BaristaService extends BaseService
     {
         $phone_regex = config('param_config.phone_regex');
 
-        if ($request->phone) {
-            $request->phone = Helper::editPhoneNumber($request->phone);
-        }
+        $request = Helper::editPhoneNumber($request);
 
-        $validator = Validator::make(
-            $request->all(), 
+        $this->validate(
+            $request->all(),
             [
                 "name" => ["required", "string"],
                 "last_name" => ["nullable", "string"],
@@ -111,12 +103,6 @@ class BaristaService extends BaseService
                 "coffeePot_id" => ["required", "exists:coffee_pots,id"]
             ]
         );
-        
-        if ($validator->fails()) {
-            return $this->sendErrorResponse(
-                $validator->errors()->all()
-            );
-        }
 
         $coffeePot = CoffeePot::find($request->coffeePot_id);
 
@@ -159,11 +145,7 @@ class BaristaService extends BaseService
      */
     public function update(object $request, int $id) : array
     {
-        $user = User::where("role_id", 2)->find($id);
-
-        if (!$user) {
-            return $this->sendErrorResponse(['Сотрудник не найден']);
-        }
+        $user = User::where("role_id", 2)->findOrFail($id);
 
         $phone_regex = config('param_config.phone_regex');
 
@@ -171,7 +153,7 @@ class BaristaService extends BaseService
             $request->phone = Helper::editPhoneNumber($request->phone);
         }
 
-        $validator = Validator::make(
+        $this->validate(
             $request->all(),
             [
                 "name" => ["required", "string"],
@@ -184,12 +166,6 @@ class BaristaService extends BaseService
                 "coffeePot_id" => ["required", "exists:coffee_pots,id"]
             ]
         );
-        
-        if ($validator->fails()) {
-            return $this->sendErrorResponse(
-                $validator->errors()->all()
-            );
-        }
 
         $user->update(
             [
@@ -227,11 +203,7 @@ class BaristaService extends BaseService
      */
     public function delete(int $id) : array
     {
-        $user = User::where("role_id", 2)->find($id);
-
-        if (!$user) {
-            return $this->sendErrorResponse(['Сотрудник не найден']);
-        }
+        $user = User::where("role_id", 2)->findOrFail($id);
 
         UserCoffeePot::where("user_id", $user->id)->delete();
 

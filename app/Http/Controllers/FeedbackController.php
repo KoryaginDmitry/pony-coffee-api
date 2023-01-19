@@ -9,7 +9,7 @@
  */
 namespace App\Http\Controllers;
 
-use App\Service\FeedbackService;
+use App\Services\FeedbackService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

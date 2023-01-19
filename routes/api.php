@@ -32,7 +32,7 @@ Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePo
 Route::group(
     [
         'controller' => AuthController::class,
-        'middleware' => ['guest']
+        'middleware' => 'guest'
     ], 
     function () {
         Route::post('/login', 'login'); //Авторизация пользоватея
@@ -77,7 +77,7 @@ Route::group(
         Route::group(
             [
                 'controller' => FeedbackController::class
-            ], 
+            ],
             function () {
                 // Возвращает все все обращения пользователя в обратную связь,
                 // если делать запрос с профился админа, то просто вернет все 

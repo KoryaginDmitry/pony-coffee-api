@@ -8,7 +8,7 @@
  * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
  */
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\User;
 

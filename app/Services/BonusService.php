@@ -8,12 +8,11 @@
  * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
  */
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * BonusService class
@@ -67,18 +66,12 @@ class BonusService extends BaseService
      */
     public function search(object $request) : array
     {
-        $validator = Validator::make(
+        $this->validate(
             $request->all(),
             [
                 "value" => ["sometimes", "required", "string", "min:1", "max:12"]
             ]
         );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse(
-                $validator->errors()->all()
-            );
-        }
 
         $user = User::where("role_id", "3")
             ->when(
@@ -116,11 +109,7 @@ class BonusService extends BaseService
      */
     public function create(int $id) : array
     {
-        $user = User::where("role_id", 3)->find($id);
-
-        if (!$user) {
-            return $this->sendErrorResponse(['Такого пользователя нет']);
-        }
+        $user = User::where("role_id", 3)->findOrFail($id);
 
         $user->bonuses()->create(
             [
@@ -147,11 +136,7 @@ class BonusService extends BaseService
      */
     public function wrote(int $id) : array
     {
-        $user = User::where("role_id", 3)->find($id);
-
-        if (!$user) {
-            return $this->sendErrorResponse(['Такого пользователя нет']);
-        }
+        $user = User::where("role_id", 3)->findOrFail($id);
         
         $bonuses = $user->bonuses()
             ->where("usage", "0")

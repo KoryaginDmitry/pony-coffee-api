@@ -8,12 +8,12 @@
  * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
  */
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\Feedback;
 use App\Models\Message;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Validator;
+
 
 /**
  * FeedbackService class
@@ -90,18 +90,14 @@ class FeedbackService extends BaseService
      */
     public function create(object $request) : array
     {
-        $validator = Validator::make(
+        $this->validate(
             $request->all(),
             [
                 "coffeePot_id" => ["required", "exists:coffee_pots,id"],
-                "grade" => ["nullable", "min:1", "max:5"],
+                "grade" => ["nullable", "integer", "min:1", "max:5"],
                 "text" => ["required", "string", "min:15"]
             ]
         );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->errors()->all());
-        }
 
         $feedback = Feedback::create(
             [
@@ -139,29 +135,17 @@ class FeedbackService extends BaseService
      */
     public function createMessage(int $id, object $request) : array
     {
-        $validator = Validator::make(
+        $this->validate(
             $request->all(),
             [
-                "text" => ["required", "string", "min:5"]
+                'text' => ["required", "string", "min:5"]
             ]
         );
 
-        if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->errors()->all());
-        }
-
         if (auth()->user()->isAdmin()) {
-            $feedback = Feedback::find($id);
+            $feedback = Feedback::findOrFail($id);
         } else {
-            $feedback = Feedback::where("user_id", auth()->id())->find($id);
-        }
-
-        if (!$feedback) {
-            return $this->sendErrorResponse(
-                [
-                  'Проверьте данные, которые вы передаете'
-                ]
-            );
+            $feedback = Feedback::where("user_id", auth()->id())->findOrFail($id);
         }
 
         $message = Message::create(

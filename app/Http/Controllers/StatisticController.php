@@ -10,7 +10,7 @@
  */
 namespace App\Http\Controllers;
 
-use App\Service\StatisticService;
+use App\Services\StatisticService;
 use Illuminate\Http\JsonResponse;
 
 /**

@@ -8,11 +8,10 @@
  * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
  */
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\CoffeePot;
 use App\Models\UserCoffeePot;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * CoffeePotService class
@@ -67,12 +66,7 @@ class CoffeePotService extends BaseService
      */
     public function getCoffeePot(int $id) : array
     {   
-
-        $coffeePot = CoffeePot::find($id);
-
-        if (!$coffeePot) {
-            return $this->sendErrorResponse(['Такой кофейни нет']);
-        }
+        $coffeePot = CoffeePot::findOrFail($id);
 
         $this->data = [
             "coffeePot" => $coffeePot
@@ -90,17 +84,13 @@ class CoffeePotService extends BaseService
      */
     public function create(object $request) : array
     {
-        $validator = Validator::make(
+        $this->validate(
             $request->all(),
             [
                 "name" => ["nullable", "string"],
-                "address" => ["required", "string"]
+                "address" => ["required", "string"]  
             ]
         );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->errors()->all());
-        }
 
         $coffeePot = CoffeePot::create(
             [
@@ -128,23 +118,15 @@ class CoffeePotService extends BaseService
      */
     public function update(int $id, object $request) : array
     {   
-        $validator = Validator::make(
+        $this->validate(
             $request->all(),
             [
                 "name" => ["nullable", "string"],
                 "address" => ["required", "string"]
             ]
         );
-        
-        if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->errors()->all());
-        }
 
-        $coffeePot = CoffeePot::find($id);
-
-        if (!$coffeePot) {
-            return $this->sendErrorResponse(['Такой кофейни нет']);
-        }
+        $coffeePot = CoffeePot::findOrFail($id);
 
         $coffeePot->update(
             [
@@ -169,11 +151,7 @@ class CoffeePotService extends BaseService
      */
     public function delete(int $id) : array
     {
-        $coffeePot = CoffeePot::find($id);
-
-        if (!$coffeePot) {
-            return $this->sendErrorResponse(['Такой кофейни нет']);
-        }
+        $coffeePot = CoffeePot::findOrFail($id);
 
         UserCoffeePot::where("coffee_pot_id", $id)->delete();
 

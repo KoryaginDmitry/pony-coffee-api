@@ -10,7 +10,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\CoffeePotService;
+use App\Services\CoffeePotService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

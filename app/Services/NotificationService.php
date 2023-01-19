@@ -8,11 +8,9 @@
  * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
  */
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\Notification;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Request;
 
 /**
  * NotificationService class
@@ -39,7 +37,7 @@ class NotificationService extends BaseService
         $user_id = auth()->id();
 
         $this->data['notifications'] = Notification::where("site", "1")
-            ->where("users_read_id", null)
+            ->whereNull("users_read_id")
             ->orWhere("users_read_id", "NOT LIKE", "%[$user_id]%")
             ->orderBy("created_at", "DESC")
             ->get();
@@ -58,17 +56,9 @@ class NotificationService extends BaseService
     {
         $user_id = auth()->id();
 
-        $notification = Notification::where(
-            'users_read_id',
-            'NOT LIKE',
-            "[$user_id]"
-        )
+        $notification = Notification::where('users_read_id', 'NOT LIKE', "[$user_id]")
             ->orWhere('users_read_id', null)
-            ->find($id);
-
-        if (!$notification) {
-            return $this->sendErrorResponse(['Ошибка получения уведомления']);
-        }
+            ->findOrFail($id);
 
         $notification->users_read_id = trim(
             $notification->users_read_id . ",[" . $user_id . "]",
@@ -122,18 +112,14 @@ class NotificationService extends BaseService
      */
     public function createNotification(object $request) : array
     {
-        $validator = Validator::make(
-            $request->all(), 
+        $this->validate(
+            $request->all(),
             [
                 "site" => ["sometimes", "accepted"],
                 "telegram" => ["sometimes", "accepted"],
                 "text" => ["required", "string", "min:10"]
             ]
         );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->errors()->all());
-        }
 
         if (!$request->site && !$request->telegram) {
             return $this->sendErrorResponse(['Выберите метод рассылки']);
@@ -153,7 +139,7 @@ class NotificationService extends BaseService
             catch (\Exception $e){
                 return $this->sendErrorResponse(
                     [
-                        'Ошибка отправки уведомленией в телеграмм'
+                        'Ошибка отправки уведомления в телеграм'
                     ]
                 );
             }

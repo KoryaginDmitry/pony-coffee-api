@@ -9,7 +9,7 @@
  */
 namespace App\Http\Controllers;
 
-use App\Service\NotificationService;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

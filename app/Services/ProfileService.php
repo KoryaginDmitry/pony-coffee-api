@@ -8,12 +8,11 @@
  * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
  */
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\User;
 use App\Support\Helper;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * ProfileService class
@@ -53,18 +52,12 @@ class ProfileService extends BaseService
      */
     public function updateName(object $request) : array
     {
-        $validator = Validator::make(
-            $request->all(), 
+        $this->validate(
+            $request->all(),
             [
                 "name" => ["request", 'min:5', 'string']
             ]
         );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse(
-                $validator->errors()->all()
-            );
-        }
 
         $user = User::find(auth()->id());
 
@@ -90,22 +83,14 @@ class ProfileService extends BaseService
     {
         $phone_regex = config('param_config.phone_regex');
 
-        if ($request->phone) {
-            $request->phone = Helper::editPhoneNumber($request->phone);
-        }
+        $request = Helper::editPhoneNumber($request);
 
-        $validator = Validator::make(
-            $request->all(), 
+        $this->validate(
+            $request->all(),
             [
                 "phone" => ["request", "regex:/$phone_regex/", "unique:users"]
             ]
         );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse(
-                $validator->errors()->all()
-            );
-        }
 
         $user = User::find(auth()->id());
 
@@ -131,18 +116,12 @@ class ProfileService extends BaseService
      */
     public function updateEmail(object $request) : array
     {
-        $validator = Validator::make(
-            $request->all(), 
+        $this->validate(
+            $request->all(),
             [
                 "email" => ["request", 'email', 'unique:users']
             ]
         );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse(
-                $validator->errors()->all()
-            );
-        }
 
         $user = User::find(auth()->id());
 
@@ -168,16 +147,12 @@ class ProfileService extends BaseService
      */
     public function newPassword(object $request) : array
     {
-        $validator = Validator::make(
-            $request->all(), 
+        $this->validate(
+            $request->all(),
             [
                 "password" => ["required", "between:8, 255" , "confirmed"],
             ]
         );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->errros()->all());
-        } 
 
         $user = User::find(auth()->id());
 

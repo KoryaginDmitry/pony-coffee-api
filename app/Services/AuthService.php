@@ -7,13 +7,12 @@
  * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
  */
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\User;
 use App\Support\Helper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * AuthService class
@@ -39,22 +38,20 @@ class AuthService extends BaseService
     {   
         $phone_regex = config('param_config.phone_regex');
 
-        if ($request->phone) {
-            $request->phone = Helper::editPhoneNumber($request->phone);
-        }
-    
-        $validator = Validator::make(
-            $request->all(), 
+        $request = Helper::editPhoneNumber($request);
+        
+        $this->validate(
+            $request->all(),
             [
                 "phone" => ["required", "regex:/$phone_regex/"],
                 "password" => ["required", "string"]
             ]
         );
 
-        $user = User::where('phone', $request->phone)->first();
+        $user = User::firstWhere('phone', $request->phone);
 
-        if ($validator->fails() || !Hash::check($request->password, $user->password)) {
-            return $this->sendErrorResponse(['Проверьте введенные данные']);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return $this->sendErrorResponse('Проверьте введенные данные');
         }
 
         $token = $user->createToken('userToken');
@@ -75,11 +72,9 @@ class AuthService extends BaseService
     {
         $phone_regex = config('param_config.phone_regex');
 
-        if ($request->phone) {
-            $request->phone = Helper::editPhoneNumber($request->phone);
-        }
+        $request = Helper::editPhoneNumber($request);
 
-        $validator = Validator::make(
+        $this->validate(
             $request->all(),
             [
                 "name" => ["required", "string", "max:255"],
@@ -88,10 +83,6 @@ class AuthService extends BaseService
                 "agreement" => ["required", "accepted"]
             ]
         );
-
-        if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->errors()->all());
-        }
 
         $user = User::create(
             [
@@ -102,10 +93,6 @@ class AuthService extends BaseService
                 "role_id" => 3
             ]
         );
-
-        if (!$user) {
-            return $this->sendErrorResponse(['Ошибка регистрации'], 500);
-        }
 
         $token = $user->createToken('userToken');
 

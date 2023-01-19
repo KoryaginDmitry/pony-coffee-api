@@ -8,8 +8,10 @@
  * 
  * @author DmitryKoryagin <kor.dima97@maiol.ru>
  */
-namespace App\Service;
+namespace App\Services;
 
+use App\Exceptions\ValidateException;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -24,6 +26,7 @@ use Illuminate\Support\Facades\Validator;
  * @method array|null getLastErrors()
  * @method void logErrorValidate(array|string $messages)
  * @method array sendErrorResponse(array $errorArray, int $code = 422)
+ * @method ValidateException validate(array $params, array $rules)
  * 
  * @category Services
  * 
@@ -114,12 +117,33 @@ class BaseService
      * 
      * @return array
      */
-    protected function sendErrorResponse(array $errorArray, int $code = 422) : array
+    protected function sendErrorResponse(array|string $errorArray, int $code = 422) : array
     {
         $this->logErrorValidate($errorArray);
         $this->status = false;
         $this->code = $code;
 
         return $this->sendResponse();
+    }
+
+    /**
+     * Validate method
+     *
+     * @param array $params array of parameters for validation
+     * @param array $rules  array of validation rules
+     * 
+     * @throws ValidateException
+     * 
+     * @return boolean
+     */
+    protected function validate(array $params, array $rules) : bool|ValidateException
+    {
+        $validate = Validator::make($params, $rules);
+
+        if ($validate->fails()) {
+            return throw new ValidateException($validate->errors());
+        }
+
+        return true;
     }
 }
