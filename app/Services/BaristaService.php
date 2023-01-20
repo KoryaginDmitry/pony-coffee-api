@@ -6,18 +6,17 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  * 
  */
 namespace App\Services;
 
+use App\Http\Requests\Barista\CreateRequest;
+use App\Http\Requests\Barista\UpdateRequest;
 use App\Models\CoffeePot;
 use App\Models\User;
 use App\Models\UserCoffeePot;
-use App\Support\Helper;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 /**
  * BaristaService class
@@ -25,12 +24,12 @@ use Illuminate\Validation\Rule;
  * @method array getBaristas()
  * @method array getBaristas(int $id)
  * @method array create(object $request)
- * @method array update(object $request)
+ * @method array update(object $request, int $id)
  * @method array delete(int $id)
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class BaristaService extends BaseService
 {
@@ -60,20 +59,16 @@ class BaristaService extends BaseService
     /**
      * Get barista
      * 
-     * @param int $id id barista user
+     * @param User $barista barista user
      * 
      * @return array
      */
-    public function getBarista(int $id) : array
+    public function getBarista(User $barista) : array
     {
-        $user = User::where("role_id", "2")
-            ->with("userCoffeePot.coffeePot")
-            ->findOrFail($id);
-        
         $coffeePots = CoffeePot::orderBy('created_at', "DESC")->get();
 
         $this->data = [
-            "user" => $user,
+            "user" => $barista->fresh('userCoffeePot'),
             "coffeePots" => $coffeePots
         ];
         
@@ -83,50 +78,30 @@ class BaristaService extends BaseService
     /**
      * Create profile barista
      * 
-     * @param object $request object Request class
+     * @param CreateRequest $request object CreateRequest
      * 
      * @return array
      */
-    public function create(object $request) : array
+    public function create(CreateRequest $request) : array
     {
-        $phone_regex = config('param_config.phone_regex');
-
-        $request = Helper::editPhoneNumber($request);
-
-        $this->validate(
-            $request->all(),
-            [
-                "name" => ["required", "string"],
-                "last_name" => ["nullable", "string"],
-                "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
-                "password" => ["required", "string", "confirmed"],
-                "coffeePot_id" => ["required", "exists:coffee_pots,id"]
-            ]
-        );
-
         $coffeePot = CoffeePot::find($request->coffeePot_id);
 
-        $user = User::create(
-            [
-                "name" => $request->name,
-                "last_name" => $request->last_name,
-                "phone" => $request->phone,
-                "phone_verified_at" => Carbon::now(),
-                "password" => Hash::make($request->password),
-                "agreement" => "1",
-                "role_id" => "2"
-            ]
+        $data = $request->safe()->except(['coffeePot_id']);
+        
+        $data['password'] = Hash::make($request->password);
+
+        $barista = User::create(
+            $data
         );
         
-        UserCoffeePot::firstOrCreate(
+        $barista->userCoffeePot()->create(
             [
-                "user_id" => $user->id,
-                "coffee_pot_id" => $coffeePot->id
+                'coffee_pot_id' => $coffeePot->id
             ]
         );
 
         $this->data = [
-            "user" => $user,
+            "user" => $barista,
             "coffeePot" => $coffeePot
         ];
 
@@ -138,56 +113,27 @@ class BaristaService extends BaseService
     /**
      * Update profile barista
      * 
-     * @param object $request object Request class
-     * @param int    $id      id barista
+     * @param UpdateRequest $request object UpdateRequest
+     * @param User          $barista user barista
      * 
      * @return array
      */
-    public function update(object $request, int $id) : array
+    public function update(UpdateRequest $request, User $barista) : array
     {
-        $user = User::where("role_id", 2)->findOrFail($id);
-
-        $phone_regex = config('param_config.phone_regex');
-
-        if ($request->phone) {
-            $request->phone = Helper::editPhoneNumber($request->phone);
-        }
-
-        $this->validate(
-            $request->all(),
-            [
-                "name" => ["required", "string"],
-                "last_name" => ["nullable", "string"],
-                "phone" => [
-                    "required",
-                    "regex:/$phone_regex/",
-                    Rule::unique('users')->ignore($id, 'user_id')
-                ],
-                "coffeePot_id" => ["required", "exists:coffee_pots,id"]
-            ]
-        );
-
-        $user->update(
-            [
-                "name" => $request->name,
-                "last_name" => $request->last_name,
-                "phone" => $request->phone
-            ]
+        $barista->update(
+            $request->safe()->except(['coffeePot_id'])
         );
 
         $coffeePot = CoffeePot::find($request->coffeePot_id);
 
-        UserCoffeePot::updateOrCreate(
-            [
-                "user_id" => $user->id
-            ],
+        $barista->userCoffeePot()->updateOrCreate(
             [
                 "coffee_pot_id" => $coffeePot->id
             ]
         );
 
         $this->data = [
-            "user" => $user,
+            "user" => $barista,
             "coffeePot" => $coffeePot
         ];
         
@@ -197,17 +143,13 @@ class BaristaService extends BaseService
     /**
      * Delete profile barista
      * 
-     * @param int $id id barista
+     * @param User $barista barista user
      * 
      * @return array
      */
-    public function delete(int $id) : array
+    public function delete(User $barista) : array
     {
-        $user = User::where("role_id", 2)->findOrFail($id);
-
-        UserCoffeePot::where("user_id", $user->id)->delete();
-
-        $user->delete();
+        $barista->delete();
 
         $this->code = 204;
 

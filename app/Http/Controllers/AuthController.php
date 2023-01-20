@@ -5,31 +5,32 @@
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 /**
  * AuthController class
  * 
- * @method JsonResponse login(Request $request)
- * @method JsonResponse register(Request $request)
+ * @method JsonResponse login(LoginRequest $request)
+ * @method JsonResponse register(RegisterRequest $request)
  * @method JsonResponse logout()
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class AuthController extends BaseController
 {
     /**
-     * Server connection
+     * Service connection
      *
-     * @param AuthService $service connection service class
+     * @param AuthService $service Service variable
      */
     public function __construct(protected AuthService $service)
     {
@@ -39,11 +40,11 @@ class AuthController extends BaseController
     /**
      * Login
      *
-     * @param Request $request Request class odject
+     * @param LoginRequest $request LoginRequest class odject
      * 
      * @return JsonResponse
      */
-    public function login(Request $request) : JsonResponse
+    public function login(LoginRequest $request) : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->login($request)
@@ -53,11 +54,11 @@ class AuthController extends BaseController
     /**
      * Register
      *
-     * @param Request $request Request class odject
+     * @param RegisterRequest $request RegisterRequest class odject
      * 
      * @return JsonResponse
      */
-    public function register(Request $request) : JsonResponse
+    public function register(RegisterRequest $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->register($request)

@@ -6,12 +6,11 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Services;
 
 use App\Models\User;
-use App\Support\Helper;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -25,7 +24,7 @@ use Illuminate\Support\Facades\Hash;
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class ProfileService extends BaseService
 {
@@ -46,19 +45,12 @@ class ProfileService extends BaseService
     /**
      * Update name auth user
      *
-     * @param Request $request object Request class
+     * @param App\Http\Requests\Profile\ProfileNameRequest $request object Request class
      * 
      * @return array
      */
     public function updateName(object $request) : array
     {
-        $this->validate(
-            $request->all(),
-            [
-                "name" => ["request", 'min:5', 'string']
-            ]
-        );
-
         $user = User::find(auth()->id());
 
         $user->name = $request->name;
@@ -75,23 +67,12 @@ class ProfileService extends BaseService
     /**
      * Update phone auth user
      *
-     * @param Request $request object Request class
+     * @param App\Http\Requests\Profile\ProfilePhoneRequest $request object Request class
      * 
      * @return array
      */
     public function updatePhone(object $request) : array
     {
-        $phone_regex = config('param_config.phone_regex');
-
-        $request = Helper::editPhoneNumber($request);
-
-        $this->validate(
-            $request->all(),
-            [
-                "phone" => ["request", "regex:/$phone_regex/", "unique:users"]
-            ]
-        );
-
         $user = User::find(auth()->id());
 
         $user->phone = $request->phone;
@@ -110,19 +91,12 @@ class ProfileService extends BaseService
     /**
      * Update email auth user
      * 
-     * @param Request $request object Request class
+     * @param App\Http\Requests\Profile\ProfileEmailRequest $request object Request class
      *
      * @return array
      */
     public function updateEmail(object $request) : array
     {
-        $this->validate(
-            $request->all(),
-            [
-                "email" => ["request", 'email', 'unique:users']
-            ]
-        );
-
         $user = User::find(auth()->id());
 
         $user->email = $request->email;
@@ -141,19 +115,12 @@ class ProfileService extends BaseService
     /**
      * Update password auth user
      *
-     * @param Request $request object Request class
+     * @param App\Http\Requests\Profile\ProfilepasswordRequest $request object Request class
      * 
      * @return array
      */
     public function newPassword(object $request) : array
     {
-        $this->validate(
-            $request->all(),
-            [
-                "password" => ["required", "between:8, 255" , "confirmed"],
-            ]
-        );
-
         $user = User::find(auth()->id());
 
         $user->password = Hash::make($request->password);

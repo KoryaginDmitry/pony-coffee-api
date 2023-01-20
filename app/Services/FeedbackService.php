@@ -6,76 +6,88 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Services;
 
+use App\Http\Requests\Feedback\CreateMessageRequest;
+use App\Http\Requests\Feedback\CreateRequest;
+use App\Models\CoffeePot;
 use App\Models\Feedback;
-use App\Models\Message;
-use Illuminate\Database\Eloquent\Collection;
-
 
 /**
  * FeedbackService class
  * 
- * @method App\Models\Feedback _getAdminFeedback(int $id)
- * @method array getFeedback(int $id)
- * @method array create(object $request)
- * @method array createMessage(int $id, object $request)
+ * @method JsonResponse getFeedbacks()
+ * @method JsonResponse getFeedback(Feedback $feedback)
+ * @method JsonResponse getFeedbackCoffeePot(CoffeePot $coffePot)
+ * @method JsonResponse create(CreateRequest $request)
+ * @method JsonResponse createMessage(Feedback $feedback, CreateMessageRequest $request)
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class FeedbackService extends BaseService
 {
     /**
-     * Get all feedbacks for admin
-     *
-     * @param int $id id coffee pot
-     * 
-     * @return Collection
-     */
-    private function _getAdminFeedback(int $id) : Collection
-    {
-        return Feedback::when(
-            ($id !== 0),
-            function ($query) use ($id) {
-                return $query->where("coffee_pot_id", $id);
-            }
-        )->with(
-            [
-                'messages',
-                'coffeePot'
-            ]
-        )
-        ->get();
-    }
-
-    /**
      * Get feedbacks
-     *
-     * @param int $id id coffee pot
      * 
      * @return array
      */
-    public function getFeedback(int $id) : array
+    public function getFeedbacks() : array
     {
-        if (auth()->user()->isAdmin()) {
-            $feedbacks = $this->_getAdminFeedback($id);
-        } else {
-            $feedbacks = Feedback::where('user_id', auth()->id())
-                ->with(
-                    [
-                        'messages',
-                        'coffeePot'
-                    ]
-                )
-                ->get();
-        }
+        $this->data = [
+            'feedbacks' => Feedback::when(
+                !auth()->user()->isAdmin(),
+                function ($query) {
+                    return $query->where('user_id', auth()->id);
+                }
+            )
+            ->with(['messages', 'coffeePot'])
+            ->get()
+        ];
+
+        return $this->sendResponse();
+    }
+
+    /**
+     * Get feedback
+     * 
+     * @param Feedback $feedback object Feedback
+     * 
+     * @return array
+     */
+    public function getFeedback(Feedback $feedback) : array
+    {
+        $this->rightCheck($feedback);
 
         $this->data = [
-            'feedbacks' => $feedbacks
+            'feedback' => $feedback->fresh(['messages', 'coffeePot'])
+        ];
+
+        return $this->sendResponse();
+    }
+
+    /**
+     * Get feedbacks for a specific coffee shop
+     * 
+     * @param CoffeePot $coffeePot object CoffeePot
+     * 
+     * @return array
+     */
+    public function getFeedbackCoffeePot(CoffeePot $coffeePot) : array
+    {
+        $this->data = [
+            'feedbacks' => Feedback::when(
+                !auth()->user()->isAdmin(),
+                function ($query) {
+                    return $query->where('user_id', auth()->id);
+                }
+            )
+            ->where('coffee_pot_id', $coffeePot->id)
+            ->with(['messages', 'coffeePot'])
+            ->get()
         ];
 
         return $this->sendResponse();
@@ -84,40 +96,21 @@ class FeedbackService extends BaseService
     /**
      * Create feedback and message
      *
-     * @param object $request class Request object
+     * @param CreateRequest $request object CreateRequest
      * 
      * @return array
      */
-    public function create(object $request) : array
+    public function create(CreateRequest $request) : array
     {
-        $this->validate(
-            $request->all(),
-            [
-                "coffeePot_id" => ["required", "exists:coffee_pots,id"],
-                "grade" => ["nullable", "integer", "min:1", "max:5"],
-                "text" => ["required", "string", "min:15"]
-            ]
-        );
-
         $feedback = Feedback::create(
-            [
-                "grade" => $request->grade,
-                "user_id" => auth()->id(),
-                "coffee_pot_id" => $request->coffeePot_id
-            ]
-        );
-
-        $message = Message::create(
-            [
-                "text" => $request->text,
-                "user_id" => auth()->id(),
-                "feedback_id" => $feedback->id
-            ]
+            $request->safe()->except(['text'])
         );
 
         $this->data = [
             "feedback" => $feedback,
-            "message" => $message
+            "message" => $feedback->messages()->create(
+                $request->safe()->only(['text', 'user_id'])
+            )
         ];
 
         $this->code = 201;
@@ -128,36 +121,19 @@ class FeedbackService extends BaseService
     /**
      * Create message for feedback
      * 
-     * @param int    $id      id feedback
-     * @param object $request class Request object
+     * @param Feedback             $feedback object Feedback
+     * @param CreateMessageRequest $request  object CreateMessageRequest
      * 
      * @return array
      */
-    public function createMessage(int $id, object $request) : array
+    public function createMessage(Feedback $feedback, CreateMessageRequest $request) : array
     {
-        $this->validate(
-            $request->all(),
-            [
-                'text' => ["required", "string", "min:5"]
-            ]
-        );
-
-        if (auth()->user()->isAdmin()) {
-            $feedback = Feedback::findOrFail($id);
-        } else {
-            $feedback = Feedback::where("user_id", auth()->id())->findOrFail($id);
-        }
-
-        $message = Message::create(
-            [
-                "text" => $request->text,
-                "user_id" => auth()->id(),
-                "feedback_id" => $feedback->id
-            ]
-        );
-
+        $this->rightCheck($feedback);
+        
         $this->data = [
-            'message' => $message
+            'message' => $feedback->messages()->create(
+                $request->validated()
+            )
         ];
 
         return $this->sendResponse();

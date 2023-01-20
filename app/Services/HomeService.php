@@ -6,7 +6,7 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Services;
 
@@ -17,7 +17,7 @@ namespace App\Services;
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class HomeService extends BaseService
 {

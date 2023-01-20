@@ -5,11 +5,13 @@
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 
  namespace App\Http\Controllers;
 
+use App\Http\Requests\Bonus\UserSearchRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\BonusService;
 use Illuminate\Http\JsonResponse;
@@ -24,14 +26,14 @@ use Illuminate\Http\JsonResponse;
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class BonusController extends BaseController
 {
     /**
-     * Method connection service class
+     * Service connection
      *
-     * @param BonusService $service param service class
+     * @param BonusService $service Service variable
      */
     public function __construct(protected BonusService $service)
     {
@@ -53,11 +55,11 @@ class BonusController extends BaseController
     /**
      * Method search user
      *
-     * @param Request $request object Request class
+     * @param UserSearchRequest $request object UserSearchRequest
      * 
      * @return JsonResponse
      */
-    public function search(Request $request) : JsonResponse
+    public function search(UserSearchRequest $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->search($request)
@@ -67,28 +69,28 @@ class BonusController extends BaseController
     /**
      * Method create bonus for user
      *
-     * @param int $id id user
+     * @param User $user user object
      * 
      * @return jsonResponse
      */
-    public function create(int $id) : JsonResponse
+    public function create(User $user) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->create($id)
+            $this->service->create($user)
         );
     }
 
     /**
      * Method wrote users bonuses
      *
-     * @param int $id id user
+     * @param User $user user object
      * 
      * @return JsonResponse
      */
-    public function wrote(int $id) : JsonResponse
+    public function wrote(User $user) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->wrote($id)
+            $this->service->wrote($user)
         );
     }
 }

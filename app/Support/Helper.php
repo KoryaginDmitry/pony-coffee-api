@@ -27,17 +27,15 @@ class Helper
     /**
      * Removes extra characters from a phone number
      *
-     * @param object $request object Request class
+     * @param string $phone number phone
      * 
-     * @return object
+     * @return string|null
      */
-    public static function editPhoneNumber(object $request) : object
-    {
-        if (!isset($request->phone)) {
-            return $request;
+    public static function editPhoneNumber(mixed $phone) : string|null
+    {   
+        if (!$phone) {
+            return null;
         }
-
-        $phone = $request->phone;
 
         $phone = Str::remove(['-','(',')'], $phone);
 
@@ -47,8 +45,6 @@ class Helper
             $phone = Str::replaceFirst($firstSim, '+7', $phone);
         }
 
-        $request->phone = $phone;
-
-        return $request;
+        return $phone;
     }
 }

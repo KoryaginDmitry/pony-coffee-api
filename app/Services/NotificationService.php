@@ -6,27 +6,60 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Services;
 
+use App\Http\Requests\Notification\CreateNotificationRequest;
 use App\Models\Notification;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * NotificationService class
  * 
+ * @method mixed _sendTelegramNotification(string text)
  * @method array getUserNotifications()
- * @method array read(int $id)
+ * @method array read(Notification $notification)
  * @method array getCount()
  * @method array getNotificationForAdmin()
  * @method array createNotification(object $request)
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class NotificationService extends BaseService
 {
+    /**
+     * Send notification in telegram
+     *
+     * @param string $text text message
+     * 
+     * @throws Exception
+     * 
+     * @return mixed
+     */
+    private function _sendTelegramNotification(string $text) : mixed
+    {
+        $idChannel = config('param_config.channel_id');
+        $botToken = config('param_config.bot_token');
+
+        $message = urlencode($text);
+        
+        try {
+            file_get_contents(
+                "https://api.telegram.org/bot$botToken/sendMessage?chat_id=$idChannel&text=".$message
+            );
+        }
+        catch (\Exception $e){
+            return $this->sendErrorResponse(
+                [
+                    'Ошибка отправки уведомления в телеграм'
+                ]
+            );
+        }
+    }
     /**
      * Get notifications for auth user 
      *
@@ -36,11 +69,13 @@ class NotificationService extends BaseService
     {
         $user_id = auth()->id();
 
-        $this->data['notifications'] = Notification::where("site", "1")
-            ->whereNull("users_read_id")
-            ->orWhere("users_read_id", "NOT LIKE", "%[$user_id]%")
-            ->orderBy("created_at", "DESC")
-            ->get();
+        $this->data = [
+            'notifications' => Notification::where("site", "1")
+                ->whereNull("users_read_id")
+                ->orWhere("users_read_id", "NOT LIKE", "%[$user_id]%")
+                ->orderBy("created_at", "DESC")
+                ->get()
+        ];
 
         return $this->sendResponse();
     }
@@ -48,21 +83,22 @@ class NotificationService extends BaseService
     /**
      * Read notification
      *
-     * @param int $id id notification
+     * @param Notification $notification Notification object
+     * 
+     * @throws NotFoundHttpException
      * 
      * @return array
      */
-    public function read(int $id) : array
+    public function read(Notification $notification) : array|NotFoundHttpException
     {
         $user_id = auth()->id();
 
-        $notification = Notification::where('users_read_id', 'NOT LIKE', "[$user_id]")
-            ->orWhere('users_read_id', null)
-            ->findOrFail($id);
+        if (Str::contains($notification->users_read, $user_id)) {
+            return throw new NotFoundHttpException();
+        }
 
         $notification->users_read_id = trim(
-            $notification->users_read_id . ",[" . $user_id . "]",
-            ","
+            $notification->users_read_id . ",[" . $user_id . "]", ","
         );
 
         $notification->save();
@@ -81,10 +117,12 @@ class NotificationService extends BaseService
     {
         $user_id = auth()->id();
         
-        $this->data['count'] = Notification::where("site", "1")
-            ->whereNull("users_read_id")
-            ->orWhere("users_read_id", "NOT LIKE", "%[$user_id]%")
-            ->count();
+        $this->data = [
+            'count' => Notification::where("site", "1")
+                ->whereNull("users_read_id")
+                ->orWhere("users_read_id", "NOT LIKE", "%[$user_id]%")
+                ->count()
+        ];
     
         return $this->sendResponse();
     }
@@ -106,55 +144,20 @@ class NotificationService extends BaseService
     /**
      * Create notification
      *
-     * @param object $request object Request class
+     * @param CreateNotificationRequest $request object CreateNotificationRequest class
      * 
      * @return array
      */
-    public function createNotification(object $request) : array
+    public function createNotification(CreateNotificationRequest $request) : array
     {
-        $this->validate(
-            $request->all(),
-            [
-                "site" => ["sometimes", "accepted"],
-                "telegram" => ["sometimes", "accepted"],
-                "text" => ["required", "string", "min:10"]
-            ]
-        );
-
-        if (!$request->site && !$request->telegram) {
-            return $this->sendErrorResponse(['Выберите метод рассылки']);
-        }
-
         if ($request->telegram) {
-            $idChannel = config('param_config.channel_id');
-            $botToken = config('param_config.bot_token');
-
-            $message = urlencode($request->text);
-           
-            try {
-                file_get_contents(
-                    "https://api.telegram.org/bot$botToken/sendMessage?chat_id=$idChannel&text=".$message
-                );
-            }
-            catch (\Exception $e){
-                return $this->sendErrorResponse(
-                    [
-                        'Ошибка отправки уведомления в телеграм'
-                    ]
-                );
-            }
+            $this->_sendTelegramNotification($request->text());
         }
-         
-        $notification = Notification::create(
-            [
-                "site" => $request->site ? "1" : "0",
-                "telegram" => $request->site ? "1" : "0",
-                "text" => $request->text
-            ]
-        );
-
+    
         $this->data = [
-            'notification' => $notification
+            'notification' => Notification::create(
+                $request->validated()
+            )
         ];
 
         return $this->sendResponse();

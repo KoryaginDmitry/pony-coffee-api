@@ -57,6 +57,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserCoffeePot[] $userCoffeePot
+ * @property-read int|null $user_coffee_pot_count
  */
 	class CoffeePot extends \Eloquent {}
 }
@@ -233,6 +235,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\User|null $user
  */
 	class UserCoffeePot extends \Eloquent {}
 }

@@ -5,7 +5,7 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Services;
 
@@ -23,31 +23,19 @@ use Illuminate\Support\Facades\Hash;
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class AuthService extends BaseService
 {
     /**
      * Authorization method
      * 
-     * @param object $request object Request method
+     * @param object $request object LoginRequest
      * 
      * @return array
      */
     public function login(object $request) : array
     {   
-        $phone_regex = config('param_config.phone_regex');
-
-        $request = Helper::editPhoneNumber($request);
-        
-        $this->validate(
-            $request->all(),
-            [
-                "phone" => ["required", "regex:/$phone_regex/"],
-                "password" => ["required", "string"]
-            ]
-        );
-
         $user = User::firstWhere('phone', $request->phone);
 
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -64,34 +52,16 @@ class AuthService extends BaseService
     /**
      * Registration method
      * 
-     * @param object $request object Request class
+     * @param object $request object RegisterRequest
      * 
      * @return array
      */
     public function register(object $request) : array
     {
-        $phone_regex = config('param_config.phone_regex');
-
-        $request = Helper::editPhoneNumber($request);
-
-        $this->validate(
-            $request->all(),
-            [
-                "name" => ["required", "string", "max:255"],
-                "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
-                "password" => ["required", "between:8, 255" , "confirmed"],
-                "agreement" => ["required", "accepted"]
-            ]
-        );
-
+        $request->password = Hash::make($request->password);
+        
         $user = User::create(
-            [
-                "name" => $request->name,
-                "phone" => Helper::editPhoneNumber($request->phone),
-                "password" => Hash::make($request->password),
-                "agreement" => $request->agreement ? "1" : "0", 
-                "role_id" => 3
-            ]
+            $request->validated()
         );
 
         $token = $user->createToken('userToken');

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\CoffeePot
@@ -37,4 +38,14 @@ class CoffeePot extends Model
         'name',
         'address',
     ];
+
+    /**
+     * Relation userCoffeePot
+     *
+     * @return HasMany
+     */
+    public function userCoffeePot() : HasMany
+    {
+        return $this->hasMany(UserCoffeePot::class);
+    }
 }

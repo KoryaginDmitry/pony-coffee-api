@@ -5,35 +5,36 @@
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CoffeePot\CoffeePotRequest;
+use App\Models\CoffeePot;
 use App\Services\CoffeePotService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 /**
  * CoffeePotController class
  * 
  * @method JsonResponse getAddressCoffeePots()
  * @method JsonResponse getCoffeePots()
- * @method JsonResponse getCoffeePot(int $id)
- * @method JsonResponse create(Request $request)
- * @method JsonResponse update(int $id, Request $request)
- * @method JsonResponse delete(int $id)
+ * @method JsonResponse getCoffeePot(CoffeePot $coffeePot)
+ * @method JsonResponse create(CoffeePotRequest $request)
+ * @method JsonResponse update(CoffeePot $coffeePot, CoffeePotRequest $request)
+ * @method JsonResponse delete(CoffeePot $coffeePot)
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class CoffeePotController extends BaseController
 {
     /**
-     * Method connection service class
+     * Service connection
      *
-     * @param CoffeePotService $service param service class
+     * @param CoffeePotService $service Service variable
      */
     public function __construct(protected CoffeePotService $service)
     {
@@ -67,25 +68,25 @@ class CoffeePotController extends BaseController
     /**
      * Method get coffee pot
      *
-     * @param int $id id coffee pot
+     * @param CoffeePot $coffeePot object CoffeePot
      * 
      * @return JsonResponse
      */
-    public function getCoffeePot(int $id) : JsonResponse
+    public function getCoffeePot(CoffeePot $coffeePot) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->getCoffeePot($id)
+            $this->service->getCoffeePot($coffeePot)
         );
     }
 
     /**
      * Method create coffee pot
      *
-     * @param Request $request object Request class
+     * @param CoffeePotRequest $request object CoffeePotRequest
      * 
      * @return JsonResponse
      */
-    public function create(Request $request) : JsonResponse
+    public function create(CoffeePotRequest $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->create($request)
@@ -95,29 +96,29 @@ class CoffeePotController extends BaseController
     /**
      * Method update coffee pot
      *
-     * @param int     $id      id coffee pot
-     * @param Request $request object Request class
+     * @param CoffeePot        $coffeePot object CoffeePot
+     * @param CoffeePotRequest $request   object CoffeePotRequest
      * 
      * @return JsonResponse
      */
-    public function update(int $id, Request $request) : JsonResponse
+    public function update(CoffeePot $coffeePot, CoffeePotRequest $request) : JsonResponse
     {   
         return $this->sendResponse(
-            $this->service->update($id, $request)
+            $this->service->update($coffeePot, $request)
         );
     }
 
     /**
      * Method delete coffee pot
      *
-     * @param int $id id coffee pot
+     * @param CoffeePot $coffeePot object CoffeePot
      * 
      * @return JsonResponse
      */
-    public function delete(int $id) : JsonResponse
+    public function delete(CoffeePot $coffeePot) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->delete($id)
+            $this->service->delete($coffeePot)
         );
     }
 }

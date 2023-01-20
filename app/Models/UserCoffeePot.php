@@ -50,4 +50,14 @@ class UserCoffeePot extends Model
     {
         return $this->belongsTo(CoffeePot::class);
     }
+
+    /**
+     * Relationship user
+     *
+     * @return BelongsTo
+     */
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -68,7 +68,7 @@ Route::group(
                 //Возвращает уведомления для пользователя
                 Route::get("/notification", 'getUserNotifications');
                 //Убирает сообщение для пользователя(делает его прочитанным)
-                Route::put("/notification/{id}", "read");
+                Route::put("/notification/{notification}", "read");
                 //Возвращает кол-во уведомлений
                 Route::get("notification/count", "getCount");
             }
@@ -79,15 +79,16 @@ Route::group(
                 'controller' => FeedbackController::class
             ],
             function () {
-                // Возвращает все все обращения пользователя в обратную связь,
-                // если делать запрос с профился админа, то просто вернет все 
-                // обращаения и сообщеня
-                Route::get("feedback", 'getFeedback');
-                // Создание обращения в обратную связь
+                // Возвращает все обращения пользователя
+                Route::get("feedback", 'getFeedbacks');
+                // Возвращает определенное обращение
+                Route::get("feedback/{feedback}", 'getFeedback');
+                //Врзвращает обращения по кофейне
+                Route::get("feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
+                // Создание обращения
                 Route::post('feedback', 'create');
-                // Создание сообщения для определенного обращение, id обращения 
-                // передается в адресной строке
-                Route::post('feedback/{id}', 'createMessage'); 
+                // Создание сообщения для определенного обращение
+                Route::post('feedback/{feedback}', 'createMessage'); 
             }
         );
     }
@@ -99,9 +100,12 @@ Route::group(
         'middleware' => 'barista'
     ], 
     function () {
-        Route::get('search', 'search'); //Поиск гостя по id или номеру телефона
-        Route::post('bonus/{id}', 'create'); //Создание бонуса для гостя
-        Route::put('bonus/{id}', 'wrote'); //Списание бонусов у гостя
+        //Поиск гостя по id или номеру телефона
+        Route::get('search', 'search');
+        //Создание бонуса для гостя
+        Route::post('bonus/{user}', 'create');
+        //Списание бонусов у гостя
+        Route::put('bonus/{user}', 'wrote');
     }
 );
 
@@ -127,10 +131,14 @@ Route::group(
                 'controller' => FeedbackController::class
             ],
             function () {
-                //Возвращает все feedback, либо обращения по конкрентной кофейни
-                Route::get('admin/feedback/{id?}', 'getFeedback');
-                //создает сообщения для обратной связи
-                Route::post('admin/feedback/{id}', 'createMessage');
+                // Возвращает все обращения
+                Route::get("admin/feedback", 'getFeedbacks');
+                // Возвращает определенное обращение
+                Route::get("admin/feedback/{feedback}", 'getFeedback');
+                //Врзвращает обращения по кофейне
+                Route::get("admin/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
+                // Создание сообщения для определенного обращение
+                Route::post('feedback/{feedback}', 'createMessage');
             }
         );
 
@@ -154,13 +162,13 @@ Route::group(
                 //Возвращает все кофеточки
                 Route::get('admin/coffeePot', 'getCoffeePots');
                 //Возвращает данные по одной кофейне
-                Route::get('admin/coffeePot/{id}', 'getCoffeePot');
+                Route::get('admin/coffeePot/{coffeePot}', 'getCoffeePot');
                 //Содает кофеточку
                 Route::post('admin/coffeePot', 'create');
                 //обновляет кофеточку
-                Route::put('admin/coffeePot/{id}', 'update');
+                Route::put('admin/coffeePot/{coffeePot}', 'update');
                 //удаляет кофеточку
-                Route::delete('admin/coffeePot/{id}', 'delete');
+                Route::delete('admin/coffeePot/{coffeePot}', 'delete');
             }
         );
 
@@ -172,13 +180,13 @@ Route::group(
                 //возвращает всех барист
                 Route::get('barista', 'get');
                 //возвращает определенного баристу
-                Route::get('barista/{id}', 'getBarista');
+                Route::get('barista/{barista}', 'getBarista');
                 //создает баристу
                 Route::post('barista', 'create');
                 //редактирование баристы
-                Route::put('barista/{id}', 'update');
+                Route::put('barista/{barista}', 'update');
                 //удаление баристы
-                Route::delete('barista/{id}', 'delete');
+                Route::delete('barista/{barista}', 'delete');
             }
         );
     }

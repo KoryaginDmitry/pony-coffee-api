@@ -6,35 +6,36 @@
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Profile\ProfileEmailRequest;
+use App\Http\Requests\Profile\ProfileNameRequest;
+use App\Http\Requests\Profile\ProfilePasswordRequest;
+use App\Http\Requests\Profile\ProfilePhoneRequest;
 use App\Services\ProfileService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 /**
  * NotificationController class
  * 
  * @method JsonResponse getUser()
- * @method JsonResponse updateName(Request $request)
- * @method JsonResponse updatePhone(Request $request)
- * @method JsonResponse updateEmail(Request $request)
- * @method JsonResponse newPassword(Request $request)
+ * @method JsonResponse updateName(ProfileNameRequest $request)
+ * @method JsonResponse updatePhone(ProfilePhoneRequest $request)
+ * @method JsonResponse updateEmail(ProfileEmailRequest $request)
+ * @method JsonResponse newPassword(ProfilePasswordRequest $request)
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class ProfileController extends BaseController
 {
     /**
-     * Construct method
-     * 
-     * Connection service class
+     * Service connection
      *
-     * @param ProfileService $service param service class
+     * @param ProfileService $service Service variable
      */
     public function __construct(protected ProfileService $service)
     {
@@ -56,11 +57,11 @@ class ProfileController extends BaseController
     /**
      * Update name auth user
      *
-     * @param Request $request object Request class
+     * @param ProfileNameRequest $request object ProfileNameRequest
      * 
      * @return JsonResponse
      */
-    public function updateName(Request $request) : JsonResponse
+    public function updateName(ProfileNameRequest $request) : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->updateName($request)
@@ -70,11 +71,11 @@ class ProfileController extends BaseController
     /**
      * Update phone auth user
      *
-     * @param Request $request object Request class
+     * @param ProfilePhoneRequest $request object ProfilePhoneRequest
      * 
      * @return JsonResponse
      */
-    public function updatePhone(Request $request) : JsonResponse
+    public function updatePhone(ProfilePhoneRequest $request) : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->updatePhone($request)
@@ -84,11 +85,11 @@ class ProfileController extends BaseController
     /**
      * Update email auth user
      *
-     * @param Request $request object Request class
+     * @param ProfileEmailRequest $request object ProfileEmailRequest
      * 
      * @return JsonResponse
      */
-    public function updateEmail(Request $request) : JsonResponse
+    public function updateEmail(ProfileEmailRequest $request) : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->updateEmail($request)
@@ -98,11 +99,11 @@ class ProfileController extends BaseController
     /**
      * New password for auth user
      *
-     * @param Request $request object Request class
+     * @param ProfilePasswordRequest $request object ProfilePasswordRequest
      * 
      * @return JsonResponse
      */
-    public function newPassword(Request $request) : JsonResponse
+    public function newPassword(ProfilePasswordRequest $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->newPassword($request)

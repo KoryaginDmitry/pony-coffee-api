@@ -5,7 +5,7 @@
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Http\Controllers;
 
@@ -18,7 +18,7 @@ use Illuminate\Http\JsonResponse;
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class BaseController extends Controller
 {

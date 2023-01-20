@@ -48,19 +48,19 @@ class Handler extends ExceptionHandler
             //
         });
         
-        $this->renderable(function (NotFoundHttpException $e, $request) {
-            if ($request->wantsJson()) {
-                return response()->json(
-                    [
-                        'data' => [],
-                        'errors' => [
-                            'message' => 'Объект не найден'
+        $this->renderable(
+            function (NotFoundHttpException $e, $request) {
+                if ($request->wantsJson()) {
+                    return response()->json(
+                        [
+                            'errors' => [
+                                'message' => 'Страница не существует'
+                            ],
                         ],
-                        'status' => false
-                    ],
-                    404
-                );
+                        404
+                    );
+                }
             }
-        });
+        );
     }
 }

@@ -6,7 +6,7 @@
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Http\Controllers;
 
@@ -21,16 +21,14 @@ use Illuminate\Http\JsonResponse;
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class StatisticController extends BaseController
 {
     /**
-     * Construct
-     * 
-     * Connection servcie class
+     * Service connection
      *
-     * @param StatisticService $service param servcie class
+     * @param StatisticService $service Service variable
      */
     public function __construct(protected StatisticService $service)
     {
@@ -38,8 +36,6 @@ class StatisticController extends BaseController
     }
     
     /**
-     * Barista
-     * 
      * Get statistic baristas
      *
      * @return JsonResponse
@@ -52,8 +48,6 @@ class StatisticController extends BaseController
     }
 
     /**
-     * User
-     * 
      * Get statistic users
      *
      * @return JsonResponse

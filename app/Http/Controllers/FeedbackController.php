@@ -5,31 +5,36 @@
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Feedback\CreateMessageRequest;
+use App\Http\Requests\Feedback\CreateRequest;
+use App\Models\CoffeePot;
+use App\Models\Feedback;
 use App\Services\FeedbackService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 /**
  * FeedbackController class
  * 
- * @method JsonResponse getFeedback(int $id = 0)
- * @method JsonResponse create(Request $request)
- * @method JsonResponse createMessage(int $id, Request $request)
+ * @method JsonResponse getFeedbacks()
+ * @method JsonResponse getFeedback(Feedback $feedback)
+ * @method JsonResponse getFeedbackCoffeePot(CoffeePot $coffePot)
+ * @method JsonResponse create(CreateRequest $request)
+ * @method JsonResponse createMessage(Feedback $feedback, CreateMessageRequest $request)
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class FeedbackController extends BaseController
 {
     /**
-     * Method connection service class
+     * Service connection
      *
-     * @param FeedbackService $service param service class
+     * @param FeedbackService $service Service variable
      */
     public function __construct(protected FeedbackService $service)
     {
@@ -38,26 +43,52 @@ class FeedbackController extends BaseController
 
     /**
      * Method get feedbacks
-     *
-     * @param int $id id coffee pot
      * 
      * @return JsonResponse
      */
-    public function getFeedback(int $id = 0) : JsonResponse
+    public function getFeedbacks() : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->getFeedback($id)
+            $this->service->getFeedbacks()
+        );
+    }
+
+    /**
+     * Method get feedback
+     * 
+     * @param Feedback $feedback object Feedback
+     * 
+     * @return JsonResponse
+     */
+    public function getFeedback(Feedback $feedback) : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->getFeedbacks($feedback)
+        );
+    }
+
+    /**
+     * Method get feedback
+     * 
+     * @param CoffeePot $coffeePot object CoffeePot
+     * 
+     * @return JsonResponse
+     */
+    public function getFeedbackCoffeePot(CoffeePot $coffeePot) : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->getFeedbackCoffeePot($coffeePot)
         );
     }
 
     /**
      * Create feedback
      *
-     * @param Request $request object Request class
+     * @param CreateRequest $request object CreateRequest
      * 
      * @return JsonResponse
      */
-    public function create(Request $request) : JsonResponse
+    public function create(CreateRequest $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->create($request)
@@ -67,15 +98,15 @@ class FeedbackController extends BaseController
     /**
      * Create message for feedback
      *
-     * @param int     $id      id feedback
-     * @param Request $request object Request class
+     * @param Feedback             $feedback object Feedback
+     * @param CreateMessageRequest $request  object CreateMessageRequest
      * 
      * @return JsonResponse
      */
-    public function createMessage(int $id, Request $request) : JsonResponse
+    public function createMessage(Feedback $feedback, CreateMessageRequest $request) : JsonResponse
     {   
         return $this->sendResponse(
-            $this->service->createMessage($id, $request)
+            $this->service->createMessage($feedback, $request)
         );
     }
 }

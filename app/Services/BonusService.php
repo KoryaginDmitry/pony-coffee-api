@@ -6,10 +6,11 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Services;
 
+use App\Http\Requests\Bonus\UserSearchRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\DB;
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class BonusService extends BaseService
 {
@@ -60,19 +61,12 @@ class BonusService extends BaseService
     /**
      * Serch user
      *
-     * @param object $request object Request class
+     * @param UserSearchRequest $request object UserSearchRequest
      * 
      * @return array
      */
-    public function search(object $request) : array
+    public function search(UserSearchRequest $request) : array
     {
-        $this->validate(
-            $request->all(),
-            [
-                "value" => ["sometimes", "required", "string", "min:1", "max:12"]
-            ]
-        );
-
         $user = User::where("role_id", "3")
             ->when(
                 isset($request->value),
@@ -103,14 +97,12 @@ class BonusService extends BaseService
     /**
      * Create bonus for user
      *
-     * @param int $id id user
+     * @param User $user user object
      * 
      * @return array
      */
-    public function create(int $id) : array
+    public function create(User $user) : array
     {
-        $user = User::where("role_id", 3)->findOrFail($id);
-
         $user->bonuses()->create(
             [
                 "user_id_create" => auth()->id()
@@ -119,7 +111,6 @@ class BonusService extends BaseService
 
         $this->data = [
             "count" => $user->countActiveBonuses(),
-            "id" => $id
         ];
 
         $this->code = 201;
@@ -130,14 +121,12 @@ class BonusService extends BaseService
     /**
      * Wrote bonuses user
      *
-     * @param int $id id user
+     * @param User $user user object
      * 
      * @return array
      */
-    public function wrote(int $id) : array
+    public function wrote(User $user) : array
     {
-        $user = User::where("role_id", 3)->findOrFail($id);
-        
         $bonuses = $user->bonuses()
             ->where("usage", "0")
             ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
@@ -155,7 +144,6 @@ class BonusService extends BaseService
 
             $this->data = [
                 "count" => $user->countActiveBonuses(),
-                "id" => $id,
             ];
 
             return $this->sendResponse();
@@ -163,9 +151,8 @@ class BonusService extends BaseService
         
         $this->data = [
             "count" => $user->countActiveBonuses(),
-            "id" => $id,
         ];
-
+        
         return $this->sendErrorResponse(['Недостаточно бонусов']);
     }
 }

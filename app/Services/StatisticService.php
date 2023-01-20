@@ -6,7 +6,7 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Services;
 
@@ -20,7 +20,7 @@ use App\Models\User;
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class StatisticService extends BaseService
 {
@@ -31,14 +31,11 @@ class StatisticService extends BaseService
      */
     public function barista() : array
     {
-        $this->data['barista'] = User::where("role_id", "2")
-            ->with(
-                [
-                    "bonusesCreate",
-                    "bonusesWrote"
-                ]
-            )
-            ->get();
+        $this->data = [
+            'barista' => User::where("role_id", "2")
+                ->with(["bonusesCreate", "bonusesWrote"])
+                ->get()
+        ];
         
         return $this->sendResponse();
     }
@@ -50,9 +47,11 @@ class StatisticService extends BaseService
      */
     public function user() : array
     {
-        $this->data['user'] = User::where("role_id", "3")
-            ->with("bonuses")
-            ->get(); 
+        $this->data = [
+            'user' => User::where("role_id", "3")
+                ->with("bonuses")
+                ->get()
+        ];
         
         return $this->sendResponse();
     }

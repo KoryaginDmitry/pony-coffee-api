@@ -6,14 +6,12 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Services;
 
 use App\Exceptions\ValidateException;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\MessageBag;
-use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * BaseService class
@@ -27,11 +25,11 @@ use Illuminate\Validation\ValidationException;
  * @method array|null getLastErrors()
  * @method void logErrorValidate(array|string $messages)
  * @method array sendErrorResponse(array $errorArray, int $code = 422)
- * @method ValidateException validate(array $params, array $rules)
+ * @method mixed rightCheck(object $object)
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class BaseService
 {
@@ -128,23 +126,18 @@ class BaseService
     }
 
     /**
-     * Validate method
-     *
-     * @param array $params array of parameters for validation
-     * @param array $rules  array of validation rules
+     * Checking permissions to perform actions with an object
      * 
-     * @throws ValidationException
+     * @param object $object the object being checked
      * 
-     * @return boolean
+     * @throws NotFoundHttpException
+     * 
+     * @return mixed
      */
-    protected function validate(array $params, array $rules) : bool|MessageBag
+    protected function rightCheck(object $object) : mixed
     {
-        $validator = Validator::make($params, $rules);
-
-        if ($validator->fails()) {
-            return throw new ValidationException($validator);
+        if (!auth()->user()->isdmin() && $object->user_id !== auth()->id()) {
+            return throw new NotFoundHttpException();
         }
-
-        return true;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -26,16 +27,36 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Route::bind('barista', function ($value) {
+            return User::where(
+                [
+                    'id' => $value,
+                    'role_id' => '2'
+                ]
+            )->firstOrFail();
+        });
+
+        Route::bind('user', function ($value) {
+            return User::where(
+                [
+                    'id' => $value,
+                    'role_id' => '3'
+                ]
+            )->firstOrFail();
+        });
+        
         $this->configureRateLimiting();
 
-        $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
+        $this->routes(
+            function () {
+                Route::middleware('api')
+                    ->prefix('api')
+                    ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
-        });
+                Route::middleware('web')
+                    ->group(base_path('routes/web.php'));
+            }
+        );
     }
 
     /**

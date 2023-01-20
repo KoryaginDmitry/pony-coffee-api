@@ -5,35 +5,34 @@
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Notification\CreateNotificationRequest;
+use App\Models\Notification;
 use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 /**
  * NotificationController class
  * 
  * @method JsonResponse getUserNotifications()
- * @method JsonResponse read(int $id)
+ * @method JsonResponse read(Notifiction $notifiction)
  * @method JsonResponse getCount()
  * @method JsonResponse getNotificationForAdmin()
- * @method JsonResponse createNotification(Request $request)
+ * @method JsonResponse createNotification(CreateNotificationRequest $request)
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class NotificationController extends BaseController
 {
     /**
-     * Construct method
-     * 
-     * Connetcion service class
+     * Service connection
      *
-     * @param NotificationService $service param service class
+     * @param NotificationService $service Service variable
      */
     public function __construct(protected NotificationService $service)
     {
@@ -55,14 +54,14 @@ class NotificationController extends BaseController
     /**
      * Read notification user
      *
-     * @param int $id id notification
+     * @param Notifiction $notification Notification object
      * 
      * @return JsonResponse
      */
-    public function read(int $id) : JsonResponse
+    public function read(Notification $notification) : JsonResponse
     {   
         return $this->sendResponse(
-            $this->service->read($id)
+            $this->service->read($notification)
         );
     }
 
@@ -93,11 +92,11 @@ class NotificationController extends BaseController
     /**
      * Create notification
      *
-     * @param Request $request object Request class
+     * @param CreateNotificationRequest $request object CreateNotificqtionRequest
      * 
      * @return JsonResponse
      */
-    public function createNotification(Request $request) : JsonResponse
+    public function createNotification(CreateNotificationRequest $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->createNotification($request)

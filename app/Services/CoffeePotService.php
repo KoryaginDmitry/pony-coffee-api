@@ -6,26 +6,26 @@
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Services;
 
+use App\Http\Requests\CoffeePot\CoffeePotRequest;
 use App\Models\CoffeePot;
-use App\Models\UserCoffeePot;
 
 /**
  * CoffeePotService class
  * 
  * @method array getAddressCoffeePots()
  * @method array getCoffeePots()
- * @method array getCoffeePot(int $id)
- * @method array create(object $request)
- * @method array update(int $id, object $request)
- * @method array delete(int $id)
+ * @method array getCoffeePot(CoffeePot $coffeepot)
+ * @method array create(CoffeePotRequest $request)
+ * @method array update(CoffeePot $coffeePot, CoffeePotRequest $request)
+ * @method array delete(CoffeePot $coffeePot)
  * 
  * @category Services
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class CoffeePotService extends BaseService
 {
@@ -60,14 +60,12 @@ class CoffeePotService extends BaseService
     /**
      * Get coffee pot
      *
-     * @param int $id id coffee pot
+     * @param CoffeePot $coffeePot object CoffeePot
      * 
      * @return array
      */
-    public function getCoffeePot(int $id) : array
+    public function getCoffeePot(CoffeePot $coffeePot) : array
     {   
-        $coffeePot = CoffeePot::findOrFail($id);
-
         $this->data = [
             "coffeePot" => $coffeePot
         ];
@@ -78,29 +76,16 @@ class CoffeePotService extends BaseService
     /**
      * Create coffee pot
      *
-     * @param object $request object Request class
+     * @param CoffeePotRequest $request object CoffeePotRequest
      * 
      * @return array
      */
-    public function create(object $request) : array
+    public function create(CoffeePotRequest $request) : array
     {
-        $this->validate(
-            $request->all(),
-            [
-                "name" => ["nullable", "string"],
-                "address" => ["required", "string"]  
-            ]
-        );
-
-        $coffeePot = CoffeePot::create(
-            [
-                "name" => $request->name,
-                "address" => $request->address
-            ]
-        );
-
         $this->data = [
-            'coffeePot' => $coffeePot
+            'coffeePot' => CoffeePot::create(
+                $request->validated()
+            )
         ];
 
         $this->code = 201;
@@ -111,28 +96,15 @@ class CoffeePotService extends BaseService
     /**
      * Update coffee pot
      *
-     * @param int    $id      id coffee pot
-     * @param object $request object request class
+     * @param CoffeePot        $coffeePot object CoffeePot
+     * @param CoffeePotRequest $request   object CoffeePotRequest
      * 
      * @return array
      */
-    public function update(int $id, object $request) : array
+    public function update(CoffeePot $coffeePot, CoffeePotRequest $request) : array
     {   
-        $this->validate(
-            $request->all(),
-            [
-                "name" => ["nullable", "string"],
-                "address" => ["required", "string"]
-            ]
-        );
-
-        $coffeePot = CoffeePot::findOrFail($id);
-
         $coffeePot->update(
-            [
-                "name" => $request->name,
-                "address" => $request->address
-            ]
+            $request->validated()
         );
 
         $this->data = [
@@ -145,16 +117,12 @@ class CoffeePotService extends BaseService
     /**
      * Delete coffee pot 
      *
-     * @param int $id id coffee pot
+     * @param CoffeePot $coffeePot object CoffeePot
      * 
      * @return array
      */
-    public function delete(int $id) : array
+    public function delete(CoffeePot $coffeePot) : array
     {
-        $coffeePot = CoffeePot::findOrFail($id);
-
-        UserCoffeePot::where("coffee_pot_id", $id)->delete();
-
         $coffeePot->delete();
 
         $this->code = 204;

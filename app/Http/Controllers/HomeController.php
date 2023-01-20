@@ -5,7 +5,7 @@
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@maiol.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 namespace App\Http\Controllers;
 
@@ -20,16 +20,14 @@ use Illuminate\Http\Request;
  * 
  * @category Controllers
  * 
- * @author DmitryKoryagin <kor.dima97@email.ru>
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class HomeController extends BaseController
 {
     /**
-     * Constuct method
-     * 
-     * Connection service class
+     * Service connection
      *
-     * @param HomeService $service param service class
+     * @param HomeService $service Stores in a service
      */
     public function __construct(protected HomeService $service)
     {
