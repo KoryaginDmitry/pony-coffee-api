@@ -16,7 +16,7 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next)
     {   
-        if (auth()->user()?->role->name !== 'user') {
+        if (!auth()->user()?->isUser()) {
             return response()->json(
                 [
                     'data' => null,

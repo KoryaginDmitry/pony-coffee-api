@@ -15,7 +15,6 @@ use App\Http\Requests\Barista\CreateRequest;
 use App\Http\Requests\Barista\UpdateRequest;
 use App\Models\CoffeePot;
 use App\Models\User;
-use App\Models\UserCoffeePot;
 use Illuminate\Support\Facades\Hash;
 
 /**

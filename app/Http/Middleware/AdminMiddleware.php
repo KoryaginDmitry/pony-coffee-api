@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {   
-        if (auth()->user()?->role->name !== 'admin') {
+        if (!auth()->user()?->isAdmin()) {
             return response()
                 ->json(
                     [

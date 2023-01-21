@@ -16,7 +16,7 @@ class BaristaMiddleware
      */
     public function handle(Request $request, Closure $next)
     {   
-        if (auth()->user()?->role->name !== 'barista') {
+        if (!auth()->user()?->isBarista()) {
             return response()->json(
                 [
                     'data' => null,
