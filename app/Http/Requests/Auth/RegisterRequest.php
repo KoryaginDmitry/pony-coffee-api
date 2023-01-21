@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
         $phone_regex = config('param_config.phone_regex');
 
         return [
-            "name" => ["required", "string", "between:5, 255"],
+            "name" => ["required", "string", "between:2, 255"],
             "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
             "password" => ["required", "between:8, 255" , "confirmed"],
             "agreement" => ["required", "accepted"],

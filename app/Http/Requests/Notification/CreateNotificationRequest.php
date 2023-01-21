@@ -26,7 +26,7 @@ class CreateNotificationRequest extends FormRequest
         return [
             "site" => ["required_without_all:telegram", "accepted"],
             "telegram" => ["required_without_all:site", "accepted"],
-            "text" => ["required", "string", "between:10, 255"]
+            "text" => ["required", "string", "between:5, 255"]
         ];
     }
 

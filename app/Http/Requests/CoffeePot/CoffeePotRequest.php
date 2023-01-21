@@ -25,7 +25,7 @@ class CoffeePotRequest extends FormRequest
     {
         return [
             "name" => ["nullable", "string", "max:255"],
-            "address" => ["required", "string", "between:10, 255"] 
+            "address" => ["required", "string", "between:5, 255"] 
         ];
     }
 }

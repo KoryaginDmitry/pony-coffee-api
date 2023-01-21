@@ -24,7 +24,7 @@ class ProfileNameRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["request", 'between:5, 255', 'string']
+            "name" => ["request", 'between:2, 255', 'string']
         ];
     }
 }

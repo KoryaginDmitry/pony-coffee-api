@@ -25,7 +25,7 @@ class CreateMessageRequest extends FormRequest
     {
         return [
             'user_id' => ['required', 'integer'],
-            'text' => ['required', 'string', 'between:5, 255'],
+            'text' => ['required', 'string', 'between:1, 255'],
         ];
     }
 
