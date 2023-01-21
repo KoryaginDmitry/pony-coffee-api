@@ -49,6 +49,10 @@ return [
     /**
      * Unique telegram bot token
      */
-    'bot_token' => env('TELEGRAM_BOT_TOKEN')
-    
+    'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+
+    /**
+     * Unique identifier for sending SMS
+     */
+    'sms_api_id' => env('SMS_API_ID')
 ];

@@ -7,6 +7,7 @@ use App\Http\Controllers\CoffeePotController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PhoneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatisticController;
 use Illuminate\Support\Facades\Route;
@@ -31,14 +32,30 @@ Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePo
 
 Route::group(
     [
-        'controller' => AuthController::class,
         'middleware' => 'guest'
-    ], 
+    ],
     function () {
-        Route::post('/login', 'login'); //Авторизация пользоватея
-        Route::post('/register', 'register'); //Регистрация
+        Route::group(
+            [
+                'controller' => AuthController::class,
+            ],
+            function () {
+                Route::post('/login', 'login'); //Авторизация пользоватея
+                Route::post('/register', 'register'); //Регистрация
+            }
+        );
+
+        Route::group(
+            [
+                'controller' => PhoneController::class
+            ],
+            function () {
+                Route::post('/sendMessage', 'sendCode');
+            }
+        );
     }
 );
+
 
 Route::group(
     [
