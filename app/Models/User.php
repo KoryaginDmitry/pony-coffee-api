@@ -203,7 +203,7 @@ class User extends Authenticatable
      */
     public function isUser() : bool
     {
-        if (auth()->user()?->role->name === 'barista') {
+        if (auth()->user()?->role->name === 'user') {
             return true;
         }
 
