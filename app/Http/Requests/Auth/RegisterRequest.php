@@ -28,7 +28,7 @@ class RegisterRequest extends FormRequest
 
         return [
             "name" => ["required", "string", "between:2, 255"],
-            "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
+            "phone" => ["required", "regex:/$phone_regex/", "exists:phones", 'verification', 'notBusy'],
             "password" => ["required", "between:8, 255" , "confirmed"],
             "agreement" => ["required", "accepted"],
             "role_id" => ["required", "integer"]

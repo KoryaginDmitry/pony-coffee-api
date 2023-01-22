@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('messages', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('phone')->unique()->after('last_name');
             $table->timestamp('phone_verified_at')->nullable()->after('phone');
         });
