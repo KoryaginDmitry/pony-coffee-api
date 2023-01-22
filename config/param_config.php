@@ -21,6 +21,7 @@ return [
             ['href' => '/logout', 'text' => 'Выход'],
         ],
         "barista" => [
+            ['href' => '/user', 'text' => 'Создать пользователя'],
             ['href' => '/', 'text' => 'Главная страница'],
             ['href' => '/bonuses', 'text' => 'Бонусы'],
             ['href' => '/logout', 'text' => 'Выход'],
