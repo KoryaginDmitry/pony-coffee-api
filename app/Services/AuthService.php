@@ -9,6 +9,7 @@
  */
 namespace App\Services;
 
+use App\Models\Phone;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -60,8 +61,14 @@ class AuthService extends BaseService
         $request->password = Hash::make($request->password);
         
         $user = User::create(
-            $request->validated()
+            $request->safe()->except(['phone'])
         );
+
+        $phone = Phone::where('phone', $request->phone)->first();
+
+        $phone->user_id = $user->id;
+
+        $phone->save();
 
         $token = $user->createToken('userToken');
 

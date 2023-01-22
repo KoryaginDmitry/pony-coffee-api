@@ -51,6 +51,7 @@ Route::group(
             ],
             function () {
                 Route::post('/sendMessage', 'sendCode');
+                Route::post('/phoneVerification', 'verification');
             }
         );
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Phone\PhoneRequest;
+use App\Http\Requests\Phone\VerificationRequest;
 use App\Services\PhoneService;
 use Illuminate\Http\JsonResponse;
 
@@ -29,6 +30,20 @@ class PhoneController extends BaseController
     {
         return $this->sendResponse(
             $this->service->sendCode($request)
+        );
+    }
+
+    /**
+     * Phone number verification during registration
+     *
+     * @param VerificationRequest $request object VerificationRequest
+     * 
+     * @return JsonResponse
+     */
+    public function verification(VerificationRequest $request) : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->verification($request)
         );
     }
 }

@@ -144,6 +144,54 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Phone
+ *
+ * @property int $id
+ * @property int|null $user_id
+ * @property string $phone
+ * @property int $confirmation
+ * @property string|null $phone_verified_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PhoneCode[] $codes
+ * @property-read int|null $codes_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone whereConfirmation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone wherePhoneVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Phone whereUserId($value)
+ */
+	class Phone extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\PhoneCode
+ *
+ * @property int $id
+ * @property int $phone_id
+ * @property int $code
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|PhoneCode newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PhoneCode newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PhoneCode query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PhoneCode whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PhoneCode whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PhoneCode whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PhoneCode wherePhoneId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PhoneCode whereUpdatedAt($value)
+ */
+	class PhoneCode extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Role
  *
  * @property int $id

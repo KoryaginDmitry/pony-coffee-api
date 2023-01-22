@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Rules\NotBusy;
+use App\Rules\Verification;
 use App\Support\Helper;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -28,7 +30,7 @@ class RegisterRequest extends FormRequest
 
         return [
             "name" => ["required", "string", "between:2, 255"],
-            "phone" => ["required", "regex:/$phone_regex/", "exists:phones", 'verification', 'notBusy'],
+            "phone" => ["required", "regex:/$phone_regex/", "exists:phones", new Verification, new NotBusy],
             "password" => ["required", "between:8, 255" , "confirmed"],
             "agreement" => ["required", "accepted"],
             "role_id" => ["required", "integer"]

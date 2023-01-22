@@ -6,7 +6,7 @@ use App\Rules\NotVerification;
 use App\Support\Helper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PhoneRequest extends FormRequest
+class VerificationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,8 @@ class PhoneRequest extends FormRequest
         $phone_regex = config('param_config.phone_regex');
 
         return [
-            "phone" => ["required", "regex:/$phone_regex/", new NotVerification],
+            "phone" => ["required", "regex:/$phone_regex/", "exists:phones", new NotVerification],
+            "code" => ["required", "string", "exists:phone_codes"]
         ];
     }
 
