@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -75,11 +76,12 @@ class User extends Authenticatable
         'name',
         'last_name',
         'phone',
+        'phone_verified_at',
         'email',
+        'email_verified_at',
         'password',
         'agreement',
         'role_id',
-        'password'
     ];
 
     /**
@@ -88,10 +90,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        //'password',
+        'password',
+        'phone_verified_at',
+        'email_verified_at',
         'remember_token',
         'role_id',
-        'role',
         'agreement'
     ];
 
@@ -105,17 +108,17 @@ class User extends Authenticatable
     ];
 
     /**
-     * Receives the number of user's active bonuses
+     * Return active bonuses
      *
-     * @return int
+     * @return Collection
      */
-    public function countActiveBonuses() : int
+    public function getActiveBonuses() : Collection
     {  
         return $this->bonuses()
-            ->where("usage", "0")
+            ->where('usage', '0')
             ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
-            ->get()
-            ->count();
+            ->orderBy('created_at', 'DESC')
+            ->get();
     }
 
     /**
@@ -167,7 +170,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserCoffeePot::class);
     }
-
+    
     /**
      * Check if the user is an admin
      *

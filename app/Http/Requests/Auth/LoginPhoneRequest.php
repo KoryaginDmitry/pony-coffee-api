@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Phone;
+namespace App\Http\Requests\Auth;
 
 use App\Support\Helper;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Route;
 
-class PhoneRequest extends FormRequest
+class LoginPhoneRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +14,7 @@ class PhoneRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return !auth()->check();
     }
 
     /**
@@ -27,14 +26,9 @@ class PhoneRequest extends FormRequest
     {
         $phone_regex = config('param_config.phone_regex');
 
-        if (Route::currentRouteName() == 'sendloginCode') {
-            return [
-                "phone" => ["required", "regex:/$phone_regex/", "exists:users"]
-            ];
-        }
-
         return [
-            "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
+            'phone' => ['required', "regex:/$phone_regex/", "exists:users"],
+            'code' => ['required', 'integer', 'between: 999, 9999']
         ];
     }
 

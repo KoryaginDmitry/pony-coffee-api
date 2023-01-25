@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Phone\PhoneRequest;
+use App\Http\Requests\Phone\VerificationRequest;
 use App\Services\PhoneService;
 use Illuminate\Http\JsonResponse;
 

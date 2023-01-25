@@ -76,4 +76,14 @@ class Feedback extends Model
     {
         return $this->belongsTo(CoffeePot::class);
     }
+
+    /**
+     * Relationship
+     *
+     * @return BelongsTo
+     */
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -9,7 +9,9 @@
  */
 namespace App\Services;
 
+use App\Exceptions\LimitSmsException;
 use App\Http\Requests\Phone\PhoneRequest;
+use Illuminate\Support\Facades\DB;
 
 /**
  * PhoneService class
@@ -27,21 +29,21 @@ class PhoneService extends BaseService
      *
      * @return array
      */
-    public function sendCode(PhoneRequest $request)
-    {
-        $code = urlencode(
-            rand(1000, 9999)
+    public function sendCode(PhoneRequest $request) : array
+    {   
+        $code = mt_rand(1000, 9999);
+
+        $request->session()->put($request->phone, $code);
+
+        $this->sendHttpRequest(
+            'https://sms.ru/sms/send',
+            [
+                'api_id' => config('param_config.sms_api_id'),
+                'to' => $request->phone,
+                'msg' => urlencode($code),
+                'json' => 1
+            ]
         );
-
-        $id = config('param_config.sms_api_id');
-
-        file_get_contents(
-            "https://sms.ru/sms/send?api_id=$id&to=$$request->phone&msg=$code&json=1"
-        );
-
-        $this->data = [
-            'data' => $code
-        ];
 
         $this->code = 201;
 

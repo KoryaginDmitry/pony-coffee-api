@@ -30,10 +30,10 @@ class CreateRequest extends FormRequest
         return [
             "name" => ["required", "string", "between:2, 255"],
             "last_name" => ["nullable", "string", "between:2, 255"],
-            "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
-            "phone_verified_at" => ["required", "date"],
-            "password" => ["required", "string", "confirmed", "between:8, 255"],
             "coffeePot_id" => ["required", "exists:coffee_pots,id"],
+            "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
+            'phone_verified_at' => ['required', 'date'],
+            "password" => ["required", "string", "confirmed", "between:8, 255"],
             "agreement" => ["required", "integer"],
             "role_id" => ["required", "integer"]
         ];

@@ -35,14 +35,10 @@ class BonusService extends BaseService
      * @return array
      */
     public function getInfoBonuses() : array
-    {
+    { 
         $user = User::find(auth()->id());
-
-        $userBonuses = $user->bonuses()
-            ->where('usage', '0')
-            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
-            ->orderBy('created_at', 'DESC')
-            ->get();
+        
+        $userBonuses = $user->getActiveBonuses();
 
         $bonusBurnDate = $userBonuses
             ->pluck('created_at')
@@ -67,7 +63,7 @@ class BonusService extends BaseService
      */
     public function search(UserSearchRequest $request) : array
     {
-        $user = User::where("role_id", "3")
+        $users = User::where("role_id", "3")
             ->when(
                 isset($request->value),
                 function ($query) use ($request) {
@@ -82,13 +78,13 @@ class BonusService extends BaseService
                             ->where(
                                 DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30"
                             );
-                    }
+                    },
                 ]
             )
             ->get();
 
         $this->data = [
-            "user" => $user
+            "users" => $users
         ];
 
         return $this->sendResponse();

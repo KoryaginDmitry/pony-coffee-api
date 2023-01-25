@@ -86,6 +86,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\User|null $user
  */
 	class Feedback extends \Eloquent {}
 }

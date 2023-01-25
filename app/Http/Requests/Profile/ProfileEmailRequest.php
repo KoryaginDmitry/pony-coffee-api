@@ -24,7 +24,22 @@ class ProfileEmailRequest extends FormRequest
     public function rules()
     {
         return [
-            "email" => ["request", 'email', 'unique:users', 'max:255']
+            "email" => ["request", 'email', 'unique:users', 'max:255'],
+            "email_verified_at" => ['required']
         ];
+    }
+
+    /**
+     * Prepare data for validation.
+     *
+     * @return void
+     */
+    public function prepareForValidation()
+    {
+        $this->merge(
+            [
+                'email_verified_at' => null
+            ]
+        );
     }
 }

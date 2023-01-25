@@ -10,6 +10,7 @@
  */
 namespace App\Support;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -18,6 +19,7 @@ use Illuminate\Support\Str;
  * @category Helper
  * 
  * @method static string editPhoneNumber(string $phone)
+ * @method static array hashPassword(array $data)
  * 
  * @author DmitryKoryagin <kor.dima97@email.ru>
  */
@@ -46,5 +48,21 @@ class Helper
         }
 
         return $phone;
+    }
+
+    /**
+     * Hashes the password parameter in the resulting array
+     *
+     * @param array $data array to hash
+     * 
+     * @return array
+     */
+    public static function hashPassword(array $data) : array
+    {
+        if ($data['password']) {
+            $data['password'] = Hash::make($data['password']);
+        }
+
+        return $data;
     }
 }

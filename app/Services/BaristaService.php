@@ -15,7 +15,7 @@ use App\Http\Requests\Barista\CreateRequest;
 use App\Http\Requests\Barista\UpdateRequest;
 use App\Models\CoffeePot;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Support\Helper;
 
 /**
  * BaristaService class
@@ -39,17 +39,14 @@ class BaristaService extends BaseService
      */
     public function getBaristas() : array
     {
-        $users = User::where("role_id", "2")
-            ->orderBy('created_at', "DESC")
-            ->with("userCoffeePot.coffeePot")
-            ->get();
-        
-        $coffeePots = CoffeePot::orderBy('created_at', "DESC")
-            ->get();
-
         $this->data = [
-            "users" => $users,
-            "coffeePots" => $coffeePots
+            "users" => User::where("role_id", "2")
+                ->orderBy('created_at', "DESC")
+                ->with("userCoffeePot.coffeePot")
+                ->get(),
+
+            "coffeePots" => CoffeePot::orderBy('created_at', "DESC")
+                ->get()
         ];
         
         return $this->sendResponse();
@@ -64,11 +61,9 @@ class BaristaService extends BaseService
      */
     public function getBarista(User $barista) : array
     {
-        $coffeePots = CoffeePot::orderBy('created_at', "DESC")->get();
-
         $this->data = [
-            "user" => $barista->fresh('userCoffeePot'),
-            "coffeePots" => $coffeePots
+            "user" => $barista->fresh(['userCoffeePot', 'phone']),
+            "coffeePots" => CoffeePot::orderBy('created_at', "DESC")->get()
         ];
         
         return $this->sendResponse();
@@ -84,15 +79,13 @@ class BaristaService extends BaseService
     public function create(CreateRequest $request) : array
     {
         $coffeePot = CoffeePot::find($request->coffeePot_id);
-
-        $data = $request->safe()->except(['coffeePot_id']);
         
-        $data['password'] = Hash::make($request->password);
-
         $barista = User::create(
-            $data
+            Helper::hashPassword(
+                $request->safe()->except('coffeePot_id')
+            )
         );
-        
+
         $barista->userCoffeePot()->create(
             [
                 'coffee_pot_id' => $coffeePot->id
@@ -120,7 +113,7 @@ class BaristaService extends BaseService
     public function update(UpdateRequest $request, User $barista) : array
     {
         $barista->update(
-            $request->safe()->except(['coffeePot_id'])
+            $request->safe()->except('coffeePot_id')
         );
 
         $coffeePot = CoffeePot::find($request->coffeePot_id);

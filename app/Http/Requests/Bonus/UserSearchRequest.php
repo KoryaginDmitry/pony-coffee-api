@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Bonus;
 
-use App\Support\Helper;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 
 class UserSearchRequest extends FormRequest
 {
