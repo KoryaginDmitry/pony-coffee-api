@@ -30,6 +30,9 @@ Route::get("/header", [HomeController::class, 'get']);
 //Возвращает адреса кофеточек и их id
 Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
 
+Route::post('/sendCode', [PhoneController::class, 'sendCode'])
+    ->middleware('api_session');
+
 Route::group(
     [
         'middleware' => 'guest'
@@ -40,18 +43,9 @@ Route::group(
                 'controller' => AuthController::class,
             ],
             function () {
-                Route::post('/login', 'login'); //Авторизация пользоватея
-                Route::post('/register', 'register'); //Регистрация
-            }
-        );
-
-        Route::group(
-            [
-                'controller' => PhoneController::class
-            ],
-            function () {
-                Route::post('/sendMessage', 'sendCode');
-                Route::post('/phoneVerification', 'verification');
+                Route::post('/login', 'login'); //Авторизация пользователя
+                Route::post('login/phone', 'phonelogin')->middleware('api_session');
+                Route::post('/register', 'register')->middleware('api_session'); //Регистрация
             }
         );
     }
@@ -75,6 +69,10 @@ Route::group(
                 Route::put("/profile/password", 'newPassword'); //Обновление пароля
             }
         );
+
+        Route::post('/login/sendCode', [PhoneController::class, 'sendCode'])
+            ->name('sendloginCode')
+            ->middleware('api_session');
 
         Route::get('/user/bonuses', [BonusController::class, 'getInfoBonuses']);
 

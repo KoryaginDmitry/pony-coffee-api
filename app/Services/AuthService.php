@@ -9,16 +9,19 @@
  */
 namespace App\Services;
 
-use App\Models\Phone;
+use App\Http\Requests\Auth\LoginPhoneRequest;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
+use App\Support\Helper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 /**
  * AuthService class
  * 
- * @method array login(object $request)
- * @method array register(object $request)
+ * @method array login(LoginRequest $request)
+ * @method array register(RegisterRequest $request)
  * @method array logout()
  * 
  * @category Services
@@ -30,49 +33,57 @@ class AuthService extends BaseService
     /**
      * Authorization method
      * 
-     * @param object $request object LoginRequest
+     * @param LoginRequest $request
      * 
      * @return array
      */
-    public function login(object $request) : array
+    public function login(LoginRequest $request) : array
     {   
-        $user = User::firstWhere('phone', $request->phone);
+        $user = User::where('phone', $request->phone)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->sendErrorResponse('Проверьте введенные данные');
         }
 
-        $token = $user->createToken('userToken');
-
-        $this->data = $token;
+        $this->data = $user->createToken('userToken');
         
         return $this->sendResponse();
     }
 
     /**
-     * Registration method
-     * 
-     * @param object $request object RegisterRequest
+     * Phone login
+     *
+     * @param LoginPhoneRequest $request
      * 
      * @return array
      */
-    public function register(object $request) : array
+    public function phoneLogin(LoginPhoneRequest $request) : array
     {
-        $request->password = Hash::make($request->password);
+        $this->smsCodeCheck($request);
+
+        $user = User::where('phone', $request->phone)->first();
+
+        $this->data = $user->createToken('userToken');
+        
+        return $this->sendResponse();
+    }
+
+    /**
+     * Registration
+     * 
+     * @param RegisterRequest $request
+     * 
+     * @return array
+     */
+    public function register(RegisterRequest $request) : array
+    {
+        $this->smsCodeCheck($request);
         
         $user = User::create(
-            $request->safe()->except(['phone'])
+            Helper::hashPassword($request->safe()->except('code'))
         );
 
-        $phone = Phone::where('phone', $request->phone)->first();
-
-        $phone->user_id = $user->id;
-
-        $phone->save();
-
-        $token = $user->createToken('userToken');
-
-        $this->data = $token;
+        $this->data = $user->createToken('userToken');
 
         $this->code = 201;
         
@@ -80,7 +91,7 @@ class AuthService extends BaseService
     }
 
     /**
-     * Logout method
+     * Logout
      * 
      * @return array
      */ 

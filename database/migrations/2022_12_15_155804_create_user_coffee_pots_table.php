@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('user_coffee_pots', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(CoffeePot::class);
+            $table->foreignIdFor(User::class)->cascadeOnDelete();
+            $table->foreignIdFor(CoffeePot::class)->cascadeOnDelete();
             $table->timestamps();
         });
     }

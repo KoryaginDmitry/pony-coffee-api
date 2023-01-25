@@ -18,8 +18,8 @@ return new class extends Migration
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
             $table->string('grade')->nullable();
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(CoffeePot::class);
+            $table->foreignIdFor(User::class)->cascadeOnDelete();
+            $table->foreignIdFor(CoffeePot::class)->cascadeOnDelete();
             $table->timestamps();
         });
     }

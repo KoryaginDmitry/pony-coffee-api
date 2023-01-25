@@ -10,7 +10,13 @@
  */
 namespace App\Services;
 
+use App\Http\Requests\Profile\ProfileEmailRequest;
+use App\Http\Requests\Profile\ProfileNameRequest;
+use App\Http\Requests\Profile\ProfilePasswordRequest;
+use App\Http\Requests\Profile\ProfilePhoneRequest;
+use App\Models\Phone;
 use App\Models\User;
+use App\Support\Helper;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -45,20 +51,16 @@ class ProfileService extends BaseService
     /**
      * Update name auth user
      *
-     * @param App\Http\Requests\Profile\ProfileNameRequest $request object Request class
+     * @param ProfileNameRequest $request object ProfileNameRequest class
      * 
      * @return array
      */
-    public function updateName(object $request) : array
+    public function updateName(ProfileNameRequest $request) : array
     {
         $user = User::find(auth()->id());
 
-        $user->name = $request->name;
-
-        $user->save();
-
         $this->data = [
-            'user' => $user
+            'user' => $user->update($request->validated())
         ];
 
         return $this->sendResponse();
@@ -67,22 +69,18 @@ class ProfileService extends BaseService
     /**
      * Update phone auth user
      *
-     * @param App\Http\Requests\Profile\ProfilePhoneRequest $request object Request class
+     * @param ProfilePhoneRequest $request object ProfilePhoneRequest class
      * 
      * @return array
      */
-    public function updatePhone(object $request) : array
+    public function updatePhone(ProfilePhoneRequest $request) : array
     {
+        $this->smsCodeCheck($request);
+
         $user = User::find(auth()->id());
 
-        $user->phone = $request->phone;
-
-        $user->phone_verified_at = null;
-
-        $user->save();
-
         $this->data = [
-            'user' => $user
+            'phone' => $user->update($request->validated())
         ];
 
         return $this->sendResponse();
@@ -91,22 +89,16 @@ class ProfileService extends BaseService
     /**
      * Update email auth user
      * 
-     * @param App\Http\Requests\Profile\ProfileEmailRequest $request object Request class
+     * @param ProfileEmailRequest $request object ProfileEmailRequest class
      *
      * @return array
      */
-    public function updateEmail(object $request) : array
+    public function updateEmail(ProfileEmailRequest $request) : array
     {
         $user = User::find(auth()->id());
 
-        $user->email = $request->email;
-
-        $user->email_verified_at = null;
-
-        $user->save();
-
         $this->data = [
-            'user' => $user
+            'user' => $user->update($request->validated())
         ];
 
         return $this->sendResponse();
@@ -115,17 +107,17 @@ class ProfileService extends BaseService
     /**
      * Update password auth user
      *
-     * @param App\Http\Requests\Profile\ProfilepasswordRequest $request object Request class
+     * @param ProfilepasswordRequest $request object ProfilepasswordRequest class
      * 
      * @return array
      */
-    public function newPassword(object $request) : array
+    public function newPassword(ProfilePasswordRequest $request) : array
     {
         $user = User::find(auth()->id());
 
-        $user->password = Hash::make($request->password);
-
-        $user->save();
+        $user->update(
+            Helper::hashPassword($request->validated())
+        );
 
         $this->data = [
             "message" => "Пароль изменен"

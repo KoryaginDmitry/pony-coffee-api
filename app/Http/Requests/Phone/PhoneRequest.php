@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Phone;
 
-use App\Rules\NotVerification;
 use App\Support\Helper;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Route;
 
 class PhoneRequest extends FormRequest
 {
@@ -15,7 +15,7 @@ class PhoneRequest extends FormRequest
      */
     public function authorize()
     {
-        return !auth()->check();
+        return true;
     }
 
     /**
@@ -27,8 +27,14 @@ class PhoneRequest extends FormRequest
     {
         $phone_regex = config('param_config.phone_regex');
 
+        if (Route::currentRouteName() == 'sendloginCode') {
+            return [
+                "phone" => ["required", "regex:/$phone_regex/", "exists:users"]
+            ];
+        }
+
         return [
-            "phone" => ["required", "regex:/$phone_regex/", new NotVerification],
+            "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
         ];
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Profile;
 
 use App\Support\Helper;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProfilePhoneRequest extends FormRequest
@@ -14,7 +15,7 @@ class ProfilePhoneRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return auth()->user()->isUser();
     }
 
     /**
@@ -27,7 +28,9 @@ class ProfilePhoneRequest extends FormRequest
         $phone_regex = config('param_config.phone_regex');
 
         return [
-            "phone" => ["request", "regex:/$phone_regex/", "unique:users"]
+            "phone" => ["required", "regex:/$phone_regex/", "uniques:users"],
+            'phone_verified_at' => ['required', 'date'],
+            "code" => ["request", "integer", "between:1000, 9999"]
         ];
     }
 
@@ -40,7 +43,8 @@ class ProfilePhoneRequest extends FormRequest
     {
         $this->merge(
             [
-                'phone' => Helper::editPhoneNumber($this->phone)
+                'phone' => Helper::editPhoneNumber($this->phone),
+                'phone_verified_at' => Carbon::now()
             ]
         );
     }

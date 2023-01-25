@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Phone;
+namespace App\Http\Requests\Auth;
 
-use App\Rules\NotVerification;
 use App\Support\Helper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class VerificationRequest extends FormRequest
+class LoginPhoneRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,8 +27,8 @@ class VerificationRequest extends FormRequest
         $phone_regex = config('param_config.phone_regex');
 
         return [
-            "phone" => ["required", "regex:/$phone_regex/", "exists:phones", new NotVerification],
-            "code" => ["required", "string", "exists:phone_codes"]
+            'phone' => ['required', "regex:/$phone_regex/", "exists:users"],
+            'code' => ['required', 'integer', 'between: 999, 9999']
         ];
     }
 

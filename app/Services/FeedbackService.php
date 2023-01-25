@@ -41,10 +41,10 @@ class FeedbackService extends BaseService
             'feedbacks' => Feedback::when(
                 !auth()->user()->isAdmin(),
                 function ($query) {
-                    return $query->where('user_id', auth()->id);
+                    return $query->where('user_id', auth()->id());
                 }
             )
-            ->with(['messages', 'coffeePot'])
+            ->with(['messages', 'coffeePot', 'user'])
             ->get()
         ];
 
@@ -63,7 +63,7 @@ class FeedbackService extends BaseService
         $this->rightCheck($feedback);
 
         $this->data = [
-            'feedback' => $feedback->fresh(['messages', 'coffeePot'])
+            'feedback' => $feedback->fresh(['messages', 'coffeePot', 'user'])
         ];
 
         return $this->sendResponse();
@@ -82,11 +82,11 @@ class FeedbackService extends BaseService
             'feedbacks' => Feedback::when(
                 !auth()->user()->isAdmin(),
                 function ($query) {
-                    return $query->where('user_id', auth()->id);
+                    return $query->where('user_id', auth()->id());
                 }
             )
             ->where('coffee_pot_id', $coffeePot->id)
-            ->with(['messages', 'coffeePot'])
+            ->with(['messages', 'coffeePot', 'user'])
             ->get()
         ];
 

@@ -9,6 +9,7 @@
  */
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\LoginPhoneRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthService;
@@ -48,6 +49,20 @@ class AuthController extends BaseController
     {   
         return $this->sendResponse(
             $this->service->login($request)
+        );
+    }
+
+    /**
+     * Phone login 
+     *
+     * @param LoginPhoneRequest $request
+     *  
+     * @return JsonResponse
+     */
+    public function phoneLogin(LoginPhoneRequest $request) : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->phoneLogin($request)
         );
     }
 

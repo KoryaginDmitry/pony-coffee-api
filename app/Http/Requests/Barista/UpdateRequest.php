@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Barista;
 
 use App\Support\Helper;
-use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -34,9 +33,8 @@ class UpdateRequest extends FormRequest
             "phone" => [
                 "required",
                 "regex:/$phone_regex/",
-                Rule::unique('users')->ignore($this->barista, 'id')
+                Rule::unique('phones')->ignore($this->barista)
             ],
-            'phone_verified_at' => ["required", "date"],
             "coffeePot_id" => ["required", "exists:coffee_pots,id"]
         ];
     }
@@ -51,7 +49,6 @@ class UpdateRequest extends FormRequest
         $this->merge(
             [
                 'phone' => Helper::editPhoneNumber($this->phone),
-                'phone_verified_at' => Carbon::now()
             ]
         );
     }

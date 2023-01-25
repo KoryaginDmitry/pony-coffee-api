@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('bonuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId("user_id_create");
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->cascadeOnDelete();
             $table->foreignId("user_id_wrote")->nullable();
             $table->enum("usage", [0, 1])->default(0);
             $table->timestamps();

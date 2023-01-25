@@ -10,7 +10,9 @@
  */
 namespace App\Services;
 
-use App\Exceptions\ValidateException;
+use App\Exceptions\ErrorCodeException;
+use App\Exceptions\RequestExecutionErrorException;
+use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -139,5 +141,46 @@ class BaseService
         if (!auth()->user()->isdmin() && $object->user_id !== auth()->id()) {
             return throw new NotFoundHttpException();
         }
+    }
+
+    /**
+     * Send http request
+     *
+     * @param string $url   http link
+     * @param array  $param array param
+     * 
+     * @throws RequestExecutionErrorException
+     * 
+     * @return bool
+     */
+    protected function sendHttpRequest(string $url, array $param) : bool|RequestExecutionErrorException
+    {
+        $request = Http::acceptJson()
+            ->get($url, $param);
+
+        if ($request->json()['status'] != "OK") {
+            return throw new RequestExecutionErrorException();
+        }
+
+        return true;
+    }
+
+    /**
+     * Sms code check
+     *
+     * @param object $request
+     * 
+     * @throws ErrorCodeException
+     * @return bool
+     */
+    protected function smsCodeCheck(object $request) : bool|ErrorCodeException
+    {
+        if ($request->session()->get($request->phone) != $request->code) {
+            return throw new ErrorCodeException();
+        }
+
+        $request->session()->forget($request->phone);
+
+        return true;
     }
 }

@@ -32,18 +32,4 @@ class PhoneController extends BaseController
             $this->service->sendCode($request)
         );
     }
-
-    /**
-     * Phone number verification during registration
-     *
-     * @param VerificationRequest $request object VerificationRequest
-     * 
-     * @return JsonResponse
-     */
-    public function verification(VerificationRequest $request) : JsonResponse
-    {
-        return $this->sendResponse(
-            $this->service->verification($request)
-        );
-    }
 }
