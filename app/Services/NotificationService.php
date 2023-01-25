@@ -32,35 +32,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class NotificationService extends BaseService
 {
     /**
-     * Send notification in telegram
-     *
-     * @param string $text text message
-     * 
-     * @throws Exception
-     * 
-     * @return mixed
-     */
-    private function _sendTelegramNotification(string $text) : mixed
-    {
-        $idChannel = config('param_config.channel_id');
-        $botToken = config('param_config.bot_token');
-
-        $message = urlencode($text);
-        
-        try {
-            file_get_contents(
-                "https://api.telegram.org/bot$botToken/sendMessage?chat_id=$idChannel&text=".$message
-            );
-        }
-        catch (\Exception $e){
-            return $this->sendErrorResponse(
-                [
-                    'Ошибка отправки уведомления в телеграм'
-                ]
-            );
-        }
-    }
-    /**
      * Get notifications for auth user 
      *
      * @return array
@@ -151,7 +122,15 @@ class NotificationService extends BaseService
     public function createNotification(CreateNotificationRequest $request) : array
     {
         if ($request->telegram) {
-            $this->_sendTelegramNotification($request->text());
+            $botToken = config('param_config.bot_token');
+
+            $this->sendHttpRequest(
+                "https://api.telegram.org/bot$botToken/sendMessage",
+                [
+                    'chat_id' => config('param_config.channel_id'),
+                    'text' => urlencode($request->text)
+                ]
+            );
         }
     
         $this->data = [
