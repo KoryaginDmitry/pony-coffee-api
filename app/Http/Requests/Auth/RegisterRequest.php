@@ -25,7 +25,7 @@ class RegisterRequest extends FormRequest
      */
     public function rules()
     {
-        $phone_regex = config('options.regex.phone');
+        $phone_regex = config('param_config.phone_regex');
 
         return [
             "name" => ["required", "string", "between:2, 255"],

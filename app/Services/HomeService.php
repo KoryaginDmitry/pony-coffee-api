@@ -22,6 +22,21 @@ namespace App\Services;
 class HomeService extends BaseService
 {
     /**
+     * Array links header
+     *
+     * @var array
+     */
+    private array $_header;
+
+    /**
+     * Get array header
+     */
+    public function __construct()
+    {
+        $this->_header = config('param_config.header');
+    }
+
+    /**
      * Get header for user role
      *
      * @return array
@@ -35,7 +50,7 @@ class HomeService extends BaseService
         }
 
         $this->data = [
-            'header' => config("options.header.$role")
+            'header' => $this->_header[$role]
         ];
 
         return $this->sendResponse();

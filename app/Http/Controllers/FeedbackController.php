@@ -63,7 +63,7 @@ class FeedbackController extends BaseController
     public function getFeedback(Feedback $feedback) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->getFeedback($feedback)
+            $this->service->getFeedbacks($feedback)
         );
     }
 

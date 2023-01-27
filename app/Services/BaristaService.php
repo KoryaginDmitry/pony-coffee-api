@@ -105,8 +105,8 @@ class BaristaService extends BaseService
     /**
      * Update profile barista
      * 
-     * @param UpdateRequest $request
-     * @param User          $barista
+     * @param UpdateRequest $request object UpdateRequest
+     * @param User          $barista user barista
      * 
      * @return array
      */

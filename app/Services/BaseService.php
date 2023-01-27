@@ -128,6 +128,22 @@ class BaseService
     }
 
     /**
+     * Checking permissions to perform actions with an object
+     * 
+     * @param object $object the object being checked
+     * 
+     * @throws NotFoundHttpException
+     * 
+     * @return mixed
+     */
+    protected function rightCheck(object $object) : mixed
+    {
+        if (!auth()->user()->isdmin() && $object->user_id !== auth()->id()) {
+            return throw new NotFoundHttpException();
+        }
+    }
+
+    /**
      * Send http request
      *
      * @param string $url   http link

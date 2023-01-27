@@ -38,7 +38,7 @@ class PhoneService extends BaseService
         $this->sendHttpRequest(
             'https://sms.ru/sms/send',
             [
-                'api_id' => config('services.sms.api_id'),
+                'api_id' => config('param_config.sms_api_id'),
                 'to' => $request->phone,
                 'msg' => urlencode($code),
                 'json' => 1

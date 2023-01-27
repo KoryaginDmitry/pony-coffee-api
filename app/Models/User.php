@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -64,7 +63,7 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin  \Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -115,13 +114,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getActiveBonuses() : Collection
     {  
-        $bonusDuration = config('param_config.bonusDuration');
-
         return $this->bonuses()
             ->where('usage', '0')
-            ->where(
-                DB::raw("DATEDIFF(NOW(), created_at)"), "<", Bonus::getLifetime()
-            )
+            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
             ->orderBy('created_at', 'DESC')
             ->get();
     }

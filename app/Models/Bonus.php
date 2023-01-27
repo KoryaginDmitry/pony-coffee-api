@@ -96,26 +96,6 @@ class Bonus extends Model
                 Carbon::create($this->attributes['created_at'])
             );
         
-        return $this->attributes['date'] = !$dateDiff > self::getLifetime();
-    }
-
-    /**
-     * Get lifitime bonus
-     *
-     * @return int
-     */
-    public static function getLifetime() : int
-    {
-        return config('options.bonus.lifetime');
-    }
-
-    /**
-     * Get write-off quantity
-     *
-     * @return int
-     */
-    public static function getWriteOffQuantity() : int
-    {
-        return config('options.bonus.writeOffQuantity');
+        return $this->attributes['date'] = $dateDiff < 30 ? '0' : '1';
     }
 }

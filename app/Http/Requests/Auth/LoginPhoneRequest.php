@@ -24,7 +24,7 @@ class LoginPhoneRequest extends FormRequest
      */
     public function rules()
     {
-        $phone_regex = config('options.regex.phone');
+        $phone_regex = config('param_config.phone_regex');
 
         return [
             'phone' => ['required', "regex:/$phone_regex/", "exists:users"],
