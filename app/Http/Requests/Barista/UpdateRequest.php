@@ -33,7 +33,7 @@ class UpdateRequest extends FormRequest
             "phone" => [
                 "required",
                 "regex:/$phone_regex/",
-                Rule::unique('phones')->ignore($this->barista)
+                Rule::unique('users')->ignore($this->barista)
             ],
             "coffeePot_id" => ["required", "exists:coffee_pots,id"]
         ];

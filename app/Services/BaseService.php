@@ -142,7 +142,7 @@ class BaseService
         $request = Http::acceptJson()
             ->get($url, $param);
 
-        if ($request->json()['status'] != "OK") {
+        if (!$request->ok()) {
             return throw new RequestExecutionErrorException();
         }
 
