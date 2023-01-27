@@ -54,7 +54,7 @@ class NotificationService extends BaseService
     /**
      * Read notification
      *
-     * @param Notification $notification Notification object
+     * @param Notification $notification
      * 
      * @throws NotFoundHttpException
      * 
@@ -115,19 +115,19 @@ class NotificationService extends BaseService
     /**
      * Create notification
      *
-     * @param CreateNotificationRequest $request object CreateNotificationRequest class
+     * @param CreateNotificationRequest $request
      * 
      * @return array
      */
     public function createNotification(CreateNotificationRequest $request) : array
     {
         if ($request->telegram) {
-            $botToken = config('param_config.bot_token');
+            $botToken = config('services.telegram.bot_token');
 
             $this->sendHttpRequest(
                 "https://api.telegram.org/bot$botToken/sendMessage",
                 [
-                    'chat_id' => config('param_config.channel_id'),
+                    'chat_id' => config('services.telegram.channel_id'),
                     'text' => urlencode($request->text)
                 ]
             );

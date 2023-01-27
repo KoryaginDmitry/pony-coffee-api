@@ -25,7 +25,7 @@ class ProfilePhoneRequest extends FormRequest
      */
     public function rules()
     {
-        $phone_regex = config('param_config.phone_regex');
+        $phone_regex = config('options.regex.phone');
 
         return [
             "phone" => ["required", "regex:/$phone_regex/", "uniques:users"],

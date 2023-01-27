@@ -25,7 +25,7 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {   
-        $phone_regex = config('param_config.phone_regex');
+        $phone_regex = config('options.regex.phone');
     
         return [
             "name" => ["required", "string", "between:2, 255"],

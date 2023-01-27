@@ -10,7 +10,6 @@
 
  namespace App\Http\Controllers;
 
-use App\Http\Requests\Bonus\UserSearchRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\BonusService;
@@ -53,16 +52,14 @@ class BonusController extends BaseController
     }
 
     /**
-     * Method search user
+     * Return all users
      *
-     * @param UserSearchRequest $request object UserSearchRequest
-     * 
      * @return JsonResponse
      */
-    public function search(UserSearchRequest $request) : JsonResponse
+    public function getUsers() : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->search($request)
+            $this->service->getUsers()
         );
     }
 

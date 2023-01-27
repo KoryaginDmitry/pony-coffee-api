@@ -6,6 +6,7 @@ use App\Http\Controllers\BonusController;
 use App\Http\Controllers\CoffeePotController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhoneController;
 use App\Http\Controllers\ProfileController;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('sendMail', [MailController::class, 'sendCode']);
 
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
 
@@ -54,7 +56,7 @@ Route::group(
 
 Route::group(
     [
-        'middleware' => 'user'
+        'middleware' => 'can:isUser'
     ],
     function () {
         Route::group(
@@ -96,15 +98,15 @@ Route::group(
             ],
             function () {
                 // Возвращает все обращения пользователя
-                Route::get("feedback", 'getFeedbacks');
+                Route::get("/feedback", 'getFeedbacks');
                 // Возвращает определенное обращение
-                Route::get("feedback/{feedback}", 'getFeedback');
+                Route::get("/feedback/{feedback}", 'getFeedback');
                 //Врзвращает обращения по кофейне
-                Route::get("feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
+                Route::get("/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
                 // Создание обращения
-                Route::post('feedback', 'create');
+                Route::post('/feedback', 'create');
                 // Создание сообщения для определенного обращение
-                Route::post('feedback/{feedback}', 'createMessage'); 
+                Route::post('/feedback/{feedback}', 'createMessage');
             }
         );
     }
@@ -113,11 +115,11 @@ Route::group(
 Route::group(
     [
         'controller' => BonusController::class,
-        'middleware' => 'barista'
+        'middleware' => 'can:isBarista'
     ], 
     function () {
         //Поиск гостя по id или номеру телефона
-        Route::get('search', 'search');
+        Route::get('/users', 'getUsers');
         //Создание бонуса для гостя
         Route::post('bonus/{user}', 'create');
         //Списание бонусов у гостя
@@ -127,7 +129,7 @@ Route::group(
 
 Route::group(
     [
-    'middleware' => 'admin'
+    'middleware' => 'can:isAdmin'
     ],
     function () {
         Route::group(

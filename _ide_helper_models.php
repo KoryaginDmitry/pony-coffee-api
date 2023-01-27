@@ -35,6 +35,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdCreate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdWrote($value)
  * @mixin \Eloquent
+ * @method static \Database\Factories\BonusFactory factory(...$parameters)
  */
 	class Bonus extends \Eloquent {}
 }
@@ -59,6 +60,7 @@ namespace App\Models{
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserCoffeePot[] $userCoffeePot
  * @property-read int|null $user_coffee_pot_count
+ * @method static \Database\Factories\CoffeePotFactory factory(...$parameters)
  */
 	class CoffeePot extends \Eloquent {}
 }
@@ -87,6 +89,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUserId($value)
  * @mixin \Eloquent
  * @property-read \App\Models\User|null $user
+ * @method static \Database\Factories\FeedbackFactory factory(...$parameters)
  */
 	class Feedback extends \Eloquent {}
 }
@@ -113,6 +116,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Database\Factories\MessageFactory factory(...$parameters)
  */
 	class Message extends \Eloquent {}
 }
@@ -139,6 +143,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUsersReadId($value)
  * @mixin \Eloquent
+ * @method static \Database\Factories\NotificationFactory factory(...$parameters)
  */
 	class Notification extends \Eloquent {}
 }
@@ -214,7 +219,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	class User extends \Eloquent {}
+	class User extends \Eloquent implements \Illuminate\Contracts\Auth\MustVerifyEmail {}
 }
 
 namespace App\Models{
@@ -237,6 +242,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereUserId($value)
  * @mixin \Eloquent
  * @property-read \App\Models\User|null $user
+ * @method static \Database\Factories\UserCoffeePotFactory factory(...$parameters)
  */
 	class UserCoffeePot extends \Eloquent {}
 }

@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Bonus;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UserSearchRequest extends FormRequest
+class BonusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +25,8 @@ class UserSearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'value' => ["sometimes", "required", "string", "between: 1, 12"]
+            "count" => ["required", "integer"],
+            "act" => ["required", Rule::in(['plus', 'minus'])]
         ];
     }
 }
