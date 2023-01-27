@@ -15,6 +15,7 @@ use App\Http\Requests\Barista\CreateRequest;
 use App\Http\Requests\Barista\UpdateRequest;
 use App\Models\CoffeePot;
 use App\Models\User;
+use App\Models\UserCoffeePot;
 use App\Support\Helper;
 
 /**
@@ -118,7 +119,10 @@ class BaristaService extends BaseService
 
         $coffeePot = CoffeePot::find($request->coffeePot_id);
 
-        $barista->userCoffeePot()->updateOrCreate(
+        UserCoffeePot::updateOrCreate(
+            [
+                'user_id' => $barista->id
+            ],
             [
                 "coffee_pot_id" => $coffeePot->id
             ]
