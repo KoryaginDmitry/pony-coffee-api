@@ -3,20 +3,20 @@
 return [
     "header" => [
         "user" => [
-            ['href' => '/', 'text' => 'Главная страница'],
+            ['href' => '/', 'text' => 'Главная'],
             ['href' => '/profile', 'text' => 'Профиль'],
             ['href' => '/notifications', 'text' => 'Уведомления'],
             ['href' => '/feedback', 'text' => 'Обратная связь'],
             ['href' => '/logout', 'text' => 'Выход'],
         ],
         "barista" => [
-            ['href' => '/', 'text' => 'Главная страница'],
+            ['href' => '/', 'text' => 'Главная'],
             ['href' => '/user', 'text' => 'Создать пользователя'],
             ['href' => '/bonuses', 'text' => 'Бонусы'],
             ['href' => '/logout', 'text' => 'Выход'],
         ],
         "admin" => [
-            ['href' => '/', 'text' => 'Главная страница'],
+            ['href' => '/', 'text' => 'Главная'],
             ['href' => '/statistic/barista', 'text' => 'Статистика сотрудников'],
             ['href' => '/statistic/user', 'text' => 'Статистика гостей'],
             ['href' => '/feedback', 'text' => 'Обратная связь'],
