@@ -63,7 +63,7 @@ class BaristaService extends BaseService
     public function getBarista(User $barista) : array
     {
         $this->data = [
-            "user" => $barista->fresh('userCoffeePot'),
+            "user" => $barista->fresh('userCoffeePot.coffeePot'),
             "coffeePots" => CoffeePot::orderBy('created_at', "DESC")->get()
         ];
         

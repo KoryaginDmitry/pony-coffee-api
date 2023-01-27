@@ -96,7 +96,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at',
         'remember_token',
         'role_id',
-        'agreement'
+        'agreement',
+        'created_at',
+        'updated_at',
     ];
 
     /**

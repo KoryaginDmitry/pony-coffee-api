@@ -51,6 +51,9 @@ class Message extends Model
      */
     protected $hidden = [
         'id',
+        'user_id',
+        'feedback_id',
+        'updated_at'
     ];
 
     /**

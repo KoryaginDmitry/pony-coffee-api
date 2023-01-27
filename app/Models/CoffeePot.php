@@ -40,6 +40,16 @@ class CoffeePot extends Model
     ];
 
     /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'id',
+        'updated_at'
+    ];
+
+    /**
      * Relation userCoffeePot
      *
      * @return HasMany

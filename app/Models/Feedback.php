@@ -55,6 +55,7 @@ class Feedback extends Model
      */
     protected $hidden = [
         'id',
+        'updated_at'
     ];
 
     /**

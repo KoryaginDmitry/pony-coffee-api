@@ -50,14 +50,13 @@ class Bonus extends Model
     ];
 
     /**
-     * The virtual attributes
+     * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
-    protected $appends = [
-        'create-date',
-        'update-date',
-        'burnt'
+    protected $hidden = [
+        'id',
+        'updated_at'
     ];
 
     /**

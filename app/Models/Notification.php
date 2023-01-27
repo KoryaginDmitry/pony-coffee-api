@@ -39,10 +39,19 @@ class Notification extends Model
      */
     protected $fillable = [
         'email',
-        'sms',
         'site',
         'telegram',
         'text',
         'user_read_id',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'user_read_id',
+        'updated_at'
     ];
 }
