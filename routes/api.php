@@ -32,7 +32,7 @@ Route::get("/header", [HomeController::class, 'get']);
 //Возвращает адреса кофеточек и их id
 Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
 
-Route::post('/sendCode', [PhoneController::class, 'sendCode'])
+Route::post('/call', [PhoneController::class, 'call'])
     ->middleware('api_session');
 
 Route::group(
@@ -72,7 +72,7 @@ Route::group(
             }
         );
 
-        Route::post('/login/sendCode', [PhoneController::class, 'sendCode'])
+        Route::post('/login/call', [PhoneController::class, 'call'])
             ->name('sendloginCode')
             ->middleware('api_session');
 

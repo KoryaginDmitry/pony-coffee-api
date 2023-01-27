@@ -29,21 +29,18 @@ class PhoneService extends BaseService
      *
      * @return array
      */
-    public function sendCode(PhoneRequest $request) : array
+    public function call(PhoneRequest $request) : array
     {   
-        $code = mt_rand(1000, 9999);
-
-        $request->session()->put($request->phone, $code);
-
-        $this->sendHttpRequest(
-            'https://sms.ru/sms/send',
+        $response = $this->sendHttpRequest(
+            'https://sms.ru/sms/code/call',
             [
                 'api_id' => config('services.sms.api_id'),
-                'to' => $request->phone,
-                'msg' => urlencode($code),
-                'json' => 1
+                'phone' => $request->phone,
+                'ip' => config('services.sms.ip'),
             ]
         );
+
+        $request->session()->put($request->phone, $response->object()->code);
 
         $this->code = 201;
 

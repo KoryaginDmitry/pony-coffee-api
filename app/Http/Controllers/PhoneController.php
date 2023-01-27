@@ -26,10 +26,10 @@ class PhoneController extends BaseController
      * 
      * @return JsonResponse
      */
-    public function sendCode(PhoneRequest $request) : JsonResponse
+    public function call(PhoneRequest $request) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->sendCode($request)
+            $this->service->call($request)
         );
     }
 }

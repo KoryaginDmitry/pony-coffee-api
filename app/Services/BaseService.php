@@ -12,8 +12,8 @@ namespace App\Services;
 
 use App\Exceptions\ErrorCodeException;
 use App\Exceptions\RequestExecutionErrorException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * BaseService class
@@ -135,9 +135,9 @@ class BaseService
      * 
      * @throws RequestExecutionErrorException
      * 
-     * @return bool
+     * @return Response
      */
-    protected function sendHttpRequest(string $url, array $param) : bool|RequestExecutionErrorException
+    protected function sendHttpRequest(string $url, array $param) : Response
     {
         $request = Http::acceptJson()
             ->get($url, $param);
@@ -146,7 +146,7 @@ class BaseService
             return throw new RequestExecutionErrorException();
         }
 
-        return true;
+        return $request;
     }
 
     /**
