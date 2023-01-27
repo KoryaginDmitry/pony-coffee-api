@@ -38,6 +38,5 @@ return [
     
     'sms' => [
         'api_id' => env('SMS_API_ID'),
-        'ip' => env('SMS_IP'),
     ],
 ];

@@ -36,7 +36,7 @@ class PhoneService extends BaseService
             [
                 'api_id' => config('services.sms.api_id'),
                 'phone' => $request->phone,
-                'ip' => config('services.sms.ip'),
+                'ip' => $request->ip(),
             ]
         );
 
