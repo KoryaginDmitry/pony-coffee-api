@@ -14,6 +14,7 @@ use App\Http\Requests\Feedback\CreateMessageRequest;
 use App\Http\Requests\Feedback\CreateRequest;
 use App\Models\CoffeePot;
 use App\Models\Feedback;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * FeedbackService class
@@ -60,8 +61,11 @@ class FeedbackService extends BaseService
      */
     public function getFeedback(Feedback $feedback) : array
     {
-        $this->rightCheck($feedback);
+        Gate::authorize('access-to-appeal', $feedback);
 
+        $this->data = 12;
+
+        return $this->sendResponse();
         $this->data = [
             'feedback' => $feedback->fresh(['messages', 'coffeePot', 'user'])
         ];
@@ -128,8 +132,8 @@ class FeedbackService extends BaseService
      */
     public function createMessage(Feedback $feedback, CreateMessageRequest $request) : array
     {
-        $this->rightCheck($feedback);
-        
+        Gate::authorize('access-to-appeal', $feedback);
+
         $this->data = [
             'message' => $feedback->messages()->create(
                 $request->validated()

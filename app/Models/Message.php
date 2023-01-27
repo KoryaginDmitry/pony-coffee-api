@@ -69,6 +69,6 @@ class Message extends Model
      */
     public function getBelongToAuthUserAttribute() : int
     {
-        return $this->attributes['belongToAuthUser'] = auth()->id() === $this->attributes['user_id'] ? 1 : 0;
+        return $this->attributes['belongToAuthUser'] = auth()->id() === $this->attributes['user_id'];
     }
 }

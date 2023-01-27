@@ -1,17 +1,6 @@
 <?php
 
-/**
- * Array of parameters for the site
- */
 return [
-    /**
-     * Regular expression for phone number validation
-     */
-    "phone_regex" => "\+7\d{10}",
-
-    /**
-     * Asrray with data for the site header
-     */
     "header" => [
         "user" => [
             ['href' => '/', 'text' => 'Главная страница'],
@@ -21,8 +10,8 @@ return [
             ['href' => '/logout', 'text' => 'Выход'],
         ],
         "barista" => [
-            ['href' => '/user', 'text' => 'Создать пользователя'],
             ['href' => '/', 'text' => 'Главная страница'],
+            ['href' => '/user', 'text' => 'Создать пользователя'],
             ['href' => '/bonuses', 'text' => 'Бонусы'],
             ['href' => '/logout', 'text' => 'Выход'],
         ],
@@ -42,18 +31,12 @@ return [
         ]
     ],
 
-    /**
-     * Unique telegram channel id
-     */
-    'channel_id' => env('TELEGRAM_CHANEL_ID'),
+    'regex' => [
+        'phone' => '\+7\d{10}',
+    ],
     
-    /**
-     * Unique telegram bot token
-     */
-    'bot_token' => env('TELEGRAM_BOT_TOKEN'),
-
-    /**
-     * Unique identifier for sending SMS
-     */
-    'sms_api_id' => env('SMS_API_ID')
+    'bonus' => [
+        'lifetime' => 30,
+        'writeOffQuantity' => 3,
+    ]
 ];

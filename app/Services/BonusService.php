@@ -10,7 +10,7 @@
  */
 namespace App\Services;
 
-use App\Http\Requests\Bonus\UserSearchRequest;
+use App\Models\Bonus;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -48,43 +48,21 @@ class BonusService extends BaseService
             "count" => $userBonuses->count(),
             "dateBurn" => $bonusBurnDate ? Carbon::create(
                 $bonusBurnDate
-            )->addDays(30)->format("d-m-Y") : null
+            )->addDays(Bonus::getLifetime())->format("d-m-Y") : null
         ];
 
         return $this->sendResponse();
     }
 
     /**
-     * Serch user
+     * Return all users and bonuses
      *
-     * @param UserSearchRequest $request object UserSearchRequest
-     * 
      * @return array
      */
-    public function search(UserSearchRequest $request) : array
+    public function getUsers() : array
     {
-        $users = User::where("role_id", "3")
-            ->when(
-                isset($request->value),
-                function ($query) use ($request) {
-                    return $query->where("id", $request->value)
-                        ->orWhere("phone", $request->value);
-                }
-            )
-            ->with(
-                [
-                    'bonuses' => function ($query) {
-                        $query->where("usage", "0")
-                            ->where(
-                                DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30"
-                            );
-                    },
-                ]
-            )
-            ->get();
-
         $this->data = [
-            "users" => $users
+            'users' => User::where('role_id', 2)->bonus()->get()
         ];
 
         return $this->sendResponse();
@@ -93,7 +71,7 @@ class BonusService extends BaseService
     /**
      * Create bonus for user
      *
-     * @param User $user user object
+     * @param User $user
      * 
      * @return array
      */
@@ -106,7 +84,7 @@ class BonusService extends BaseService
         );
 
         $this->data = [
-            "count" => $user->countActiveBonuses(),
+            "count" => $user->getActiveBonuses()->count(),
         ];
 
         $this->code = 201;
@@ -117,7 +95,7 @@ class BonusService extends BaseService
     /**
      * Wrote bonuses user
      *
-     * @param User $user user object
+     * @param User $user
      * 
      * @return array
      */
@@ -125,12 +103,14 @@ class BonusService extends BaseService
     {
         $bonuses = $user->bonuses()
             ->where("usage", "0")
-            ->where(DB::raw("DATEDIFF(NOW(), created_at)"), "<", "30")
+            ->where(
+                DB::raw("DATEDIFF(NOW(), created_at)"), "<", Bonus::getLifetime()
+            )
             ->orderBy("created_at", "DESC")
-            ->limit(3)
+            ->limit(Bonus::getWriteOffQuantity())
             ->get();
         
-        if ($bonuses->count() == 3) {
+        if ($bonuses->count() == Bonus::getWriteOffQuantity()) {
             $bonuses->update(
                 [
                     'usage' => '1',
@@ -139,15 +119,11 @@ class BonusService extends BaseService
             );
 
             $this->data = [
-                "count" => $user->countActiveBonuses(),
+                "count" => $user->getActiveBonuses()->count(),
             ];
 
             return $this->sendResponse();
         }
-        
-        $this->data = [
-            "count" => $user->countActiveBonuses(),
-        ];
         
         return $this->sendErrorResponse(['Недостаточно бонусов']);
     }
