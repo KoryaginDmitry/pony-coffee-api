@@ -10,6 +10,7 @@
  */
 namespace App\Services;
 
+use App\Events\CreateMessage;
 use App\Http\Requests\Feedback\CreateMessageRequest;
 use App\Http\Requests\Feedback\CreateRequest;
 use App\Models\CoffeePot;
@@ -131,10 +132,14 @@ class FeedbackService extends BaseService
     {
         Gate::authorize('access-to-appeal', $feedback);
 
+        $message = $feedback->messages()->create(
+            $request->validated()
+        );
+        
+        broadcast(new CreateMessage($message))->toOthers();
+
         $this->data = [
-            'message' => $feedback->messages()->create(
-                $request->validated()
-            )
+            'message' => $message
         ];
 
         return $this->sendResponse();
