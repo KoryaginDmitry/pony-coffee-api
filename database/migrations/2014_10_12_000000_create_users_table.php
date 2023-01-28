@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->enum('agreement', ['0', '1']);
             $table->foreignIdFor(Role::class);
             $table->rememberToken();

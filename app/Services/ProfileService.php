@@ -14,10 +14,8 @@ use App\Http\Requests\Profile\ProfileEmailRequest;
 use App\Http\Requests\Profile\ProfileNameRequest;
 use App\Http\Requests\Profile\ProfilePasswordRequest;
 use App\Http\Requests\Profile\ProfilePhoneRequest;
-use App\Models\Phone;
 use App\Models\User;
 use App\Support\Helper;
-use Illuminate\Support\Facades\Hash;
 
 /**
  * ProfileService class
@@ -34,6 +32,22 @@ use Illuminate\Support\Facades\Hash;
  */
 class ProfileService extends BaseService
 {
+    /**
+     * Update user
+     *
+     * @param array $data
+     * 
+     * @return User
+     */
+    private function _update(array $data) : User
+    {   
+        $user = User::find(auth()->id());
+
+        $user->update($data);
+
+        return $user;
+    }
+
     /**
      * Get auth user
      *
@@ -57,10 +71,8 @@ class ProfileService extends BaseService
      */
     public function updateName(ProfileNameRequest $request) : array
     {
-        $user = User::find(auth()->id());
-
         $this->data = [
-            'user' => $user->update($request->validated())
+            'user' => $this->_update($request->validated())
         ];
 
         return $this->sendResponse();
@@ -77,10 +89,8 @@ class ProfileService extends BaseService
     {
         $this->smsCodeCheck($request);
 
-        $user = User::find(auth()->id());
-
         $this->data = [
-            'phone' => $user->update($request->validated())
+            'user' => $this->_update($request->safe()->except('code'))
         ];
 
         return $this->sendResponse();
@@ -95,10 +105,8 @@ class ProfileService extends BaseService
      */
     public function updateEmail(ProfileEmailRequest $request) : array
     {
-        $user = User::find(auth()->id());
-
         $this->data = [
-            'user' => $user->update($request->validated())
+            'user' => $this->_update($request->validated())
         ];
 
         return $this->sendResponse();

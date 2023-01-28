@@ -13,7 +13,7 @@ class ProfileEmailRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->isUser();
+        return auth()->check();
     }
 
     /**
@@ -24,8 +24,8 @@ class ProfileEmailRequest extends FormRequest
     public function rules()
     {
         return [
-            "email" => ["request", 'email', 'unique:users', 'max:255'],
-            "email_verified_at" => ['required']
+            "email" => ["required", 'email', 'unique:users', 'max:255'],
+            "email_verified_at" => ['nullable']
         ];
     }
 

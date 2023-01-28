@@ -25,8 +25,7 @@ class BonusRequest extends FormRequest
     public function rules()
     {
         return [
-            "count" => ["required", "integer"],
-            "act" => ["required", Rule::in(['plus', 'minus'])]
+            "count" => ["required", "integer", "between:1, 10"]
         ];
     }
 }

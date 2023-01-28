@@ -39,7 +39,7 @@ class StatisticService extends BaseService
         
         return $this->sendResponse();
     }
-
+    
     /**
      * Get a collection of bonuses for user statistics
      *
@@ -49,7 +49,7 @@ class StatisticService extends BaseService
     {
         $this->data = [
             'user' => User::where("role_id", "3")
-                ->with("bonuses")
+                ->with(["activeBonuses", "usingBonuses"])
                 ->get()
         ];
         

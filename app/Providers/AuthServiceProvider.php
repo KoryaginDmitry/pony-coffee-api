@@ -36,7 +36,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define(
             'isAdmin',
             function (User $user) {
-                return $user->role->name === 'admin'
+                return $user->isAdmin()
                     ? Response::allow()
                     : Response::denyWithStatus(404);
             }
@@ -45,7 +45,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define(
             'isBarista',
             function (?User $user) {
-                return $user->role->name === 'barista'
+                return $user->isBarista()
                     ? Response::allow()
                     : Response::denyWithStatus(404);
             }
@@ -54,7 +54,16 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define(
             'isUser',
             function (?User $user) {
-                return $user->role->name === 'user'
+                return $user->isUser()
+                    ? Response::allow()
+                    : Response::denyWithStatus(404);
+            }
+        );
+
+        Gate::define(
+            'isUserOrIsAdmin',
+            function (User $user) {
+                return $user->isAdmin() || $user->isUser()
                     ? Response::allow()
                     : Response::denyWithStatus(404);
             }

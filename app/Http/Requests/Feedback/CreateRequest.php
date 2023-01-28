@@ -25,7 +25,7 @@ class CreateRequest extends FormRequest
     {
         return [
             "user_id" => ["required", "exists:users,id"],
-            "coffeePot_id" => ["required", "exists:coffee_pots,id"],
+            "coffee_pot_id" => ["required", "exists:coffee_pots,id"],
             "grade" => ["nullable", "integer", "min:1", "max:5"],
             "text" => ["required", "string", "min:1"]
         ];

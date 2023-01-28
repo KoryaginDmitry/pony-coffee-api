@@ -51,7 +51,7 @@ class Notification extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'user_read_id',
+        'users_read_id',
         'updated_at'
     ];
 }

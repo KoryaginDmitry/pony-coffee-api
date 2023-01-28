@@ -13,7 +13,7 @@ class ProfileNameRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->isUser();
+        return auth()->check();
     }
 
     /**
@@ -24,7 +24,7 @@ class ProfileNameRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["request", 'between:2, 255', 'string']
+            "name" => ["required", 'between:2, 255', 'string']
         ];
     }
 }

@@ -35,7 +35,7 @@ class UpdateRequest extends FormRequest
                 "regex:/$phone_regex/",
                 Rule::unique('users')->ignore($this->barista)
             ],
-            "coffeePot_id" => ["required", "exists:coffee_pots,id"]
+            "coffee_pot_id" => ["required", "exists:coffee_pots,id"]
         ];
     }
 

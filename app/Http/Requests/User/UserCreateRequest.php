@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Profile;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProfilePasswordRequest extends FormRequest
+class UserCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class ProfilePasswordRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check();
+        return auth()->user()->isBarista();
     }
 
     /**
@@ -23,8 +23,12 @@ class ProfilePasswordRequest extends FormRequest
      */
     public function rules()
     {
+        $phone_regex = config('options.regex.phone');
+
         return [
-            "password" => ["required", "between:8, 255" , "confirmed"]
+            'name' => ['required', 'string', 'between:2, 255'],
+            'phone' => ['required', "regex:/$phone_regex/", 'unique:users'],
+            'code' => ['required', 'integer', 'between:1000, 9999']
         ];
     }
 }

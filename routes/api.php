@@ -11,6 +11,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhoneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatisticController;
+use App\Http\Controllers\UserControler;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,32 +51,32 @@ Route::group(
                 Route::post('/register', 'register')->middleware('api_session'); //Регистрация
             }
         );
+
+        Route::post('/login/call', [PhoneController::class, 'call'])
+            ->name('sendloginCode')
+            ->middleware('api_session');
     }
 );
 
+Route::group(
+    [
+        'controller' => ProfileController::class,
+        'middleware' => 'can:isUserOrIsAdmin'
+    ],
+    function () {
+        Route::get("/profile", 'getUser'); //Возвращает данные профиля
+        Route::put('profile/name', 'updateName');
+        Route::put('profile/phone', 'updatePhone');
+        Route::put('profile/email', 'updateEmail');
+        Route::put("/profile/password", 'newPassword'); //Обновление пароля
+    }
+);
 
 Route::group(
     [
         'middleware' => 'can:isUser'
     ],
     function () {
-        Route::group(
-            [
-                'controller' => ProfileController::class
-            ],
-            function () {
-                Route::get("/profile", 'getUser'); //Возвращает данные профиля
-                Route::put('profile/name', 'updateName');
-                Route::put('profile/phone', 'updatePhone');
-                Route::put('profile/email', 'updateEmail');
-                Route::put("/profile/password", 'newPassword'); //Обновление пароля
-            }
-        );
-
-        Route::post('/login/call', [PhoneController::class, 'call'])
-            ->name('sendloginCode')
-            ->middleware('api_session');
-
         Route::get('/user/bonuses', [BonusController::class, 'getInfoBonuses']);
 
         Route::group(
@@ -114,16 +115,30 @@ Route::group(
 
 Route::group(
     [
-        'controller' => BonusController::class,
         'middleware' => 'can:isBarista'
     ], 
     function () {
-        //Поиск гостя по id или номеру телефона
-        Route::get('/users', 'getUsers');
-        //Создание бонуса для гостя
-        Route::post('bonus/{user}', 'create');
-        //Списание бонусов у гостя
-        Route::put('bonus/{user}', 'wrote');
+        Route::group(
+            [
+                'controller' => BonusController::class,
+            ],
+            function () {
+                //Создание бонуса для гостя
+                Route::post('bonus/{user}', 'create');
+                //Списание бонусов у гостя
+                Route::put('bonus/{user}', 'wrote');
+            }
+        );
+
+        Route::group(
+            [
+                'controller' => UserControler::class,
+            ],
+            function () {
+                Route::get('/users', 'users');
+                Route::post('/user/create', 'create');
+            }
+        );
     }
 );
 
@@ -156,7 +171,7 @@ Route::group(
                 //Врзвращает обращения по кофейне
                 Route::get("admin/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
                 // Создание сообщения для определенного обращение
-                Route::post('feedback/{feedback}', 'createMessage');
+                Route::post('admin/feedback/{feedback}', 'createMessage');
             }
         );
 

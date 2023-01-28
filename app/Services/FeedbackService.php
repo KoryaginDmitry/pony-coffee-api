@@ -63,9 +63,6 @@ class FeedbackService extends BaseService
     {
         Gate::authorize('access-to-appeal', $feedback);
 
-        $this->data = 12;
-
-        return $this->sendResponse();
         $this->data = [
             'feedback' => $feedback->fresh(['messages', 'coffeePot', 'user'])
         ];

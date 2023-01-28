@@ -1,32 +1,12 @@
 <?php
-/**
- * BonusController class
- * php version 8.1.2
- * 
- * @category Controllers
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 
- namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Http\Requests\Bonus\BonusRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Services\BonusService;
 use Illuminate\Http\JsonResponse;
 
-/**
- * BonusController class
- * 
- * @method JsonResponse getInfoBonuses()
- * @method JsonResponse search(Request $request)
- * @method JsonResponse create(int $id)
- * @method JsonResponse wrote(int $id)
- * 
- * @category Controllers
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 class BonusController extends BaseController
 {
     /**
@@ -38,9 +18,9 @@ class BonusController extends BaseController
     {
         
     }
-    
+
     /**
-     * Method get information about users bonuses
+     * Return information users bonuses
      *
      * @return JsonResponse
      */
@@ -52,42 +32,32 @@ class BonusController extends BaseController
     }
 
     /**
-     * Return all users
-     *
-     * @return JsonResponse
-     */
-    public function getUsers() : JsonResponse
-    {
-        return $this->sendResponse(
-            $this->service->getUsers()
-        );
-    }
-
-    /**
      * Method create bonus for user
      *
-     * @param User $user user object
+     * @param BonusRequest $request
+     * @param User         $user
      * 
      * @return jsonResponse
      */
-    public function create(User $user) : JsonResponse
+    public function create(BonusRequest $request, User $user) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->create($user)
+            $this->service->create($request, $user)
         );
     }
 
     /**
      * Method wrote users bonuses
      *
-     * @param User $user user object
+     * @param BonusRequest $request
+     * @param User         $user
      * 
      * @return JsonResponse
      */
-    public function wrote(User $user) : JsonResponse
+    public function wrote(BonusRequest $request, User $user) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->wrote($user)
+            $this->service->wrote($request, $user)
         );
     }
 }

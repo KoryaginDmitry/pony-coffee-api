@@ -79,11 +79,11 @@ class BaristaService extends BaseService
      */
     public function create(CreateRequest $request) : array
     {
-        $coffeePot = CoffeePot::find($request->coffeePot_id);
+        $coffeePot = CoffeePot::find($request->coffee_pot_id);
         
         $barista = User::create(
             Helper::hashPassword(
-                $request->safe()->except('coffeePot_id')
+                $request->safe()->except('coffee_pot_id')
             )
         );
 
@@ -114,10 +114,10 @@ class BaristaService extends BaseService
     public function update(UpdateRequest $request, User $barista) : array
     {
         $barista->update(
-            $request->safe()->except('coffeePot_id')
+            $request->safe()->except('coffee_pot_id')
         );
 
-        $coffeePot = CoffeePot::find($request->coffeePot_id);
+        $coffeePot = CoffeePot::find($request->coffee_pot_id);
 
         UserCoffeePot::updateOrCreate(
             [

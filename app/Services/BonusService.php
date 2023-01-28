@@ -1,32 +1,14 @@
 <?php
 
-/**
- * Bonus service
- * php version 8.1.2
- * 
- * @category Services
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 namespace App\Services;
 
+use App\Http\Requests\Bonus\BonusRequest;
 use App\Models\Bonus;
 use App\Models\User;
+use App\Services\BaseService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-/**
- * BonusService class
- * 
- * @method array getInfoBonuses()
- * @method array search(object $request)
- * @method array create(int id)
- * @method array wrote(int $id)
- * 
- * @category Services
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 class BonusService extends BaseService
 {
     /**
@@ -38,7 +20,7 @@ class BonusService extends BaseService
     { 
         $user = User::find(auth()->id());
         
-        $userBonuses = $user->getActiveBonuses();
+        $userBonuses = $user->activeBonuses()->get();
 
         $bonusBurnDate = $userBonuses
             ->pluck('created_at')
@@ -53,34 +35,19 @@ class BonusService extends BaseService
 
         return $this->sendResponse();
     }
-
-    /**
-     * Return all users and bonuses
-     *
-     * @return array
-     */
-    public function getUsers() : array
-    {
-        $this->data = [
-            'users' => User::where('role_id', 2)->bonus()->get()
-        ];
-
-        return $this->sendResponse();
-    }
-
+    
     /**
      * Create bonus for user
      *
-     * @param User $user
+     * @param BonusRequest $request
+     * @param User         $user
      * 
      * @return array
      */
-    public function create(User $user) : array
+    public function create(BonusRequest $request, User $user) : array
     {
-        $user->bonuses()->create(
-            [
-                "user_id_create" => auth()->id()
-            ]
+        $user->bonuses()->createMany(
+            array_fill(0, $request->count, ["user_id_create" => auth()->id()])
         );
 
         $this->data = [
@@ -95,22 +62,24 @@ class BonusService extends BaseService
     /**
      * Wrote bonuses user
      *
-     * @param User $user
+     * @param BonusRequest $request
+     * @param User         $user
      * 
      * @return array
      */
-    public function wrote(User $user) : array
+    public function wrote(BonusRequest $request, User $user) : array
     {
+        $countBonuses = Bonus::getWriteOffQuantity() * $request->count;
+        
         $bonuses = $user->bonuses()
             ->where("usage", "0")
             ->where(
                 DB::raw("DATEDIFF(NOW(), created_at)"), "<", Bonus::getLifetime()
             )
-            ->orderBy("created_at", "DESC")
-            ->limit(Bonus::getWriteOffQuantity())
-            ->get();
-        
-        if ($bonuses->count() == Bonus::getWriteOffQuantity()) {
+            ->orderBy("created_at")
+            ->limit($countBonuses);
+    
+        if ($bonuses->get()->count() == $countBonuses) {
             $bonuses->update(
                 [
                     'usage' => '1',

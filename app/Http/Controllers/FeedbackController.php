@@ -104,7 +104,7 @@ class FeedbackController extends BaseController
      * @return JsonResponse
      */
     public function createMessage(Feedback $feedback, CreateMessageRequest $request) : JsonResponse
-    {   
+    {  
         return $this->sendResponse(
             $this->service->createMessage($feedback, $request)
         );

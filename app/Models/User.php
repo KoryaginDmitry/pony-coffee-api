@@ -99,6 +99,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'agreement',
         'created_at',
         'updated_at',
+        'role'
     ];
 
     /**
@@ -111,21 +112,27 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * Return active bonuses
+     * Relationship
      *
-     * @return Collection
+     * @return HasMany
      */
-    public function getActiveBonuses() : Collection
-    {  
-        $bonusDuration = config('param_config.bonusDuration');
-
-        return $this->bonuses()
+    public function activeBonuses() : HasMany
+    {
+        return $this->hasMany(Bonus::class)
             ->where('usage', '0')
             ->where(
                 DB::raw("DATEDIFF(NOW(), created_at)"), "<", Bonus::getLifetime()
-            )
-            ->orderBy('created_at', 'DESC')
-            ->get();
+            );
+    }
+
+    /**
+     * Relationship
+     *
+     * @return HasMany
+     */
+    public function usingBonuses() : HasMany
+    {
+        return $this->hasMany(Bonus::class)->where('usage', '1');
     }
 
     /**
