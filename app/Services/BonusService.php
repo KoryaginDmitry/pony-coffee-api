@@ -71,11 +71,7 @@ class BonusService extends BaseService
     {
         $countBonuses = Bonus::getWriteOffQuantity() * $request->count;
         
-        $bonuses = $user->bonuses()
-            ->where("usage", "0")
-            ->where(
-                DB::raw("DATEDIFF(NOW(), created_at)"), "<", Bonus::getLifetime()
-            )
+        $bonuses = $user->activeBonuses()
             ->orderBy("created_at")
             ->limit($countBonuses);
     

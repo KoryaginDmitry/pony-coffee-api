@@ -10,7 +10,10 @@
  */
 namespace App\Services;
 
+use App\Models\Bonus;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * StatisticService class
@@ -49,8 +52,45 @@ class StatisticService extends BaseService
     {
         $this->data = [
             'user' => User::where("role_id", "3")
-                ->with(["activeBonuses", "usingBonuses"])
+                ->withCount(["activeBonuses", "usingBonuses", "burntBonuses"])
                 ->get()
+        ];
+        
+        return $this->sendResponse();
+    }
+
+    /**
+     * Return ino bonuses
+     *
+     * @param int $interval
+     * 
+     * @return array
+     */
+    public function userTimeInterval(int $interval) : array
+    {
+        $this->data = [
+            'users' => User::where("role_id", "3")
+                ->withCount(
+                    [
+                        "activeBonuses" => function ($query) use ($interval) {
+                            return $query->where(
+                                DB::raw("DATEDIFF(NOW(), created_at)"), "<", $interval
+                            );
+                        },
+                        "usingBonuses" => function ($query) use ($interval) {
+                            return $query->where(
+                                DB::raw("DATEDIFF(NOW(), updated_at)"), "<", $interval
+                            );
+                        },
+                        "burntBonuses" => function ($query) use ($interval) {
+                            return $query->where(
+                                DB::raw(
+                                    "DATEDIFF(NOW(), DATE_ADD(created_at, INTERVAL " . Bonus::getLifetime() . " DAY))"
+                                ), "<", $interval
+                            );
+                        }
+                    ]
+                )->get() 
         ];
         
         return $this->sendResponse();

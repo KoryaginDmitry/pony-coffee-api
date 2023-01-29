@@ -19,7 +19,7 @@ return [
             ['href' => '/', 'text' => 'Главная'],
             ['href' => '/statistic/barista', 'text' => 'Статистика сотрудников'],
             ['href' => '/statistic/user', 'text' => 'Статистика гостей'],
-            ['href' => '/admin/feedback', 'text' => 'Обратная связь'],
+            ['href' => '/feedback/admin', 'text' => 'Обратная связь'],
             ['href' => '/seending', 'text' => 'Рассылка'],
             ['href' => '/coffeePot', 'text' => 'Кофейни'],
             ['href' => '/barista', 'text' => 'Сотрудники'],

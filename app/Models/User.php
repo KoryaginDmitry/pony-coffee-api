@@ -136,6 +136,20 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Relationship
+     *
+     * @return HasMany
+     */
+    public function burntBonuses() : HasMany
+    {
+        return $this->hasMany(Bonus::class)
+            ->where('usage', '0')
+            ->where(
+                DB::raw("DATEDIFF(NOW(), created_at)"), ">", Bonus::getLifetime()
+            );
+    }
+
+    /**
      * Relationship role
      *
      * @return BelongsTo

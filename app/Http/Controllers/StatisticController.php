@@ -58,4 +58,18 @@ class StatisticController extends BaseController
             $this->service->user()
         );
     }
+    
+    /**
+     * Return info bonuses
+     *
+     * @param integer $interval
+     * 
+     * @return JsonResponse
+     */
+    public function userTimeInterval(int $interval) : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->userTimeInterval($interval)
+        );
+    }
 }

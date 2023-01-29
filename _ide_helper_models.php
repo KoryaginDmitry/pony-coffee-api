@@ -220,6 +220,8 @@ namespace App\Models{
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $activeBonuses
  * @property-read int|null $active_bonuses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $burntBonuses
+ * @property-read int|null $burnt_bonuses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $usingBonuses
  * @property-read int|null $using_bonuses_count
  */

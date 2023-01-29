@@ -156,6 +156,8 @@ Route::group(
                 Route::get('/statistic', 'barista');
                 //статистика гостей
                 Route::get('statistic/users', 'user');
+                Route::get('statisitc/users/{interval}', 'userTimeInterval')
+                    ->where('interval', '7|31');
             }
         );
 
