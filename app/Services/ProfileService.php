@@ -87,7 +87,7 @@ class ProfileService extends BaseService
      */
     public function updatePhone(ProfilePhoneRequest $request) : array
     {
-        $this->smsCodeCheck($request);
+        $this->codeCheck($request->phone, $request->code); 
 
         $this->data = [
             'user' => $this->_update($request->safe()->except('code'))
@@ -105,7 +105,7 @@ class ProfileService extends BaseService
      */
     public function updateEmail(ProfileEmailRequest $request) : array
     {
-        $this->emailCodeCheck($request);
+        $this->codeCheck($request->email, $request->code);
 
         $this->data = [
             'user' => $this->_update($request->safe()->except('code'))

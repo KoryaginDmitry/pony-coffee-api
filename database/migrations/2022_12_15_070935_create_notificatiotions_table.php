@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
+            $table->enum("email", [0,1]);
             $table->enum("site", [0,1]);
             $table->enum("telegram", [0,1]);
             $table->text('text');

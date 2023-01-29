@@ -24,24 +24,10 @@ class CreateNotificationRequest extends FormRequest
     public function rules()
     {
         return [
-            "site" => ["required_without_all:telegram", "accepted"],
-            "telegram" => ["required_without_all:site", "accepted"],
+            "email" => ["required_without_all:telegram,site", "sometimes", "accepted"],
+            "site" => ["required_without_all:telegram,email", "sometimes", "accepted"],
+            "telegram" => ["required_without_all:site,email", "sometimes", "accepted"],
             "text" => ["required", "string", "between:5, 255"]
         ];
-    }
-
-    /**
-     * Prepare data for validation.
-     *
-     * @return void
-     */
-    public function prepareForValidation()
-    {
-        $this->merge(
-            [
-                "site" => $this->site ? '1' : '0',
-                "telegram" => $this->telegram ? '1' : '0',
-            ]
-        );
     }
 }

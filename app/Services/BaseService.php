@@ -104,8 +104,8 @@ class BaseService
         $messages = (array)$messages;
 
         foreach ($messages as $message) {
-            $this->errors[] = [
-                'message' => $message,
+            $this->errors['messages'][] = [
+                $message,
             ];
         }
     }
@@ -152,18 +152,18 @@ class BaseService
     /**
      * Sms code check
      *
-     * @param object $request
+     * @param string $value
      * 
      * @throws ErrorCodeException
      * @return bool
      */
-    protected function smsCodeCheck(object $request) : bool|ErrorCodeException
+    protected function codeCheck(string $value, int $code) : bool|ErrorCodeException
     {
-        if ($request->session()->get($request->phone) != $request->code) {
+        if (session($value) != $code) {
             return throw new ErrorCodeException();
         }
 
-        $request->session()->forget($request->phone);
+        session()->forget($value);
 
         return true;
     }

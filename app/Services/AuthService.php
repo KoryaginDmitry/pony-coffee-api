@@ -59,7 +59,7 @@ class AuthService extends BaseService
      */
     public function phoneLogin(LoginPhoneRequest $request) : array
     {
-        $this->smsCodeCheck($request);
+        $this->codeCheck($request->phone, $request->code); 
 
         $user = User::where('phone', $request->phone)->first();
 
@@ -77,7 +77,7 @@ class AuthService extends BaseService
      */
     public function register(RegisterRequest $request) : array
     {
-        $this->smsCodeCheck($request);
+        $this->codeCheck($request->phone, $request->code);
         
         $user = User::create(
             Helper::hashPassword($request->safe()->except('code'))

@@ -41,10 +41,7 @@ class CodeService extends BaseService
             ]
         );
         
-        $request->session()->put(
-            $request->phone,
-            $response->object()->code
-        );
+        session([$request->phone => $response->object()->code]);
 
         $this->code = 201;
 
@@ -62,7 +59,7 @@ class CodeService extends BaseService
     {
         $code = mt_rand(10000, 99999);
 
-        $request->session()->put($request->email, $code);
+        session([$request->email => $code]);
 
         Mail::to($request->email)->send(new VerificateMail($code));
 

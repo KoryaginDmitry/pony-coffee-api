@@ -11,7 +11,10 @@
 namespace App\Services;
 
 use App\Http\Requests\Notification\CreateNotificationRequest;
+use App\Mail\NewsletterMail;
 use App\Models\Notification;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -131,6 +134,17 @@ class NotificationService extends BaseService
                     'text' => urlencode($request->text)
                 ]
             );
+        }
+
+        if ($request->email) {
+            $users = User::where('role_id', 3)
+                ->whereNotNull('email_verified_at')
+                ->get();
+            
+            foreach ($users as $user) {
+                Mail::to($user->email)
+                ->send(new NewsletterMail($request->text));
+            }
         }
     
         $this->data = [
