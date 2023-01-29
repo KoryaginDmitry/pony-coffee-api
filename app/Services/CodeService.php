@@ -10,8 +10,7 @@
 namespace App\Services;
 
 use App\Http\Requests\Code\EmailReqeust;
-use App\Http\Requests\Phone\PhoneRequest;
-use App\Mail\MailMessage;
+use App\Http\Requests\Code\PhoneRequest;
 use App\Mail\VerificateMail;
 use Illuminate\Support\Facades\Mail;
 
