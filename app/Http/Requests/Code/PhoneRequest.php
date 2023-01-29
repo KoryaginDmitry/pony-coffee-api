@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Phone;
+namespace App\Http\Requests\Code;
 
 use App\Support\Helper;
 use Illuminate\Foundation\Http\FormRequest;

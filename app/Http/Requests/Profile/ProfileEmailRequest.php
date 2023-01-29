@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Profile;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProfileEmailRequest extends FormRequest
@@ -25,7 +26,8 @@ class ProfileEmailRequest extends FormRequest
     {
         return [
             "email" => ["required", 'email', 'unique:users', 'max:255'],
-            "email_verified_at" => ['nullable']
+            "code" => ['required', 'integer', 'between:10000, 99999'],
+            "email_verified_at" => ['required', 'date']
         ];
     }
 
@@ -38,8 +40,20 @@ class ProfileEmailRequest extends FormRequest
     {
         $this->merge(
             [
-                'email_verified_at' => null
+                'email_verified_at' => Carbon::now()
             ]
         );
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'code.between' => "Поле 'Код' должно быть пятизначным числом",
+        ];
     }
 }

@@ -6,10 +6,9 @@ use App\Http\Controllers\BonusController;
 use App\Http\Controllers\CoffeePotController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MailController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\PhoneController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SendCodeController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\UserControler;
 use Illuminate\Support\Facades\Route;
@@ -24,16 +23,25 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('sendMail', [MailController::class, 'sendCode']);
 
-Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
+Route::group(
+    [
+        'middleware' => 'auth:api'
+    ],
+    function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+
+        Route::post('/mail/verificate/code', [SendCodeController::class, 'sendMailCode'])
+            ->middleware('api_session');
+    }
+);
 
 Route::get("/header", [HomeController::class, 'get']);
 
 //Возвращает адреса кофеточек и их id
 Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
 
-Route::post('/call', [PhoneController::class, 'call'])
+Route::post('/call', [SendCodeController::class, 'call'])
     ->middleware('api_session');
 
 Route::group(
@@ -52,7 +60,7 @@ Route::group(
             }
         );
 
-        Route::post('/login/call', [PhoneController::class, 'call'])
+        Route::post('/login/call', [SendCodeController::class, 'call'])
             ->name('sendloginCode')
             ->middleware('api_session');
     }
@@ -66,8 +74,8 @@ Route::group(
     function () {
         Route::get("/profile", 'getUser'); //Возвращает данные профиля
         Route::put('profile/name', 'updateName');
-        Route::put('profile/phone', 'updatePhone');
-        Route::put('profile/email', 'updateEmail');
+        Route::put('profile/phone', 'updatePhone')->middleware('api_session');
+        Route::put('profile/email', 'updateEmail')->middleware('api_session');
         Route::put("/profile/password", 'newPassword'); //Обновление пароля
     }
 );

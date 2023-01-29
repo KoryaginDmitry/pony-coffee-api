@@ -31,4 +31,16 @@ class UserCreateRequest extends FormRequest
             'code' => ['required', 'integer', 'between:1000, 9999']
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'code.between' => "Поле 'Код' должно быть четырехзначным числом",
+        ];
+    }
 }

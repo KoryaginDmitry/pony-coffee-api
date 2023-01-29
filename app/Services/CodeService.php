@@ -9,9 +9,11 @@
  */
 namespace App\Services;
 
-use App\Exceptions\LimitSmsException;
+use App\Http\Requests\Code\EmailReqeust;
 use App\Http\Requests\Phone\PhoneRequest;
-use Illuminate\Support\Facades\DB;
+use App\Mail\MailMessage;
+use App\Mail\VerificateMail;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * PhoneService class
@@ -20,7 +22,7 @@ use Illuminate\Support\Facades\DB;
  * 
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class PhoneService extends BaseService
+class CodeService extends BaseService
 {
     /**
      * Sending confirmation code
@@ -43,6 +45,24 @@ class PhoneService extends BaseService
         $request->session()->put($request->phone, $response->object()->code);
 
         $this->code = 201;
+
+        return $this->sendResponse();
+    }
+
+    /**
+     * Send code verification
+     *
+     * @param EmailReqeust $request
+     * 
+     * @return array
+     */
+    public function sendMailCode(EmailReqeust $request) : array
+    {
+        $code = mt_rand(10000, 99999);
+
+        $request->session()->put($request->email, $code);
+
+        Mail::to($request->email)->send(new VerificateMail($code));
 
         return $this->sendResponse();
     }

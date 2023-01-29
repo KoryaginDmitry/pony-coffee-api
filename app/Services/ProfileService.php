@@ -105,8 +105,10 @@ class ProfileService extends BaseService
      */
     public function updateEmail(ProfileEmailRequest $request) : array
     {
+        $this->emailCodeCheck($request);
+
         $this->data = [
-            'user' => $this->_update($request->validated())
+            'user' => $this->_update($request->safe()->except('code'))
         ];
 
         return $this->sendResponse();

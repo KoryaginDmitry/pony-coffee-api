@@ -167,4 +167,23 @@ class BaseService
 
         return true;
     }
+
+    /**
+     * Email code check
+     *
+     * @param object $request
+     * 
+     * @throws ErrorCodeException
+     * @return bool
+     */
+    protected function emailCodeCheck(object $request) : bool|ErrorCodeException
+    {
+        if ($request->session()->get($request->email) != $request->code) {
+            return throw new ErrorCodeException();
+        }
+
+        $request->session()->forget($request->phone);
+
+        return true;
+    }
 }

@@ -26,7 +26,7 @@ class CreateRequest extends FormRequest
         return [
             "user_id" => ["required", "exists:users,id"],
             "coffee_pot_id" => ["required", "exists:coffee_pots,id"],
-            "grade" => ["nullable", "integer", "min:1", "max:5"],
+            "grade" => ["nullable", "integer", "between:1, 5"],
             "text" => ["required", "string", "min:1"]
         ];
     }
@@ -43,5 +43,17 @@ class CreateRequest extends FormRequest
                 'user_id' => auth()->id()
             ]
         );
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'coffee_pot_id.required' => "Выберите кофейню",
+        ];
     }
 }

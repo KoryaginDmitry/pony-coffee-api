@@ -28,4 +28,16 @@ class BonusRequest extends FormRequest
             "count" => ["required", "integer", "between:1, 10"]
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'count.between' => "Поле 'Количество' должно быть от 1 до 10",
+        ];
+    }
 }
