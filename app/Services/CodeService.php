@@ -41,7 +41,10 @@ class CodeService extends BaseService
             ]
         );
 
-        $request->session()->put($request->phone, $response->object()->code);
+        $request->session()->put(
+            $request->phone,
+            $response->object()->code
+        );
 
         $this->code = 201;
 
