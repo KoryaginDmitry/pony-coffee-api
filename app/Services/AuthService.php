@@ -77,6 +77,9 @@ class AuthService extends BaseService
      */
     public function register(RegisterRequest $request) : array
     {
+        $this->data = $request->session()->get($request->phone);
+        return $this->sendResponse();
+        
         $this->smsCodeCheck($request);
         
         $user = User::create(
