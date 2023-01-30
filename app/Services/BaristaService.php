@@ -22,10 +22,10 @@ use App\Support\Helper;
  * BaristaService class
  * 
  * @method array getBaristas()
- * @method array getBaristas(int $id)
- * @method array create(object $request)
- * @method array update(object $request, int $id)
- * @method array delete(int $id)
+ * @method array getBarista(User $barista)
+ * @method array create(CreateRequest $request)
+ * @method array update(UpdateRequest $request, User $barista)
+ * @method array delete(User $barista)
  * 
  * @category Services
  * 
@@ -34,7 +34,7 @@ use App\Support\Helper;
 class BaristaService extends BaseService
 {
     /**
-     * Get baristas
+     * Get all baristas
      * 
      * @return array
      */
@@ -54,9 +54,9 @@ class BaristaService extends BaseService
     }
 
     /**
-     * Get barista
+     * Get one barista
      * 
-     * @param User $barista barista user
+     * @param User $barista
      * 
      * @return array
      */
@@ -73,14 +73,12 @@ class BaristaService extends BaseService
     /**
      * Create profile barista
      * 
-     * @param CreateRequest $request object CreateRequest
+     * @param CreateRequest $request
      * 
      * @return array
      */
     public function create(CreateRequest $request) : array
     {
-        $coffeePot = CoffeePot::find($request->coffee_pot_id);
-        
         $barista = User::create(
             Helper::hashPassword(
                 $request->safe()->except('coffee_pot_id')
@@ -88,14 +86,12 @@ class BaristaService extends BaseService
         );
 
         $barista->userCoffeePot()->create(
-            [
-                'coffee_pot_id' => $coffeePot->id
-            ]
+            $request->safe()->only('coffee_pot_id')
         );
 
         $this->data = [
             "user" => $barista,
-            "coffeePot" => $coffeePot
+            "coffeePot" => CoffeePot::find($request->coffee_pot_id)
         ];
 
         $this->code = 201; 
@@ -117,20 +113,18 @@ class BaristaService extends BaseService
             $request->safe()->except('coffee_pot_id')
         );
 
-        $coffeePot = CoffeePot::find($request->coffee_pot_id);
-
         UserCoffeePot::updateOrCreate(
             [
                 'user_id' => $barista->id
             ],
             [
-                "coffee_pot_id" => $coffeePot->id
+                "coffee_pot_id" => $request->coffee_pot_id
             ]
         );
 
         $this->data = [
             "user" => $barista,
-            "coffeePot" => $coffeePot
+            "coffeePot" => CoffeePot::find($request->coffee_pot_id)
         ];
         
         return $this->sendResponse();

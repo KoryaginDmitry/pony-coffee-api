@@ -33,7 +33,7 @@ class BaristaProfileController extends BaseController
     /**
      * Service connection
      *
-     * @param BaristaService $service Service variable
+     * @param BaristaService $service
      */
     public function __construct(protected BaristaService $service)
     {
@@ -41,11 +41,11 @@ class BaristaProfileController extends BaseController
     }
     
     /**
-     * Method get users baristas
+     * Get all barista users
      *
      * @return JsonResponse
      */
-    public function get() : JsonResponse
+    public function getAll() : JsonResponse
     {   
         return $this->sendResponse(
             $this->service->getBaristas()
@@ -53,9 +53,9 @@ class BaristaProfileController extends BaseController
     }
 
     /**
-     * Method get one user barista
+     * Get one user barista
      *  
-     * @param User $barista brista user
+     * @param User $barista
      * 
      * @return JsonResponse
      */
@@ -67,9 +67,9 @@ class BaristaProfileController extends BaseController
     }
 
     /**
-     * Method create user barista
+     * Create user barista
      *
-     * @param CreateRequest $request object CreateRequest
+     * @param CreateRequest $request
      * 
      * @return JsonResponse
      */
@@ -81,10 +81,10 @@ class BaristaProfileController extends BaseController
     }
 
     /**
-     * Method update user barista
+     * Update user barista
      *
-     * @param UpdateRequest $request object UpdateRequest
-     * @param User          $barista barista user
+     * @param UpdateRequest $request
+     * @param User          $barista
      * 
      * @return JsonResponse
      */
@@ -96,9 +96,9 @@ class BaristaProfileController extends BaseController
     }
 
     /**
-     * Method delete user barista
+     * Delete user barista
      *
-     * @param User $barista barista user
+     * @param User $barista
      * 
      * @return JsonResponse
      */

@@ -18,7 +18,7 @@ use App\Models\CoffeePot;
  * 
  * @method array getAddressCoffeePots()
  * @method array getCoffeePots()
- * @method array getCoffeePot(CoffeePot $coffeepot)
+ * @method array getCoffeePot(CoffeePot $coffeePot)
  * @method array create(CoffeePotRequest $request)
  * @method array update(CoffeePot $coffeePot, CoffeePotRequest $request)
  * @method array delete(CoffeePot $coffeePot)
@@ -30,7 +30,7 @@ use App\Models\CoffeePot;
 class CoffeePotService extends BaseService
 {
     /**
-     * Get address coffee pots
+     * Gets only addresses and id of coffee shops
      *
      * @return array
      */
@@ -44,7 +44,7 @@ class CoffeePotService extends BaseService
     }
 
     /**
-     * Get coffee pots
+     * Gets complete data of coffee shops
      *
      * @return array
      */
@@ -58,9 +58,9 @@ class CoffeePotService extends BaseService
     }
 
     /**
-     * Get coffee pot
+     * Gets one coffee shop
      *
-     * @param CoffeePot $coffeePot object CoffeePot
+     * @param CoffeePot $coffeePot
      * 
      * @return array
      */
@@ -74,9 +74,9 @@ class CoffeePotService extends BaseService
     }
 
     /**
-     * Create coffee pot
+     * Create coffee shop
      *
-     * @param CoffeePotRequest $request object CoffeePotRequest
+     * @param CoffeePotRequest $request
      * 
      * @return array
      */
@@ -94,7 +94,7 @@ class CoffeePotService extends BaseService
     }
 
     /**
-     * Update coffee pot
+     * Update coffee shop
      *
      * @param CoffeePot        $coffeePot object CoffeePot
      * @param CoffeePotRequest $request   object CoffeePotRequest
@@ -115,7 +115,7 @@ class CoffeePotService extends BaseService
     }
 
     /**
-     * Delete coffee pot 
+     * Delete coffee shop
      *
      * @param CoffeePot $coffeePot object CoffeePot
      * 

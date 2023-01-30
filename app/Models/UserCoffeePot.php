@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * 
  * @property-read \App\Models\CoffeePot|null $coffeePot
+ * @property-read \App\Models\User|null $user
  * 
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot newQuery()
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereUserId($value)
+ * @method static \Database\Factories\UserCoffeePotFactory factory(...$parameters)
  * @mixin  \Eloquent
  */
 class UserCoffeePot extends Model

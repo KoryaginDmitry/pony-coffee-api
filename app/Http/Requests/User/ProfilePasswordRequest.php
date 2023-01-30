@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Profile;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProfileNameRequest extends FormRequest
+class ProfilePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class ProfileNameRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["required", 'between:2, 255', 'string']
+            "password" => ["required", "between:8, 255" , "confirmed"]
         ];
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Code;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Route;
 
-class EmailReqeust extends FormRequest
+class ProfileNameRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +13,7 @@ class EmailReqeust extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -24,14 +23,8 @@ class EmailReqeust extends FormRequest
      */
     public function rules()
     {
-        if (Route::currentRouteName() == 'verificateEmail') {
-            return [
-                'email' => ['required', 'email', 'unique:users']
-            ];
-        }
-
         return [
-            'email' => ['required', 'email', 'exists:users']
+            "name" => ["required", 'between:2, 255', 'string']
         ];
     }
 }

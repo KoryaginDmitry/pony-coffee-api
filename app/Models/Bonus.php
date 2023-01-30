@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdCreate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdWrote($value)
+ * @method static \Database\Factories\BonusFactory factory(...$parameters)
  * @mixin  \Eloquent
  */
 class Bonus extends Model

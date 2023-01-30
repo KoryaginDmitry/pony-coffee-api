@@ -18,6 +18,7 @@ use Illuminate\Http\JsonResponse;
  * 
  * @method JsonResponse barista()
  * @method JsonResponse user()
+ * @method JsonResponse userTimeInterval(int interval)
  * 
  * @category Controllers
  * 
@@ -28,7 +29,7 @@ class StatisticController extends BaseController
     /**
      * Service connection
      *
-     * @param StatisticService $service Service variable
+     * @param StatisticService $service
      */
     public function __construct(protected StatisticService $service)
     {
@@ -60,7 +61,7 @@ class StatisticController extends BaseController
     }
     
     /**
-     * Return info bonuses
+     * Get user statistics for a week or month
      *
      * @param integer $interval
      * 

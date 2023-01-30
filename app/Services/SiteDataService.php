@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Home service
+ * SiteData service
  * php version 8.1.2
  * 
  * @category Services
@@ -10,23 +10,26 @@
  */
 namespace App\Services;
 
+use App\Models\Bonus;
+
 /**
- * HomeService class
+ * SiteDataService class
  * 
- * @method array get()
+ * @method JsonResponse header()
+ * @method JsonResponse bonusLifetime()
  * 
  * @category Services
  * 
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class HomeService extends BaseService
+class SiteDataService extends BaseService
 {
     /**
-     * Get header for user role
+     * Get header for role user
      *
      * @return array
      */
-    public function get() : array
+    public function header() : array
     {
         $role = auth()->user()?->role->name;
         
@@ -36,6 +39,20 @@ class HomeService extends BaseService
 
         $this->data = [
             'header' => config("options.header.$role")
+        ];
+
+        return $this->sendResponse();
+    }
+
+    /**
+     * Get bonus lifetime
+     *
+     * @return array
+     */
+    public function bonusLifetime() : array
+    {
+        $this->data = [
+            'lifetime' => Bonus::getLifetime()
         ];
 
         return $this->sendResponse();

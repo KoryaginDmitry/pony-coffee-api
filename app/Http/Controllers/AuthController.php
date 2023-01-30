@@ -9,6 +9,7 @@
  */
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\LoginEmailRequest;
 use App\Http\Requests\Auth\LoginPhoneRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -19,6 +20,8 @@ use Illuminate\Http\JsonResponse;
  * AuthController class
  * 
  * @method JsonResponse login(LoginRequest $request)
+ * @method JsonResponse phoneLogin(LoginPhoneRequest $request)
+ * @method JsonResponse emailLogin(LoginEmailRequest $request)
  * @method JsonResponse register(RegisterRequest $request)
  * @method JsonResponse logout()
  * 
@@ -31,7 +34,7 @@ class AuthController extends BaseController
     /**
      * Service connection
      *
-     * @param AuthService $service Service variable
+     * @param AuthService $service
      */
     public function __construct(protected AuthService $service)
     {
@@ -41,7 +44,7 @@ class AuthController extends BaseController
     /**
      * Login
      *
-     * @param LoginRequest $request LoginRequest class odject
+     * @param LoginRequest $request
      * 
      * @return JsonResponse
      */
@@ -67,9 +70,23 @@ class AuthController extends BaseController
     }
 
     /**
+     * Email login
+     *
+     * @param LoginEmailRequest $request
+     * 
+     * @return JsonResponse
+     */
+    public function emailLogin(LoginEmailRequest $request) : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->emailLogin($request)
+        );
+    }
+
+    /**
      * Register
      *
-     * @param RegisterRequest $request RegisterRequest class odject
+     * @param RegisterRequest $request
      * 
      * @return JsonResponse
      */

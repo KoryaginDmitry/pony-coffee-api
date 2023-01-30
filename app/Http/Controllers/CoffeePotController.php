@@ -34,7 +34,7 @@ class CoffeePotController extends BaseController
     /**
      * Service connection
      *
-     * @param CoffeePotService $service Service variable
+     * @param CoffeePotService $service
      */
     public function __construct(protected CoffeePotService $service)
     {
@@ -42,7 +42,7 @@ class CoffeePotController extends BaseController
     }
 
     /**
-     * Method get address coffee pots
+     * Gets only addresses and id of coffee shops
      *
      * @return JsonResponse
      */
@@ -54,7 +54,7 @@ class CoffeePotController extends BaseController
     }
 
     /**
-     * Method get coffee pots
+     * Gets complete data of coffee shops
      *
      * @return JsonResponse
      */
@@ -66,9 +66,9 @@ class CoffeePotController extends BaseController
     }
 
     /**
-     * Method get coffee pot
+     * Gets one coffee shop
      *
-     * @param CoffeePot $coffeePot object CoffeePot
+     * @param CoffeePot $coffeePot
      * 
      * @return JsonResponse
      */
@@ -80,9 +80,9 @@ class CoffeePotController extends BaseController
     }
 
     /**
-     * Method create coffee pot
+     * Create coffee shop
      *
-     * @param CoffeePotRequest $request object CoffeePotRequest
+     * @param CoffeePotRequest $request
      * 
      * @return JsonResponse
      */
@@ -94,10 +94,10 @@ class CoffeePotController extends BaseController
     }
 
     /**
-     * Method update coffee pot
+     * Update coffee shop
      *
-     * @param CoffeePot        $coffeePot object CoffeePot
-     * @param CoffeePotRequest $request   object CoffeePotRequest
+     * @param CoffeePot        $coffeePot
+     * @param CoffeePotRequest $request
      * 
      * @return JsonResponse
      */
@@ -109,9 +109,9 @@ class CoffeePotController extends BaseController
     }
 
     /**
-     * Method delete coffee pot
+     * Delete coffee shop
      *
-     * @param CoffeePot $coffeePot object CoffeePot
+     * @param CoffeePot $coffeePot
      * 
      * @return JsonResponse
      */

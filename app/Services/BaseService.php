@@ -26,8 +26,9 @@ use Illuminate\Support\Facades\Http;
  * @method array sendReponse()
  * @method array|null getLastErrors()
  * @method void logErrorValidate(array|string $messages)
- * @method array sendErrorResponse(array $errorArray, int $code = 422)
- * @method mixed rightCheck(object $object)
+ * @method array sendErrorResponse(array $errorArray, int $resonseCode = 422)
+ * @method Response|RequestExecutionErrorException sendHttpRequest()
+ * @method bool|ErrorCodeException codeCheck()
  * 
  * @category Services
  * 
@@ -95,7 +96,7 @@ class BaseService
     /**
      * Fill errors param
      *
-     * @param array|string $messages array errors messages
+     * @param array|string $messages array or string errors messages
      * 
      * @return void
      */
@@ -113,31 +114,31 @@ class BaseService
     /**
      * Send errors response
      *
-     * @param array   $errorArray array errors messages
-     * @param integer $code       number response code
+     * @param array   $errorArray
+     * @param integer $responseCode       
      * 
      * @return array
      */
-    protected function sendErrorResponse(array|string $errorArray, int $code = 422) : array
+    protected function sendErrorResponse(array|string $errorArray, int $responseCode = 422) : array
     {
         $this->logErrorValidate($errorArray);
         $this->status = false;
-        $this->code = $code;
+        $this->code = $responseCode;
 
         return $this->sendResponse();
     }
 
     /**
-     * Send http request
+     * make http request
      *
-     * @param string $url   http link
-     * @param array  $param array param
+     * @param string $url
+     * @param array  $param
      * 
      * @throws RequestExecutionErrorException
      * 
      * @return Response
      */
-    protected function sendHttpRequest(string $url, array $param) : Response
+    protected function sendHttpRequest(string $url, array $param) : Response|RequestExecutionErrorException
     {
         $request = Http::acceptJson()
             ->get($url, $param);
@@ -150,9 +151,10 @@ class BaseService
     }
 
     /**
-     * Sms code check
+     * Checks the code
      *
-     * @param string $value
+     * @param string $value phone or email
+     * @param int    $code
      * 
      * @throws ErrorCodeException
      * @return bool
@@ -164,25 +166,6 @@ class BaseService
         }
 
         session()->forget($value);
-
-        return true;
-    }
-
-    /**
-     * Email code check
-     *
-     * @param object $request
-     * 
-     * @throws ErrorCodeException
-     * @return bool
-     */
-    protected function emailCodeCheck(object $request) : bool|ErrorCodeException
-    {
-        if ($request->session()->get($request->email) != $request->code) {
-            return throw new ErrorCodeException();
-        }
-
-        $request->session()->forget($request->phone);
 
         return true;
     }

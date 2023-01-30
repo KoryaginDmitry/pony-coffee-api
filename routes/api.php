@@ -3,12 +3,12 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BaristaProfileController;
 use App\Http\Controllers\BonusController;
+use App\Http\Controllers\CodeVerificateController;
 use App\Http\Controllers\CoffeePotController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SendCodeController;
+use App\Http\Controllers\SiteDataController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\UserControler;
 use Illuminate\Support\Facades\Route;
@@ -24,213 +24,197 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(
-    [
-        'middleware' => 'auth:api'
-    ],
+Route::middleware('guest')->group(
     function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
-
-        Route::post('/mail/verificate/code', [SendCodeController::class, 'sendMailCode'])
-            ->middleware('api_session');
-    }
-);
-
-Route::get("/header", [HomeController::class, 'get']);
-
-//Возвращает адреса кофеточек и их id
-Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
-
-Route::post('/call', [SendCodeController::class, 'call'])
-    ->middleware('api_session');
-
-Route::group(
-    [
-        'middleware' => 'guest'
-    ],
-    function () {
-        Route::group(
-            [
-                'controller' => AuthController::class,
-            ],
+        Route::controller(AuthController::class)->group(
             function () {
-                Route::post('/login', 'login'); //Авторизация пользователя
+                //Login with phone and password
+                Route::post('/login', 'login');
+                //Login with phone and code
                 Route::post('login/phone', 'phonelogin')->middleware('api_session');
-                Route::post('/register', 'register')->middleware('api_session'); //Регистрация
+                //Login with email and code
+                Route::post('/email/login', 'emailLogin')->middleware('api_session');
+                Route::post('/register', 'register')->middleware('api_session');
             }
         );
 
-        Route::post('/login/call', [SendCodeController::class, 'call'])
-            ->name('sendloginCode')
+        Route::controller(CodeVerificateController::class)->group(
+            function () {
+                //Call to get a login code by phone
+                Route::post('/login/call', 'call')
+                    ->middleware('api_session')
+                    ->name('sendloginCode');
+                //receive code by email
+                Route::post('login/email/code', 'sendEmailCode')
+                    ->middleware('api_session');
+                //get a password reset link
+                Route::post('forgot-password', 'forgotPassword');
+                Route::post('reset-password', 'resetPassword');
+            }
+        );
+    }
+);
+
+Route::middleware('can:isUserOrIsAdmin')->group(
+    function () {
+        Route::controller(UserControler::class)->group(
+            function () {
+                //gets a profile auth user
+                Route::get("/profile", 'authUser');
+                Route::put('profile/name', 'updateName');
+                Route::put('profile/phone', 'updatePhone')
+                    ->middleware('api_session');
+                
+                Route::put('profile/email', 'updateEmail')
+                    ->middleware('api_session');
+                
+                Route::put("/profile/password", 'newPassword');
+            }
+        );  
+        //sends verification code to email
+        Route::post('/mail/verificate/code', [CodeVerificateController::class, 'sendEmailCode'])
+            ->middleware('api_session')
+            ->name('verificateEmail');
+        //sends verification code to phone 
+        Route::post('/call', [CodeVerificateController::class, 'call'])
             ->middleware('api_session');
     }
 );
 
-Route::group(
-    [
-        'controller' => ProfileController::class,
-        'middleware' => 'can:isUserOrIsAdmin'
-    ],
+Route::middleware('can:isUser')->group(
     function () {
-        Route::get("/profile", 'getUser'); //Возвращает данные профиля
-        Route::put('profile/name', 'updateName');
-        Route::put('profile/phone', 'updatePhone')->middleware('api_session');
-        Route::put('profile/email', 'updateEmail')->middleware('api_session');
-        Route::put("/profile/password", 'newPassword'); //Обновление пароля
-    }
-);
-
-Route::group(
-    [
-        'middleware' => 'can:isUser'
-    ],
-    function () {
+        //get data about authorized user's bonuses
         Route::get('/user/bonuses', [BonusController::class, 'getInfoBonuses']);
 
-        Route::group(
-            [
-                'controller' => NotificationController::class
-            ], 
+        Route::controller(NotificationController::class)->group(
             function () {
-                //Возвращает уведомления для пользователя
+                //get notifications for auth user
                 Route::get("/notification", 'getUserNotifications');
-                //Убирает сообщение для пользователя(делает его прочитанным)
+                //read notification
                 Route::put("/notification/{notification}", "read");
-                //Возвращает кол-во уведомлений
+                //get count notifications for auth user
                 Route::get("notification/count", "getCount");
             }
         );
 
-        Route::group(
-            [
-                'controller' => FeedbackController::class
-            ],
+        Route::controller(FeedbackController::class)->group(
             function () {
-                // Возвращает все обращения пользователя
+                //get user feedbacks
                 Route::get("/feedback", 'getFeedbacks');
-                // Возвращает определенное обращение
+                //get one feedback
                 Route::get("/feedback/{feedback}", 'getFeedback');
-                //Врзвращает обращения по кофейне
+                //user requests for feedback on the coffee shop
                 Route::get("/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
-                // Создание обращения
+                //create feedback and message
                 Route::post('/feedback', 'create');
-                // Создание сообщения для определенного обращение
+                //create message for feedback
                 Route::post('/feedback/{feedback}', 'createMessage');
             }
         );
     }
 );
 
-Route::group(
-    [
-        'middleware' => 'can:isBarista'
-    ], 
+Route::middleware('can:isBarista')->group(
     function () {
-        Route::group(
-            [
-                'controller' => BonusController::class,
-            ],
+        Route::controller(BonusController::class)->group(
             function () {
-                //Создание бонуса для гостя
+                //create bonuses for user
                 Route::post('bonus/{user}', 'create');
-                //Списание бонусов у гостя
+                //write off bonuses from the user
                 Route::put('bonus/{user}', 'wrote');
             }
         );
 
-        Route::group(
-            [
-                'controller' => UserControler::class,
-            ],
+        Route::controller(UserControler::class)->group(
             function () {
+                //get all users
                 Route::get('/users', 'users');
+                //create user
                 Route::post('/user/create', 'create');
             }
         );
     }
 );
 
-Route::group(
-    [
-    'middleware' => 'can:isAdmin'
-    ],
+Route::middleware('can:isAdmin')->group(
     function () {
-        Route::group(
-            [
-                'controller' => StatisticController::class
-            ],
+        Route::controller(StatisticController::class)->group(
             function () {
-                //Статистика барист
+                //get data for statsitic baristas
                 Route::get('/statistic', 'barista');
-                //статистика гостей
+                //get data for statistic users
                 Route::get('statistic/users', 'user');
+                //get data for user statistics for a week or a month
                 Route::get('statisitc/users/{interval}', 'userTimeInterval')
                     ->where('interval', '7|31');
             }
         );
 
-        Route::group(
-            [
-                'controller' => FeedbackController::class
-            ],
+        Route::controller(FeedbackController::class)->group(
             function () {
-                // Возвращает все обращения
+                //get all feedbacks
                 Route::get("admin/feedback", 'getFeedbacks');
-                // Возвращает определенное обращение
+                //get one feedback
                 Route::get("admin/feedback/{feedback}", 'getFeedback');
-                //Врзвращает обращения по кофейне
+                //get all feedback on the coffee shop 
                 Route::get("admin/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
-                // Создание сообщения для определенного обращение
+                //create message for feedback
                 Route::post('admin/feedback/{feedback}', 'createMessage');
             }
         );
 
-        Route::group(
-            [
-                'controller' => NotificationController::class
-            ],
+        Route::controller(NotificationController::class)->group(
             function () {
-                //Возвращает все уведомления
+                //get all notifications
                 Route::get('admin/notification', 'getNotificationForAdmin');
-                //Создает уведомление
+                //create notification
                 Route::post('admin/notification', 'createNotification');
             }
         );
 
-        Route::group(
-            [
-                'controller' => CoffeePotController::class
-            ],
+        Route::controller(CoffeePotController::class)->group(
             function () {
-                //Возвращает все кофеточки
+                //get all coffeePot
                 Route::get('admin/coffeePot', 'getCoffeePots');
-                //Возвращает данные по одной кофейне
+                //get one coffeePot
                 Route::get('admin/coffeePot/{coffeePot}', 'getCoffeePot');
-                //Содает кофеточку
+                //create coffeePot
                 Route::post('admin/coffeePot', 'create');
-                //обновляет кофеточку
+                //update coffeePot
                 Route::put('admin/coffeePot/{coffeePot}', 'update');
-                //удаляет кофеточку
+                //delete coffeePot
                 Route::delete('admin/coffeePot/{coffeePot}', 'delete');
             }
         );
 
-        Route::group(
-            [
-                'controller' => BaristaProfileController::class
-            ],
+        Route::controller(BaristaProfileController::class)->group(
             function () {
-                //возвращает всех барист
-                Route::get('barista', 'get');
-                //возвращает определенного баристу
+                //get all baristas user
+                Route::get('barista', 'getAll');
+                //get one barista user
                 Route::get('barista/{barista}', 'getBarista');
-                //создает баристу
+                //create barista user
                 Route::post('barista', 'create');
-                //редактирование баристы
+                //update barista user
                 Route::put('barista/{barista}', 'update');
-                //удаление баристы
+                //delete barista user
                 Route::delete('barista/{barista}', 'delete');
             }
         );
     }
 );
+
+Route::controller(SiteDataController::class)->group(
+    function () {
+        //get links for header site
+        Route::get("/header", 'header');
+        //get lifetime bonus
+        Route::get('/bonus/lifetime', 'bonusLifetime');
+    }
+);
+
+//get address and id all coffeePots
+Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
+
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth:api');

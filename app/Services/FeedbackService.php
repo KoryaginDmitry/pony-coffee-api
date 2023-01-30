@@ -54,9 +54,9 @@ class FeedbackService extends BaseService
     }
 
     /**
-     * Get feedback
+     * Get one feedback
      * 
-     * @param Feedback $feedback object Feedback
+     * @param Feedback $feedback
      * 
      * @return array
      */
@@ -72,9 +72,9 @@ class FeedbackService extends BaseService
     }
 
     /**
-     * Get feedbacks for a specific coffee shop
+     * Get a coffee shop feedback
      * 
-     * @param CoffeePot $coffeePot object CoffeePot
+     * @param CoffeePot $coffeePot
      * 
      * @return array
      */

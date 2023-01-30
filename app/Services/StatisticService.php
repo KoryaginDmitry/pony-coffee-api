@@ -18,8 +18,9 @@ use Illuminate\Support\Facades\DB;
 /**
  * StatisticService class
  * 
- * @method array barista()
- * @method array user()
+ * @method JsonResponse barista()
+ * @method JsonResponse user()
+ * @method JsonResponse userTimeInterval(int interval)
  * 
  * @category Services
  * 
@@ -60,7 +61,7 @@ class StatisticService extends BaseService
     }
 
     /**
-     * Return ino bonuses
+     * Get user statistics for a week or month
      *
      * @param int $interval
      * 

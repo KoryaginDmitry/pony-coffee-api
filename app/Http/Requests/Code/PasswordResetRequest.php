@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Profile;
+namespace App\Http\Requests\Code;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProfilePasswordRequest extends FormRequest
+class PasswordResetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class ProfilePasswordRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check();
+        return !auth()->check();
     }
 
     /**
@@ -24,7 +24,9 @@ class ProfilePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            "password" => ["required", "between:8, 255" , "confirmed"]
+            'token' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'between:8, 255', 'confirmed'],
         ];
     }
 }

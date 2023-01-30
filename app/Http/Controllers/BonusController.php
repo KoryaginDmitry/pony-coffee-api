@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Bonus controller
+ * php version 8.1.2
+ * 
+ * @category Controllers
+ * 
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
+ */
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Bonus\BonusRequest;
@@ -7,12 +14,23 @@ use App\Models\User;
 use App\Services\BonusService;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * BonusController class
+ * 
+ * @method JsonResponse getInfoBonuses()
+ * @method JsonResponse create(BonusRequest $request, User $user)
+ * @method JsonResponse wrote(BonusRequest $request, User $user)
+ * 
+ * @category Controllers
+ * 
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
+ */
 class BonusController extends BaseController
 {
     /**
      * Service connection
      *
-     * @param BonusService $service Service variable
+     * @param BonusService $service
      */
     public function __construct(protected BonusService $service)
     {
@@ -20,7 +38,7 @@ class BonusController extends BaseController
     }
 
     /**
-     * Return information users bonuses
+     * Get information about the authenticated user's bonuses
      *
      * @return JsonResponse
      */
@@ -32,7 +50,7 @@ class BonusController extends BaseController
     }
 
     /**
-     * Method create bonus for user
+     * Create from 1 to 10 bonuses for the user
      *
      * @param BonusRequest $request
      * @param User         $user
@@ -47,7 +65,7 @@ class BonusController extends BaseController
     }
 
     /**
-     * Method wrote users bonuses
+     * Writes off bonuses from the user
      *
      * @param BonusRequest $request
      * @param User         $user

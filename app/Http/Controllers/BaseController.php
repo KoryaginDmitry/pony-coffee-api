@@ -1,6 +1,6 @@
 <?php
 /**
- * BaseController controller
+ * Base controller
  * php version 8.1.2
  * 
  * @category Controllers
@@ -12,7 +12,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 
 /**
- * BaristaController class
+ * BaseController class
  * 
  * @method JsonResponse sendResponse(array $response)
  * 
@@ -25,7 +25,7 @@ class BaseController extends Controller
     /**
      * SendResponse
      *
-     * @param array $response array response
+     * @param array $response
      * 
      * @return JsonResponse
      */

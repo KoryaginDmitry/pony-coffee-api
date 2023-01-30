@@ -33,7 +33,7 @@ class VerificateMail extends Mailable implements ShouldQueue
     public function envelope()
     {
         return new Envelope(
-            subject: 'Verificate Mail',
+            subject: 'Подтверждение почты',
         );
     }
 
@@ -45,7 +45,7 @@ class VerificateMail extends Mailable implements ShouldQueue
     public function content()
     {
         return new Content(
-            view: 'mail.messages.verificate',
+            view: 'mail.verificate',
         );
     }
 

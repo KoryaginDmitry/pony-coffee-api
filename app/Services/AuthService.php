@@ -9,6 +9,7 @@
  */
 namespace App\Services;
 
+use App\Http\Requests\Auth\LoginEmailRequest;
 use App\Http\Requests\Auth\LoginPhoneRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -20,7 +21,10 @@ use Illuminate\Support\Facades\Hash;
 /**
  * AuthService class
  * 
+ * @method array _createResponse(User $user)
  * @method array login(LoginRequest $request)
+ * @method array phoneLogin(LoginRequest $request)
+ * @method array emailLogin(LoginEmailRequest $request)
  * @method array register(RegisterRequest $request)
  * @method array logout()
  * 
@@ -31,7 +35,21 @@ use Illuminate\Support\Facades\Hash;
 class AuthService extends BaseService
 {
     /**
-     * Authorization method
+     * Creates a token for the user and returns data for the response
+     *
+     * @param User $user
+     * 
+     * @return array
+     */
+    private function _createResponse(User $user) : array
+    {
+        $this->data = $user->createToken('userToken');
+
+        return $this->sendResponse();
+    }
+
+    /**
+     * Login to the site with a phone number and password
      * 
      * @param LoginRequest $request
      * 
@@ -45,13 +63,11 @@ class AuthService extends BaseService
             return $this->sendErrorResponse('Проверьте введенные данные');
         }
 
-        $this->data = $user->createToken('userToken');
-        
-        return $this->sendResponse();
+        return $this->_createResponse($user);
     }
 
     /**
-     * Phone login
+     * Login to the site with a phone number and code
      *
      * @param LoginPhoneRequest $request
      * 
@@ -63,9 +79,23 @@ class AuthService extends BaseService
 
         $user = User::where('phone', $request->phone)->first();
 
-        $this->data = $user->createToken('userToken');
-        
-        return $this->sendResponse();
+        return $this->_createResponse($user);
+    }
+
+    /**
+     * Login to the site with a email and code
+     *
+     * @param LoginEmailRequest $request
+     * 
+     * @return array
+     */
+    public function emailLogin(LoginEmailRequest $request) : array
+    {
+        $this->codeCheck($request->email, $request->code);
+
+        $user = User::where('email', $request->email)->first();
+
+        return $this->_createResponse($user);
     }
 
     /**
@@ -83,11 +113,9 @@ class AuthService extends BaseService
             Helper::hashPassword($request->safe()->except('code'))
         );
 
-        $this->data = $user->createToken('userToken');
-
         $this->code = 201;
         
-        return $this->sendResponse();
+        return $this->_createResponse($user);
     }
 
     /**

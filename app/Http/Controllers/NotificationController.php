@@ -16,7 +16,7 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * NotificationController class
- * 
+ *  
  * @method JsonResponse getUserNotifications()
  * @method JsonResponse read(Notifiction $notifiction)
  * @method JsonResponse getCount()
@@ -32,7 +32,7 @@ class NotificationController extends BaseController
     /**
      * Service connection
      *
-     * @param NotificationService $service Service variable
+     * @param NotificationService $service
      */
     public function __construct(protected NotificationService $service)
     {
@@ -40,7 +40,7 @@ class NotificationController extends BaseController
     }
     
     /**
-     * Get notification for user
+     * Get notifications for auth user
      *
      * @return JsonResponse
      */
@@ -52,9 +52,9 @@ class NotificationController extends BaseController
     }
 
     /**
-     * Read notification user
+     * Read notification
      *
-     * @param Notifiction $notification Notification object
+     * @param Notifiction $notification
      * 
      * @return JsonResponse
      */
@@ -78,7 +78,7 @@ class NotificationController extends BaseController
     }
 
     /**
-     * Get notifications for admin
+     * Get all notifications
      *
      * @return JsonResponse
      */
@@ -92,7 +92,7 @@ class NotificationController extends BaseController
     /**
      * Create notification
      *
-     * @param CreateNotificationRequest $request object CreateNotificqtionRequest
+     * @param CreateNotificationRequest $request
      * 
      * @return JsonResponse
      */

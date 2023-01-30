@@ -21,12 +21,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * NotificationService class
  * 
- * @method mixed _sendTelegramNotification(string text)
  * @method array getUserNotifications()
- * @method array read(Notification $notification)
+ * @method array|NotFoundHttpException read(Notification $notification)
  * @method array getCount()
  * @method array getNotificationForAdmin()
- * @method array createNotification(object $request)
+ * @method array createNotification(CreateNotificationRequest $request)
  * 
  * @category Services
  * 
@@ -141,10 +140,7 @@ class NotificationService extends BaseService
                 ->whereNotNull('email_verified_at')
                 ->get();
             
-            foreach ($users as $user) {
-                Mail::to($user->email)
-                ->send(new NewsletterMail($request->text));
-            }
+            Mail::to($users)->send(new NewsletterMail($request->text));
         }
     
         $this->data = [

@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * 
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserCoffeePot[] $userCoffeePot
+ * @property-read int|null $user_coffee_pot_count
+ * 
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot query()
@@ -23,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereUpdatedAt($value)
+ * @method static \Database\Factories\CoffeePotFactory factory(...$parameters)
  * @mixin  \Eloquent
  */
 class CoffeePot extends Model
@@ -49,7 +53,7 @@ class CoffeePot extends Model
     ];
 
     /**
-     * Relation userCoffeePot
+     * Relationship
      *
      * @return HasMany
      */

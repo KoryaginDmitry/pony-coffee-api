@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Message[] $messages
  * @property-read int|null $messages_count
  * @property-read \App\Models\CoffeePot|null $coffeePot
+ * @property-read \App\Models\User|null $user
  * 
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback newQuery()
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUserId($value)
+ * @method static \Database\Factories\FeedbackFactory factory(...$parameters)
  * @mixin  \Eloquent
  */
 class Feedback extends Model
@@ -58,7 +60,7 @@ class Feedback extends Model
     ];
 
     /**
-     * Hasmany Messages
+     * HasMany Messages
      *
      * @return HasMany
      */

@@ -18,7 +18,7 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * FeedbackController class
- * 
+ *  
  * @method JsonResponse getFeedbacks()
  * @method JsonResponse getFeedback(Feedback $feedback)
  * @method JsonResponse getFeedbackCoffeePot(CoffeePot $coffePot)
@@ -34,7 +34,7 @@ class FeedbackController extends BaseController
     /**
      * Service connection
      *
-     * @param FeedbackService $service Service variable
+     * @param FeedbackService $service
      */
     public function __construct(protected FeedbackService $service)
     {
@@ -42,7 +42,7 @@ class FeedbackController extends BaseController
     }
 
     /**
-     * Method get feedbacks
+     * Get feedbacks
      * 
      * @return JsonResponse
      */
@@ -54,9 +54,9 @@ class FeedbackController extends BaseController
     }
 
     /**
-     * Method get feedback
+     * Gets one feedback
      * 
-     * @param Feedback $feedback object Feedback
+     * @param Feedback $feedback
      * 
      * @return JsonResponse
      */
@@ -68,9 +68,9 @@ class FeedbackController extends BaseController
     }
 
     /**
-     * Method get feedback
+     * Gets a coffee shop feedback
      * 
-     * @param CoffeePot $coffeePot object CoffeePot
+     * @param CoffeePot $coffeePot
      * 
      * @return JsonResponse
      */
@@ -84,7 +84,7 @@ class FeedbackController extends BaseController
     /**
      * Create feedback
      *
-     * @param CreateRequest $request object CreateRequest
+     * @param CreateRequest $request
      * 
      * @return JsonResponse
      */
@@ -98,8 +98,8 @@ class FeedbackController extends BaseController
     /**
      * Create message for feedback
      *
-     * @param Feedback             $feedback object Feedback
-     * @param CreateMessageRequest $request  object CreateMessageRequest
+     * @param Feedback             $feedback
+     * @param CreateMessageRequest $request
      * 
      * @return JsonResponse
      */

@@ -34,8 +34,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdCreate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdWrote($value)
- * @mixin \Eloquent
  * @method static \Database\Factories\BonusFactory factory(...$parameters)
+ * @mixin \Eloquent
  */
 	class Bonus extends \Eloquent {}
 }
@@ -49,6 +49,8 @@ namespace App\Models{
  * @property string $address
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserCoffeePot[] $userCoffeePot
+ * @property-read int|null $user_coffee_pot_count
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot query()
@@ -57,10 +59,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereUpdatedAt($value)
- * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserCoffeePot[] $userCoffeePot
- * @property-read int|null $user_coffee_pot_count
  * @method static \Database\Factories\CoffeePotFactory factory(...$parameters)
+ * @mixin \Eloquent
  */
 	class CoffeePot extends \Eloquent {}
 }
@@ -78,6 +78,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Message[] $messages
  * @property-read int|null $messages_count
  * @property-read \App\Models\CoffeePot|null $coffeePot
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback query()
@@ -87,9 +88,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUserId($value)
- * @mixin \Eloquent
- * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\FeedbackFactory factory(...$parameters)
+ * @mixin \Eloquent
  */
 	class Feedback extends \Eloquent {}
 }
@@ -115,8 +115,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereUserId($value)
- * @mixin \Eloquent
  * @method static \Database\Factories\MessageFactory factory(...$parameters)
+ * @mixin \Eloquent
  */
 	class Message extends \Eloquent {}
 }
@@ -132,6 +132,7 @@ namespace App\Models{
  * @property string|null $users_read_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $email
  * @method static \Illuminate\Database\Eloquent\Builder|Notification newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Notification newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Notification query()
@@ -142,8 +143,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUsersReadId($value)
- * @mixin \Eloquent
  * @method static \Database\Factories\NotificationFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereEmail($value)
+ * @mixin \Eloquent
  */
 	class Notification extends \Eloquent {}
 }
@@ -200,6 +202,12 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
  * @property-read int|null $tokens_count
  * @property-read \App\Models\UserCoffeePot|null $userCoffeePot
+ * @property-read Collection|\App\Models\Bonus[] $activeBonuses
+ * @property-read int|null $active_bonuses_count
+ * @property-read Collection|\App\Models\Bonus[] $burntBonuses
+ * @property-read int|null $burnt_bonuses_count
+ * @property-read Collection|\App\Models\Bonus[] $usingBonuses
+ * @property-read int|null $using_bonuses_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -218,12 +226,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $activeBonuses
- * @property-read int|null $active_bonuses_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $burntBonuses
- * @property-read int|null $burnt_bonuses_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $usingBonuses
- * @property-read int|null $using_bonuses_count
  */
 	class User extends \Eloquent implements \Illuminate\Contracts\Auth\MustVerifyEmail {}
 }
@@ -238,6 +240,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CoffeePot|null $coffeePot
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot query()
@@ -246,9 +249,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCoffeePot whereUserId($value)
- * @mixin \Eloquent
- * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\UserCoffeePotFactory factory(...$parameters)
+ * @mixin \Eloquent
  */
 	class UserCoffeePot extends \Eloquent {}
 }

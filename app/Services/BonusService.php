@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Bonus service
+ * php version 8.1.2
+ * 
+ * @category Services
+ * 
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
+ * 
+ */
 namespace App\Services;
 
 use App\Http\Requests\Bonus\BonusRequest;
@@ -7,12 +15,22 @@ use App\Models\Bonus;
 use App\Models\User;
 use App\Services\BaseService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
+/**
+ * BonusService class
+ * 
+ * @method array getInfoBonuses()
+ * @method array create(BonusRequest $request, User $user)
+ * @method array wrote(BonusRequest $request, User $user)
+ * 
+ * @category Services
+ * 
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
+ */
 class BonusService extends BaseService
 {
     /**
-     * Get information about auth user bonuses
+     * Get information about the authenticated user's bonuses
      *
      * @return array
      */
@@ -20,24 +38,28 @@ class BonusService extends BaseService
     { 
         $user = User::find(auth()->id());
         
-        $userBonuses = $user->activeBonuses()->get();
+        $userBonuses = $user->activeBonuses()
+            ->groupBy('created_at')
+            ->get();
 
-        $bonusBurnDate = $userBonuses
+        $dateLastBonus = $userBonuses
             ->pluck('created_at')
             ->first();
 
         $this->data = [
             "count" => $userBonuses->count(),
-            "dateBurn" => $bonusBurnDate ? Carbon::create(
-                $bonusBurnDate
-            )->addDays(Bonus::getLifetime())->format("d-m-Y") : null
+            "dateBurn" => $dateLastBonus 
+                ? Carbon::create($dateLastBonus)
+                    ->addDays(Bonus::getLifetime())
+                    ->format("d-m-Y")
+                : null
         ];
 
         return $this->sendResponse();
     }
     
     /**
-     * Create bonus for user
+     * Create from 1 to 10 bonuses for the user
      *
      * @param BonusRequest $request
      * @param User         $user
@@ -60,7 +82,7 @@ class BonusService extends BaseService
     }
 
     /**
-     * Wrote bonuses user
+     * Writes off bonuses from the user
      *
      * @param BonusRequest $request
      * @param User         $user

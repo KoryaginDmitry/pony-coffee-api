@@ -44,6 +44,12 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
  * @property-read int|null $tokens_count
  * @property-read \App\Models\UserCoffeePot|null $userCoffeePot
+ * @property-read Collection|\App\Models\Bonus[] $activeBonuses
+ * @property-read int|null $active_bonuses_count
+ * @property-read Collection|\App\Models\Bonus[] $burntBonuses
+ * @property-read int|null $burnt_bonuses_count
+ * @property-read Collection|\App\Models\Bonus[] $usingBonuses
+ * @property-read int|null $using_bonuses_count
  * 
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
@@ -110,7 +116,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * Relationship
+     * Get active bonuses
      *
      * @return HasMany
      */
@@ -124,7 +130,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Relationship
+     * Get using bonuses
      *
      * @return HasMany
      */
@@ -134,7 +140,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Relationship
+     * Get burnt bonuses
      *
      * @return HasMany
      */
@@ -158,7 +164,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Relationship bonuses
+     * Relationship all user bonuses
      *
      * @return HasMany
      */
@@ -168,7 +174,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Relationship bonuses create
+     * Get bonuses created by this user 
      *
      * @return HasMany
      */
@@ -178,7 +184,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Relationship bonuses wrote
+     * Get bonuses wrote by this user
      *
      * @return HasMany
      */
