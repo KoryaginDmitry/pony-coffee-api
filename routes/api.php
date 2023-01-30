@@ -6,7 +6,6 @@ use App\Http\Controllers\BonusController;
 use App\Http\Controllers\CodeVerificateController;
 use App\Http\Controllers\CoffeePotController;
 use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SiteDataController;
 use App\Http\Controllers\StatisticController;

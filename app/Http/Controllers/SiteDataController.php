@@ -42,7 +42,7 @@ class SiteDataController extends BaseController
     public function header() : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->get()
+            $this->service->header()
         );
     }
 

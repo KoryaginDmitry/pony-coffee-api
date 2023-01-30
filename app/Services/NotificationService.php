@@ -130,7 +130,7 @@ class NotificationService extends BaseService
                 "https://api.telegram.org/bot$botToken/sendMessage",
                 [
                     'chat_id' => config('services.telegram.channel_id'),
-                    'text' => urlencode($request->text)
+                    'text' => $request->text
                 ]
             );
         }
