@@ -18,7 +18,6 @@ use Illuminate\Http\JsonResponse;
 /**
  * CoffeePotController class
  * 
- * @method JsonResponse getAddressCoffeePots()
  * @method JsonResponse getCoffeePots()
  * @method JsonResponse getCoffeePot(CoffeePot $coffeePot)
  * @method JsonResponse create(CoffeePotRequest $request)
@@ -39,18 +38,6 @@ class CoffeePotController extends BaseController
     public function __construct(protected CoffeePotService $service)
     {
         
-    }
-
-    /**
-     * Gets only addresses and id of coffee shops
-     *
-     * @return JsonResponse
-     */
-    public function getAddressCoffeePots() : JsonResponse
-    {
-        return $this->sendResponse(
-            $this->service->getAddressCoffeePots()
-        );
     }
 
     /**

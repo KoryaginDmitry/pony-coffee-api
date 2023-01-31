@@ -16,7 +16,6 @@ use App\Models\CoffeePot;
 /**
  * CoffeePotService class
  * 
- * @method array getAddressCoffeePots()
  * @method array getCoffeePots()
  * @method array getCoffeePot(CoffeePot $coffeePot)
  * @method array create(CoffeePotRequest $request)
@@ -29,20 +28,6 @@ use App\Models\CoffeePot;
  */
 class CoffeePotService extends BaseService
 {
-    /**
-     * Gets only addresses and id of coffee shops
-     *
-     * @return array
-     */
-    public function getAddressCoffeePots() : array
-    {
-        $this->data = [
-            "coffeePots" => CoffeePot::select('id', 'address')->get()
-        ];
-        
-        return $this->sendResponse();
-    }
-
     /**
      * Gets complete data of coffee shops
      *

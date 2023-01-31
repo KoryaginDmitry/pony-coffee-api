@@ -173,8 +173,6 @@ Route::middleware('can:isAdmin')->group(
 
         Route::controller(CoffeePotController::class)->group(
             function () {
-                //get all coffeePot
-                Route::get('admin/coffeePot', 'getCoffeePots');
                 //get one coffeePot
                 Route::get('admin/coffeePot/{coffeePot}', 'getCoffeePot');
                 //create coffeePot
@@ -212,8 +210,8 @@ Route::controller(SiteDataController::class)->group(
     }
 );
 
-//get address and id all coffeePots
-Route::get('coffeePot/address', [CoffeePotController::class, 'getAddressCoffeePots']);
+//get all coffeePot
+Route::get('coffeePot', [CoffeePotController::class, 'getCoffeePots']);
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth:api');
