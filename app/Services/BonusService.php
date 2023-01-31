@@ -39,20 +39,21 @@ class BonusService extends BaseService
         $user = User::find(auth()->id());
         
         $userBonuses = $user->activeBonuses()
-            ->groupBy('created_at')
+            ->orderBy('created_at')
             ->get();
 
-        $dateLastBonus = $userBonuses
-            ->pluck('created_at')
-            ->first();
+        if ($userBonuses->count()) {
+            $dateBurnt = Carbon::create(
+                $userBonuses->pluck('created_at')->first()
+            )->addDays(Bonus::getLifetime())
+            ->format("d-m-Y"); 
+        } else {
+            $dateBurnt = null;
+        }
 
         $this->data = [
             "count" => $userBonuses->count(),
-            "dateBurn" => $dateLastBonus 
-                ? Carbon::create($dateLastBonus)
-                    ->addDays(Bonus::getLifetime())
-                    ->format("d-m-Y")
-                : null
+            "dateBurn" => $dateBurnt
         ];
 
         return $this->sendResponse();

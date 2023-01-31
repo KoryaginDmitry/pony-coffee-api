@@ -76,6 +76,8 @@ class UserService extends BaseService
      */
     public function userCreate(UserCreateRequest $request) : array
     {
+        $this->codeCheck($request->phone, $request->code);
+
         $this->data = [
             'user' => User::create(
                 $request->safe()->except('code')

@@ -10,6 +10,7 @@
  */
 namespace App\Services;
 
+use App\Events\CreateFeedback;
 use App\Events\CreateMessage;
 use App\Http\Requests\Feedback\CreateMessageRequest;
 use App\Http\Requests\Feedback\CreateRequest;
@@ -115,6 +116,8 @@ class FeedbackService extends BaseService
             )
         ];
 
+        broadcast(new CreateFeedback($feedback->fresh('messages')));
+
         $this->code = 201;
 
         return $this->sendResponse();
@@ -136,7 +139,7 @@ class FeedbackService extends BaseService
             $request->validated()
         );
         
-        broadcast(new CreateMessage($message))->toOthers();
+        broadcast(new CreateMessage($feedback, $message))->toOthers();
 
         $this->data = [
             'message' => $message

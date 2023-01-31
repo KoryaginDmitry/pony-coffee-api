@@ -3,7 +3,6 @@
 namespace App\Events;
 
 use App\Models\Feedback;
-use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CreateMessage implements ShouldBroadcast
+class CreateFeedback implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,20 +21,13 @@ class CreateMessage implements ShouldBroadcast
      * @var string
      */
     public $type;
-
+    
     /**
-     * Message to be sent
+     * Feedback and first message
      *
-     * @var Message
+     * @var Feedback
      */
-    public $message;
-
-    /**
-     * User id for transferring data only for him
-     *
-     * @var int
-     */
-    public $user_id;
+    public $feedback;
 
     /**
      * The name of the queue on which to place the broadcasting job.
@@ -45,16 +37,16 @@ class CreateMessage implements ShouldBroadcast
     public $queue = 'default';
 
     /**
-     * Construct
+     * Create a new event instance.
      *
      * @param Feedback $feedback
-     * @param Message  $message
+     * 
+     * @return void
      */
-    public function __construct(Feedback $feedback, Message $message)
+    public function __construct(Feedback $feedback)
     {
-        $this->type = 'message';
-        $this->message = $message;
-        $this->user_id = $feedback->user_id;
+        $this->type = 'feedback';
+        $this->feedback = $feedback;
     }
 
     /**
@@ -64,10 +56,6 @@ class CreateMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        if (auth()->user()->isUser()) {
-            return new PrivateChannel('admin');
-        }
-
-        return new PrivateChannel('user.' . $this->user_id);
+        return new PrivateChannel('admin');
     }
 }
