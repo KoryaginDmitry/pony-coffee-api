@@ -28,7 +28,7 @@ class UserCreateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'between:2, 255'],
             'phone' => ['required', "regex:/$phone_regex/", 'unique:users'],
-            'code' => ['required', 'integer', 'between:1000, 9999']
+            'code' => ['required', 'integer', 'between:1000,9999']
         ];
     }
 

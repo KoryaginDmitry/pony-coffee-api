@@ -28,11 +28,11 @@ class RegisterRequest extends FormRequest
         $phone_regex = config('options.regex.phone');
 
         return [
-            "name" => ["required", "string", "between:2, 255"],
+            "name" => ["required", "string", "between:2,255"],
             "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
             'phone_verified_at' => ["required", "date"],
-            "code" => ["required", "integer", "between:1000, 9999"],
-            "password" => ["required", "between:8, 255" , "confirmed"],
+            "code" => ["required", "integer", "between:1000,9999"],
+            "password" => ["required", "between:8,255" , "confirmed"],
             "agreement" => ["required", "accepted"],
             "role_id" => ["required", "integer"]
         ];

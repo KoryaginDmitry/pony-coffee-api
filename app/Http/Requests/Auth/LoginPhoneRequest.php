@@ -28,7 +28,7 @@ class LoginPhoneRequest extends FormRequest
 
         return [
             'phone' => ['required', "regex:/$phone_regex/", "exists:users"],
-            'code' => ['required', 'integer', 'between: 999, 9999']
+            'code' => ['required', 'integer', 'between:999,9999']
         ];
     }
 

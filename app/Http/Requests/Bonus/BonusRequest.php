@@ -25,7 +25,7 @@ class BonusRequest extends FormRequest
     public function rules()
     {
         return [
-            "count" => ["required", "integer", "between:1, 10"]
+            "count" => ["required", "integer", "between:1,10"]
         ];
     }
 

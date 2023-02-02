@@ -26,7 +26,7 @@ class ProfileEmailRequest extends FormRequest
     {
         return [
             "email" => ["required", 'email', 'unique:users', 'max:255'],
-            "code" => ['required', 'integer', 'between:10000, 99999'],
+            "code" => ['required', 'integer', 'between:10000,99999'],
             "email_verified_at" => ['required', 'date']
         ];
     }

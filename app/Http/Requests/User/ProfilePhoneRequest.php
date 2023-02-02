@@ -30,7 +30,7 @@ class ProfilePhoneRequest extends FormRequest
         return [
             "phone" => ["required", "regex:/$phone_regex/", "uniques:users"],
             'phone_verified_at' => ['required', 'date'],
-            "code" => ["required", "integer", "between:1000, 9999"]
+            "code" => ["required", "integer", "between:1000,9999"]
         ];
     }
 

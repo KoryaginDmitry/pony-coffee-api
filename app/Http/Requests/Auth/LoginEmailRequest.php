@@ -25,7 +25,7 @@ class LoginEmailRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email', 'exists:users'],
-            'code' => ['required', 'integer', 'between:10000, 99999'],
+            'code' => ['required', 'integer', 'between:10000,99999'],
         ];
     }
 

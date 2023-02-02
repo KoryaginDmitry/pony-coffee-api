@@ -28,8 +28,8 @@ class UpdateRequest extends FormRequest
         $phone_regex = config('options.regex.phone');
     
         return [
-            "name" => ["required", "string", "between:2, 255"],
-            "last_name" => ["nullable", "string", "between:2, 255"],
+            "name" => ["required", "string", "between:2,255"],
+            "last_name" => ["nullable", "string", "between:2,255"],
             "phone" => [
                 "required",
                 "regex:/$phone_regex/",

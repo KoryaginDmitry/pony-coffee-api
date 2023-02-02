@@ -24,7 +24,7 @@ class ProfilePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            "password" => ["required", "between:8, 255" , "confirmed"]
+            "password" => ["required", "between:8,255" , "confirmed"]
         ];
     }
 }
