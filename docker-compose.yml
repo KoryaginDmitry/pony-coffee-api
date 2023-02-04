@@ -1,0 +1,56 @@
+version: '3.7'
+
+networks:
+  PonyCoffee:
+    driver: bridge
+
+services:
+  nginx:
+    build: 
+      context: .
+      dockerfile: docker/Nginx.Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/var/www/PonyCoffee
+    networks:
+      - PonyCoffee 
+    container_name: PonyCoffeeNginx
+    depends_on:
+      - app
+
+  app:
+    build:
+      args:
+        user: test
+        uid: 1000
+      context: ./
+      dockerfile: docker/Fpm.Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www/PonyCoffee
+    volumes:
+      - ./:/var/www/PonyCoffee
+    networks:
+      - PonyCoffee
+    container_name: PonyCoffeeApp
+    depends_on:
+      - mysql
+    links:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - 33061:3306
+    volumes:
+      - ./tmp/db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - PonyCoffee
+    container_name: PonyCoffeeMysql
