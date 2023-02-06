@@ -40,8 +40,8 @@ services:
     volumes:
       - ./tmp/db:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: password12345
     networks:
       - PonyCoffee
     container_name: PCMysql

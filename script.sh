@@ -15,7 +15,7 @@ echo "Создание нового ключа"
 php artisan key:generate
 
 echo "Выполнение миграций"
-php artisan migrate:refresh --seed
+php artisan migrate:fresh --seed
 
 echo "Создание клиентов для laravel passport"
 php artisan passport:install
