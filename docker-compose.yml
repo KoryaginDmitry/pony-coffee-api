@@ -15,15 +15,12 @@ services:
       - ./:/var/www/PonyCoffee
     networks:
       - PonyCoffee 
-    container_name: PonyCoffeeNginx
+    container_name: PCNginx
     depends_on:
       - app
 
   app:
     build:
-      args:
-        user: test
-        uid: 1000
       context: ./
       dockerfile: docker/Fpm.Dockerfile
     restart: unless-stopped
@@ -32,10 +29,8 @@ services:
       - ./:/var/www/PonyCoffee
     networks:
       - PonyCoffee
-    container_name: PonyCoffeeApp
+    container_name: PCApp
     depends_on:
-      - mysql
-    links:
       - mysql
 
   mysql:
@@ -47,10 +42,6 @@ services:
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
     networks:
       - PonyCoffee
-    container_name: PonyCoffeeMysql
+    container_name: PCMysql
