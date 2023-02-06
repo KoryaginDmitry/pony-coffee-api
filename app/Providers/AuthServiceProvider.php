@@ -39,42 +39,6 @@ class AuthServiceProvider extends ServiceProvider
         );
 
         Passport::loadKeysFrom(__DIR__.'/../../storage/oauth');
-        
-        Gate::define(
-            'isAdmin',
-            function (User $user) {
-                return $user->isAdmin()
-                    ? Response::allow()
-                    : Response::denyWithStatus(404);
-            }
-        );
-
-        Gate::define(
-            'isBarista',
-            function (?User $user) {
-                return $user->isBarista()
-                    ? Response::allow()
-                    : Response::denyWithStatus(404);
-            }
-        );
-
-        Gate::define(
-            'isUser',
-            function (?User $user) {
-                return $user->isUser()
-                    ? Response::allow()
-                    : Response::denyWithStatus(404);
-            }
-        );
-
-        Gate::define(
-            'isUserOrIsAdmin',
-            function (User $user) {
-                return $user->isAdmin() || $user->isUser()
-                    ? Response::allow()
-                    : Response::denyWithStatus(404);
-            }
-        );
 
         Gate::define(
             'access-to-appeal',

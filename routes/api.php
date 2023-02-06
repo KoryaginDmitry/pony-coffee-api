@@ -23,38 +23,37 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('guest')->group(
+Route::middleware(['guest', 'reCaptcha', 'api_session'])->group(
     function () {
         Route::controller(AuthController::class)->group(
             function () {
                 //Login with phone and password
-                Route::post('/login', 'login');
+                Route::post('/login', 'login')->withoutMiddleware('api_session');
                 //Login with phone and code
-                Route::post('login/phone', 'phonelogin')->middleware('api_session');
+                Route::post('login/phone', 'phonelogin');
                 //Login with email and code
-                Route::post('/email/login', 'emailLogin')->middleware('api_session');
-                Route::post('/register', 'register')->middleware('api_session');
+                Route::post('/email/login', 'emailLogin');
+                Route::post('/register', 'register');
             }
         );
 
         Route::controller(CodeVerificateController::class)->group(
             function () {
                 //Call to get a login code by phone
-                Route::post('/login/call', 'call')
-                    ->middleware('api_session')
-                    ->name('sendloginCode');
+                Route::post('/login/call', 'call')->name('sendloginCode');
                 //receive code by email
-                Route::post('login/email/code', 'sendEmailCode')
-                    ->middleware('api_session');
+                Route::post('login/email/code', 'sendEmailCode');
                 //get a password reset link
-                Route::post('forgot-password', 'forgotPassword');
-                Route::post('reset-password', 'resetPassword');
+                Route::post('forgot-password', 'forgotPassword')
+                    ->withoutMiddleware('api_session');
+                Route::post('reset-password', 'resetPassword')
+                    ->withoutMiddleware('api_session');
             }
         );
     }
 );
 
-Route::middleware('can:isUserOrIsAdmin')->group(
+Route::middleware('role:user,admin')->group(
     function () {
         Route::controller(UserControler::class)->group(
             function () {
@@ -62,25 +61,22 @@ Route::middleware('can:isUserOrIsAdmin')->group(
                 Route::get("/profile", 'authUser');
                 Route::put('profile/name', 'updateName');
                 Route::put('profile/phone', 'updatePhone')
-                    ->middleware('api_session');
+                    ->middleware(['api_session', 'reCaptcha']);
                 
                 Route::put('profile/email', 'updateEmail')
-                    ->middleware('api_session');
+                    ->middleware(['api_session', 'reCaptcha']);
                 
                 Route::put("/profile/password", 'newPassword');
             }
         );  
         //sends verification code to email
         Route::post('/mail/verificate/code', [CodeVerificateController::class, 'sendEmailCode'])
-            ->middleware('api_session')
+            ->middleware(['api_session', 'reCaptcha'])
             ->name('verificateEmail');
-        //sends verification code to phone 
-        Route::post('/call', [CodeVerificateController::class, 'call'])
-            ->middleware('api_session');
     }
 );
 
-Route::middleware('can:isUser')->group(
+Route::middleware('role:user')->group(
     function () {
         //get data about authorized user's bonuses
         Route::get('/user/bonuses', [BonusController::class, 'getInfoBonuses']);
@@ -113,7 +109,7 @@ Route::middleware('can:isUser')->group(
     }
 );
 
-Route::middleware('can:isBarista')->group(
+Route::middleware('role:barista')->group(
     function () {
         Route::controller(BonusController::class)->group(
             function () {
@@ -135,7 +131,7 @@ Route::middleware('can:isBarista')->group(
     }
 );
 
-Route::middleware('can:isAdmin')->group(
+Route::middleware('role:admin')->group(
     function () {
         Route::controller(StatisticController::class)->group(
             function () {
@@ -144,7 +140,7 @@ Route::middleware('can:isAdmin')->group(
                 //get data for statistic users
                 Route::get('statistic/users', 'user');
                 //get data for user statistics for a week or a month
-                Route::get('statisitc/users/{interval}', 'userTimeInterval')
+                Route::get('statistic/users/{interval}', 'userTimeInterval')
                     ->where('interval', '7|31');
             }
         );
@@ -212,6 +208,10 @@ Route::controller(SiteDataController::class)->group(
 
 //get all coffeePot
 Route::get('coffeePot', [CoffeePotController::class, 'getCoffeePots']);
+
+//sends verification code to phone 
+Route::post('/call', [CodeVerificateController::class, 'call'])
+->middleware(['api_session', 'reCaptcha']);
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth:api');

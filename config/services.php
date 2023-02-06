@@ -39,4 +39,10 @@ return [
     'sms' => [
         'api_id' => env('SMS_API_ID'),
     ],
+
+    'recaptcha' => [
+        'key' => env('RECAPTCHA_SITE_KEY'),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
+        'min_score' => 0.5,
+    ]
 ];
