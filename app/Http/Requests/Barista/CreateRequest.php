@@ -28,8 +28,8 @@ class CreateRequest extends FormRequest
         $phone_regex = config('options.regex.phone');
 
         return [
-            "name" => ["required", "string", "between:2,255"],
-            "last_name" => ["nullable", "string", "between:2,255"],
+            "name" => ["required", "string", "between:2,255", "alpha"],
+            "last_name" => ["nullable", "string", "between:2,255", "alpha"],
             "coffee_pot_id" => ["required", "exists:coffee_pots,id"],
             "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
             'phone_verified_at' => ['required', 'date'],
