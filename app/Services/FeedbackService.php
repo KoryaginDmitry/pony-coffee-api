@@ -139,7 +139,7 @@ class FeedbackService extends BaseService
             $request->validated()
         );
         
-        broadcast(new CreateMessage($feedback, $message))->toOthers();
+        broadcast(new CreateMessage($feedback, $message, auth()->user()));
 
         $this->data = [
             'message' => $message

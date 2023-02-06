@@ -63,7 +63,7 @@ class CodeVerificateController extends BaseController
     public function sendEmailCode(EmailReqeust $request) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->sendMailCode($request)
+            $this->service->sendEmailCode($request)
         );
     }
 

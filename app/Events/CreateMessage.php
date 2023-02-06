@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Models\Feedback;
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -31,11 +32,18 @@ class CreateMessage implements ShouldBroadcast
     public $message;
 
     /**
-     * User id for transferring data only for him
+     * Feedback
      *
-     * @var int
+     * @var Feedback
      */
-    public $user_id;
+    public $feedback;
+
+    /**
+     * Auth user
+     *
+     * @var User
+     */
+    public $user;
 
     /**
      * The name of the queue on which to place the broadcasting job.
@@ -49,12 +57,14 @@ class CreateMessage implements ShouldBroadcast
      *
      * @param Feedback $feedback
      * @param Message  $message
+     * @param User $user
      */
-    public function __construct(Feedback $feedback, Message $message)
+    public function __construct(Feedback $feedback, Message $message, User $user)
     {
         $this->type = 'message';
         $this->message = $message;
-        $this->user_id = $feedback->user_id;
+        $this->feedback = $feedback;
+        $this->user = $user;
     }
 
     /**
@@ -64,10 +74,24 @@ class CreateMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        if (auth()->user()->isUser()) {
+        if ($this->user->role_id == 3) {
             return new PrivateChannel('admin');
         }
 
-        return new PrivateChannel('user.' . $this->user_id);
+        return new PrivateChannel('user.' . $this->feedback->user_id);
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
+    public function broadcastWith()
+    {
+        return [
+            'type' => $this->type,
+            'message' => $this->message,
+            'feedback_id' => $this->feedback->id
+        ];
     }
 }

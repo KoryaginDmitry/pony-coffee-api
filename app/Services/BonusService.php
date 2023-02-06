@@ -74,7 +74,7 @@ class BonusService extends BaseService
         );
 
         $this->data = [
-            "count" => $user->getActiveBonuses()->count(),
+            "count" => $user->activeBonuses()->count(),
         ];
 
         $this->code = 201;
@@ -107,7 +107,7 @@ class BonusService extends BaseService
             );
 
             $this->data = [
-                "count" => $user->getActiveBonuses()->count(),
+                "count" => $user->activeBonuses()->count(),
             ];
 
             return $this->sendResponse();
