@@ -42,10 +42,18 @@ class CodeVerificateService extends BaseService
      */
     public function call(PhoneRequest $request) : array
     {   
+        $api_id = config('services.sms.api_id');
+
+        if (!$api_id) {
+            return $this->sendErrorResponse(
+                ['Необходимо настроить api для звонков']
+            );
+        }
+
         $response = $this->sendHttpRequest(
             'https://sms.ru/sms/code/call',
             [
-                'api_id' => config('services.sms.api_id'),
+                'api_id' => $api_id,
                 'phone' => $request->phone,
                 'ip' => $request->ip(),
             ]

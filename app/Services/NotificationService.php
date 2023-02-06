@@ -125,11 +125,18 @@ class NotificationService extends BaseService
     {
         if ($request->telegram) {
             $botToken = config('services.telegram.bot_token');
+            $chat_id = config('services.telegram.channel_id');
+
+            if (!$botToken || !$chat_id) {
+                return $this->sendErrorResponse(
+                    ['Необходимо настроить данные для отправки сообщений через telegram']
+                );
+            }
 
             $this->sendHttpRequest(
                 "https://api.telegram.org/bot$botToken/sendMessage",
                 [
-                    'chat_id' => config('services.telegram.channel_id'),
+                    'chat_id' => $chat_id,
                     'text' => $request->text
                 ]
             );
