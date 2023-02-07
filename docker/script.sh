@@ -20,4 +20,7 @@ php artisan migrate:fresh --seed
 echo "Создание клиентов для laravel passport"
 php artisan passport:install
 
+echo "Обновление прав"
+chmod 777 -R storage/
+
 exit 0
