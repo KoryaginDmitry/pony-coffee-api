@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Support\Classes\ErrorResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -16,23 +17,16 @@ class RequestExecutionErrorException extends Exception
     {
         //
     }
- 
+
     /**
      * Render the exception into an HTTP response.
      *
      * @param \Illuminate\Http\Request $request
-     * 
+     *
      * @return JsonResponse
      */
     public function render($request) : JsonResponse
     {
-        return response()->json(
-            [
-                'errors' => [
-                    'message' => 'Ошибка выполнения вашего запроса'
-                ]
-            ],
-            500
-        );
+        return ErrorResponse::sendErrorResponse('Ошибка выполнения запросв', 500);
     }
 }

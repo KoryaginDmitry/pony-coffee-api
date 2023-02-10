@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'reCaptcha' => \App\Http\Middleware\ReCaptcha::class,
         'role' => \App\Http\Middleware\Role::class,
+        'codeVerification' => \App\Http\Middleware\CodeVerification::class,
     ];
 }
