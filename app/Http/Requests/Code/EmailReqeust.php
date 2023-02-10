@@ -24,7 +24,7 @@ class EmailReqeust extends FormRequest
      */
     public function rules()
     {
-        if (Route::currentRouteName() == 'verificateEmail') {
+        if (Route::currentRouteName() == 'verificationEmail') {
             return [
                 'email' => ['required', 'email', 'unique:users']
             ];

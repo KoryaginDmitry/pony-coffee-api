@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\User;
 
-use App\Support\Helper;
+use App\Support\Classes\DataPrepare;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -28,7 +28,7 @@ class ProfilePhoneRequest extends FormRequest
         $phone_regex = config('options.regex.phone');
 
         return [
-            "phone" => ["required", "regex:/$phone_regex/", "uniques:users"],
+            "phone" => ["required", "regex:/$phone_regex/", "unique:users"],
             'phone_verified_at' => ['required', 'date'],
             "code" => ["required", "integer", "between:1000,9999"]
         ];
@@ -43,7 +43,7 @@ class ProfilePhoneRequest extends FormRequest
     {
         $this->merge(
             [
-                'phone' => Helper::editPhoneNumber($this->phone),
+                'phone' => DataPrepare::editPhoneNumber($this->phone),
                 'phone_verified_at' => Carbon::now()
             ]
         );

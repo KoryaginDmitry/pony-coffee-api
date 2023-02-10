@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Barista;
 
-use App\Support\Helper;
+use App\Support\Classes\DataPrepare;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -48,7 +48,7 @@ class CreateRequest extends FormRequest
     {
         $this->merge(
             [
-                'phone' => Helper::editPhoneNumber($this->phone),
+                'phone' => DataPrepare::editPhoneNumber($this->phone),
                 'phone_verified_at' => Carbon::now(),
                 'agreement' => '1',
                 'role_id' => 2

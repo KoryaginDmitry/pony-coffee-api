@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Barista;
 
-use App\Support\Helper;
+use App\Support\Classes\DataPrepare;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,9 +24,9 @@ class UpdateRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {   
+    {
         $phone_regex = config('options.regex.phone');
-    
+
         return [
             "name" => ["required", "string", "between:2,255", 'alpha'],
             "last_name" => ["nullable", "string", "between:2,255", 'alpha'],
@@ -48,7 +48,7 @@ class UpdateRequest extends FormRequest
     {
         $this->merge(
             [
-                'phone' => Helper::editPhoneNumber($this->phone),
+                'phone' => DataPrepare::editPhoneNumber($this->phone),
             ]
         );
     }

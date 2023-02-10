@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Code;
 
-use App\Support\Helper;
+use App\Support\Classes\DataPrepare;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +27,7 @@ class PhoneRequest extends FormRequest
     {
         $phone_regex = config('options.regex.phone');
 
-        if (Route::currentRouteName() == 'sendloginCode') {
+        if (Route::currentRouteName() == 'sendLoginCode') {
             return [
                 "phone" => ["required", "regex:/$phone_regex/", "exists:users"]
             ];
@@ -47,7 +47,7 @@ class PhoneRequest extends FormRequest
     {
         $this->merge(
             [
-                "phone" => Helper::editPhoneNumber($this->phone)
+                "phone" => DataPrepare::editPhoneNumber($this->phone)
             ]
         );
     }

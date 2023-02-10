@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Support\Classes\DataPrepare;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Support\Helper;
 
 class LoginRequest extends FormRequest
 {
@@ -41,7 +41,7 @@ class LoginRequest extends FormRequest
     {
         $this->merge(
             [
-                'phone' => Helper::editPhoneNumber($this->phone)
+                'phone' => DataPrepare::editPhoneNumber($this->phone)
             ]
         );
     }
