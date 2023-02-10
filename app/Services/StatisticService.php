@@ -1,29 +1,16 @@
 <?php
 
-/**
- * Statistic service
- * php version 8.1.2
- * 
- * @category Services
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 namespace App\Services;
 
 use App\Models\Bonus;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
  * StatisticService class
- * 
- * @method JsonResponse barista()
- * @method JsonResponse user()
- * @method JsonResponse userTimeInterval(int interval)
- * 
+ *
  * @category Services
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class StatisticService extends BaseService
@@ -40,10 +27,10 @@ class StatisticService extends BaseService
                 ->with(["bonusesCreate", "bonusesWrote"])
                 ->get()
         ];
-        
+
         return $this->sendResponse();
     }
-    
+
     /**
      * Get a collection of bonuses for user statistics
      *
@@ -56,7 +43,7 @@ class StatisticService extends BaseService
                 ->withCount(["activeBonuses", "usingBonuses", "burntBonuses"])
                 ->get()
         ];
-        
+
         return $this->sendResponse();
     }
 
@@ -64,7 +51,7 @@ class StatisticService extends BaseService
      * Get user statistics for a week or month
      *
      * @param int $interval
-     * 
+     *
      * @return array
      */
     public function userTimeInterval(int $interval) : array
@@ -91,9 +78,9 @@ class StatisticService extends BaseService
                             );
                         }
                     ]
-                )->get() 
+                )->get()
         ];
-        
+
         return $this->sendResponse();
     }
 }

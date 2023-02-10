@@ -1,12 +1,5 @@
 <?php
-/**
- * User controller
- * php version 8.1.2
- * 
- * @category Controllers
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
+
 namespace App\Services;
 
 use App\Http\Requests\User\ProfileEmailRequest;
@@ -15,22 +8,13 @@ use App\Http\Requests\User\ProfilePasswordRequest;
 use App\Http\Requests\User\ProfilePhoneRequest;
 use App\Http\Requests\User\UserCreateRequest;
 use App\Models\User;
-use App\Support\Helper;
+use App\Support\Classes\DataPrepare;
 
 /**
- * UserControler class
- * 
- * @method User _update(array $data)
- * @method array users()
- * @method array usersCreate(UserCreateRequest $request)
- * @method array authUser()
- * @method array updateName(ProfileNameRequest $request)
- * @method array updatePhone(ProfilePhoneRequest $request)
- * @method array updateEmail(ProfileEmailRequest $request)
- * @method array newPassword(ProfilePasswordRequest $request)
- * 
+ * UserController class
+ *
  * @category Controllers
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class UserService extends BaseService
@@ -39,11 +23,11 @@ class UserService extends BaseService
      * Update user
      *
      * @param array $data data for update user
-     * 
+     *
      * @return User
      */
     private function _update(array $data) : User
-    {   
+    {
         $user = User::find(auth()->id());
 
         $user->update($data);
@@ -71,13 +55,11 @@ class UserService extends BaseService
      * Creating a user through a barista profile
      *
      * @param UserCreateRequest $request
-     * 
+     *
      * @return array
      */
     public function userCreate(UserCreateRequest $request) : array
     {
-        $this->codeCheck($request->phone, $request->code);
-
         $this->data = [
             'user' => User::create(
                 $request->safe()->except('code')
@@ -93,11 +75,11 @@ class UserService extends BaseService
      * @return array
      */
     public function authUser() : array
-    {   
+    {
         $this->data = [
             'user' => auth()->user()
         ];
-    
+
         return $this->sendResponse();
     }
 
@@ -105,7 +87,7 @@ class UserService extends BaseService
      * Update name auth user
      *
      * @param ProfileNameRequest $request
-     * 
+     *
      * @return array
      */
     public function updateName(ProfileNameRequest $request) : array
@@ -123,13 +105,11 @@ class UserService extends BaseService
      * Update phone auth user
      *
      * @param ProfilePhoneRequest $request
-     * 
+     *
      * @return array
      */
     public function updatePhone(ProfilePhoneRequest $request) : array
     {
-        $this->codeCheck($request->phone, $request->code); 
-
         $this->data = [
             'user' => $this->_update(
                 $request->safe()->except('code')
@@ -141,15 +121,13 @@ class UserService extends BaseService
 
     /**
      * Update email auth user
-     * 
+     *
      * @param ProfileEmailRequest $request
      *
      * @return array
      */
     public function updateEmail(ProfileEmailRequest $request) : array
     {
-        $this->codeCheck($request->email, $request->code);
-
         $this->data = [
             'user' => $this->_update(
                 $request->safe()->except('code')
@@ -163,7 +141,7 @@ class UserService extends BaseService
      * Update password auth user
      *
      * @param ProfilepasswordRequest $request
-     * 
+     *
      * @return array
      */
     public function newPassword(ProfilePasswordRequest $request) : array
@@ -171,13 +149,13 @@ class UserService extends BaseService
         $user = User::find(auth()->id());
 
         $user->update(
-            Helper::hashPassword($request->validated())
+            DataPrepare::hashPassword($request->validated())
         );
 
         $this->data = [
             "message" => "Пароль изменен"
         ];
-        
+
         return $this->sendResponse();
     }
 }

@@ -1,13 +1,5 @@
 <?php
 
-/**
- * Feedback service
- * php version 8.1.2
- * 
- * @category Services
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 namespace App\Services;
 
 use App\Events\CreateFeedback;
@@ -20,29 +12,23 @@ use Illuminate\Support\Facades\Gate;
 
 /**
  * FeedbackService class
- * 
- * @method JsonResponse getFeedbacks()
- * @method JsonResponse getFeedback(Feedback $feedback)
- * @method JsonResponse getFeedbackCoffeePot(CoffeePot $coffePot)
- * @method JsonResponse create(CreateRequest $request)
- * @method JsonResponse createMessage(Feedback $feedback, CreateMessageRequest $request)
- * 
+ *
  * @category Services
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class FeedbackService extends BaseService
 {
     /**
      * Get feedbacks
-     * 
+     *
      * @return array
      */
     public function getFeedbacks() : array
     {
         $this->data = [
             'feedbacks' => Feedback::when(
-                !auth()->user()->isAdmin(),
+                !auth()->user()?->isAdmin(),
                 function ($query) {
                     return $query->where('user_id', auth()->id());
                 }
@@ -56,10 +42,10 @@ class FeedbackService extends BaseService
 
     /**
      * Get one feedback
-     * 
+     *
      * @param Feedback $feedback
-     * 
      * @return array
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function getFeedback(Feedback $feedback) : array
     {
@@ -74,16 +60,16 @@ class FeedbackService extends BaseService
 
     /**
      * Get a coffee shop feedback
-     * 
+     *
      * @param CoffeePot $coffeePot
-     * 
+     *
      * @return array
      */
     public function getFeedbackCoffeePot(CoffeePot $coffeePot) : array
     {
         $this->data = [
             'feedbacks' => Feedback::when(
-                !auth()->user()->isAdmin(),
+                !auth()->user()?->isAdmin(),
                 function ($query) {
                     return $query->where('user_id', auth()->id());
                 }
@@ -100,7 +86,7 @@ class FeedbackService extends BaseService
      * Create feedback and message
      *
      * @param CreateRequest $request object CreateRequest
-     * 
+     *
      * @return array
      */
     public function create(CreateRequest $request) : array
@@ -125,10 +111,10 @@ class FeedbackService extends BaseService
 
     /**
      * Create message for feedback
-     * 
+     *
      * @param Feedback             $feedback object Feedback
      * @param CreateMessageRequest $request  object CreateMessageRequest
-     * 
+     *
      * @return array
      */
     public function createMessage(Feedback $feedback, CreateMessageRequest $request) : array
@@ -138,7 +124,7 @@ class FeedbackService extends BaseService
         $message = $feedback->messages()->create(
             $request->validated()
         );
-        
+
         broadcast(new CreateMessage($feedback, $message, auth()->user()));
 
         $this->data = [

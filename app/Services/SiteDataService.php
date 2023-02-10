@@ -1,25 +1,14 @@
 <?php
 
-/**
- * SiteData service
- * php version 8.1.2
- * 
- * @category Services
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 namespace App\Services;
 
 use App\Models\Bonus;
 
 /**
  * SiteDataService class
- * 
- * @method JsonResponse header()
- * @method JsonResponse bonusLifetime()
- * 
+ *
  * @category Services
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class SiteDataService extends BaseService
@@ -32,7 +21,7 @@ class SiteDataService extends BaseService
     public function header() : array
     {
         $role = auth()->user()?->role->name;
-        
+
         if (!$role) {
             $role = 'guest';
         }

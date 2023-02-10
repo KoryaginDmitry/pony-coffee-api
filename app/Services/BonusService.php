@@ -1,30 +1,17 @@
 <?php
-/**
- * Bonus service
- * php version 8.1.2
- * 
- * @category Services
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- * 
- */
+
 namespace App\Services;
 
 use App\Http\Requests\Bonus\BonusRequest;
 use App\Models\Bonus;
 use App\Models\User;
-use App\Services\BaseService;
 use Carbon\Carbon;
 
 /**
  * BonusService class
- * 
- * @method array getInfoBonuses()
- * @method array create(BonusRequest $request, User $user)
- * @method array wrote(BonusRequest $request, User $user)
- * 
+ *
  * @category Services
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class BonusService extends BaseService
@@ -35,9 +22,9 @@ class BonusService extends BaseService
      * @return array
      */
     public function getInfoBonuses() : array
-    { 
+    {
         $user = User::find(auth()->id());
-        
+
         $userBonuses = $user->activeBonuses()
             ->orderBy('created_at')
             ->get();
@@ -46,7 +33,7 @@ class BonusService extends BaseService
             $dateBurnt = Carbon::create(
                 $userBonuses->pluck('created_at')->first()
             )->addDays(Bonus::getLifetime())
-            ->format("d-m-Y"); 
+            ->format("d-m-Y");
         } else {
             $dateBurnt = null;
         }
@@ -58,13 +45,13 @@ class BonusService extends BaseService
 
         return $this->sendResponse();
     }
-    
+
     /**
      * Create from 1 to 10 bonuses for the user
      *
      * @param BonusRequest $request
      * @param User         $user
-     * 
+     *
      * @return array
      */
     public function create(BonusRequest $request, User $user) : array
@@ -87,18 +74,18 @@ class BonusService extends BaseService
      *
      * @param BonusRequest $request
      * @param User         $user
-     * 
+     *
      * @return array
      */
     public function wrote(BonusRequest $request, User $user) : array
     {
         $countBonuses = Bonus::getWriteOffQuantity() * $request->count;
-        
+
         $bonuses = $user->activeBonuses()
             ->orderBy("created_at")
             ->limit($countBonuses);
-    
-        if ($bonuses->get()->count() == $countBonuses) {
+
+        if ($bonuses->get()->count() === $countBonuses) {
             $bonuses->update(
                 [
                     'usage' => '1',
@@ -112,7 +99,7 @@ class BonusService extends BaseService
 
             return $this->sendResponse();
         }
-        
+
         return $this->sendErrorResponse(['Недостаточно бонусов']);
     }
 }

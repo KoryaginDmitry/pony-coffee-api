@@ -1,40 +1,29 @@
 <?php
 
-/**
- * Notifications service
- * php version 8.1.2
- * 
- * @category Services
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 namespace App\Services;
 
 use App\Http\Requests\Notification\CreateNotificationRequest;
 use App\Mail\NewsletterMail;
 use App\Models\Notification;
 use App\Models\User;
+use App\Support\Traits\SendHttpRequest;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Http\Client\RequestException;
 
 /**
  * NotificationService class
- * 
- * @method array getUserNotifications()
- * @method array|NotFoundHttpException read(Notification $notification)
- * @method array getCount()
- * @method array getNotificationForAdmin()
- * @method array createNotification(CreateNotificationRequest $request)
- * 
+ *
  * @category Services
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class NotificationService extends BaseService
 {
+    use SendHttpRequest;
     /**
-     * Get notifications for auth user 
+     * Get notifications for auth user
      *
      * @return array
      */
@@ -57,10 +46,9 @@ class NotificationService extends BaseService
      * Read notification
      *
      * @param Notification $notification
-     * 
-     * @throws NotFoundHttpException
-     * 
      * @return array
+     * @throws NotFoundHttpException
+     *
      */
     public function read(Notification $notification) : array|NotFoundHttpException
     {
@@ -89,14 +77,14 @@ class NotificationService extends BaseService
     public function getCount() : array
     {
         $user_id = auth()->id();
-        
+
         $this->data = [
             'count' => Notification::where("site", "1")
                 ->whereNull("users_read_id")
                 ->orWhere("users_read_id", "NOT LIKE", "%[$user_id]%")
                 ->count()
         ];
-    
+
         return $this->sendResponse();
     }
 
@@ -118,8 +106,8 @@ class NotificationService extends BaseService
      * Create notification
      *
      * @param CreateNotificationRequest $request
-     * 
      * @return array
+     * @throws RequestException
      */
     public function createNotification(CreateNotificationRequest $request) : array
     {
@@ -127,13 +115,7 @@ class NotificationService extends BaseService
             $botToken = config('services.telegram.bot_token');
             $chat_id = config('services.telegram.channel_id');
 
-            if (!$botToken || !$chat_id) {
-                return $this->sendErrorResponse(
-                    ['Необходимо настроить данные для отправки сообщений через telegram']
-                );
-            }
-
-            $this->sendHttpRequest(
+            $this->sendRequest(
                 "https://api.telegram.org/bot$botToken/sendMessage",
                 [
                     'chat_id' => $chat_id,
@@ -146,10 +128,10 @@ class NotificationService extends BaseService
             $users = User::where('role_id', 3)
                 ->whereNotNull('email_verified_at')
                 ->get();
-            
+
             Mail::to($users)->send(new NewsletterMail($request->text));
         }
-    
+
         $this->data = [
             'notification' => Notification::create(
                 $request->validated()
