@@ -1,12 +1,12 @@
 version: '3.7'
 
 networks:
-  PonyCoffee:
+  projectNetwork:
     driver: bridge
 
 services:
   nginx:
-    build: 
+    build:
       context: .
       dockerfile: docker/Nginx.Dockerfile
     ports:
@@ -14,8 +14,8 @@ services:
     volumes:
       - ./:/var/www/PonyCoffee
     networks:
-      - PonyCoffee 
-    container_name: PCNginx
+      - projectNetwork
+    container_name: PC_Nginx
     depends_on:
       - app
 
@@ -27,9 +27,13 @@ services:
     working_dir: /var/www/PonyCoffee
     volumes:
       - ./:/var/www/PonyCoffee
+    extra_hosts:
+        -   "host.docker.internal:host-gateway"
+    environment:
+        PHP_IDE_CONFIG: serverName=Docker
     networks:
-      - PonyCoffee
-    container_name: PCApp
+      - projectNetwork
+    container_name: PC_App
     depends_on:
       - mysql
 
@@ -43,5 +47,15 @@ services:
       MYSQL_DATABASE: laravel
       MYSQL_ROOT_PASSWORD: password12345
     networks:
-      - PonyCoffee
-    container_name: PCMysql
+      - projectNetwork
+    container_name: PC_Mysql
+
+  redis:
+      image: redis:latest
+      ports:
+          - 6379:6479
+      volumes:
+          -   ./tmp/redis:/var/lib/redis
+      networks:
+          - projectNetwork
+      container_name: PC_Redis
