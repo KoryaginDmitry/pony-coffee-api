@@ -1,12 +1,5 @@
 <?php
-/**
- * SiteData controller
- * php version 8.1.2
- * 
- * @category Controllers
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
+
 namespace App\Http\Controllers;
 
 use App\Services\SiteDataService;
@@ -14,12 +7,9 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * SiteDataController class
- * 
- * @method JsonResponse header()
- * @method JsonResponse bonusLifetime()
- * 
+ *
  * @category Controllers
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class SiteDataController extends BaseController
@@ -27,13 +17,13 @@ class SiteDataController extends BaseController
     /**
      * Service connection
      *
-     * @param HomeService $service
+     * @param SiteDataService $service
      */
     public function __construct(protected SiteDataService $service)
     {
-        
+
     }
-    
+
     /**
      * Get header for role user
      *

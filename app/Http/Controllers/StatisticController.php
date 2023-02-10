@@ -1,13 +1,5 @@
 <?php
 
-/**
- * Statistic controller
- * php version 8.1.2
- * 
- * @category Controllers
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 namespace App\Http\Controllers;
 
 use App\Services\StatisticService;
@@ -15,13 +7,9 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * StatisticController class
- * 
- * @method JsonResponse barista()
- * @method JsonResponse user()
- * @method JsonResponse userTimeInterval(int interval)
- * 
+ *
  * @category Controllers
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class StatisticController extends BaseController
@@ -33,9 +21,9 @@ class StatisticController extends BaseController
      */
     public function __construct(protected StatisticService $service)
     {
-        
+
     }
-    
+
     /**
      * Get statistic baristas
      *
@@ -59,12 +47,12 @@ class StatisticController extends BaseController
             $this->service->user()
         );
     }
-    
+
     /**
      * Get user statistics for a week or month
      *
      * @param integer $interval
-     * 
+     *
      * @return JsonResponse
      */
     public function userTimeInterval(int $interval) : JsonResponse

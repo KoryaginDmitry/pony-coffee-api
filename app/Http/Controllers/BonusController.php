@@ -1,12 +1,5 @@
 <?php
-/**
- * Bonus controller
- * php version 8.1.2
- * 
- * @category Controllers
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Bonus\BonusRequest;
@@ -16,13 +9,9 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * BonusController class
- * 
- * @method JsonResponse getInfoBonuses()
- * @method JsonResponse create(BonusRequest $request, User $user)
- * @method JsonResponse wrote(BonusRequest $request, User $user)
- * 
+ *
  * @category Controllers
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class BonusController extends BaseController
@@ -34,7 +23,7 @@ class BonusController extends BaseController
      */
     public function __construct(protected BonusService $service)
     {
-        
+
     }
 
     /**
@@ -54,7 +43,7 @@ class BonusController extends BaseController
      *
      * @param BonusRequest $request
      * @param User         $user
-     * 
+     *
      * @return jsonResponse
      */
     public function create(BonusRequest $request, User $user) : JsonResponse
@@ -69,7 +58,7 @@ class BonusController extends BaseController
      *
      * @param BonusRequest $request
      * @param User         $user
-     * 
+     *
      * @return JsonResponse
      */
     public function wrote(BonusRequest $request, User $user) : JsonResponse

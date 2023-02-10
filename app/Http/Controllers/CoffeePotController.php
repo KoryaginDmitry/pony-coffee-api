@@ -1,12 +1,4 @@
 <?php
-/**
- * CoffeePotController class
- * php version 8.1.2
- * 
- * @category Controllers
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 
 namespace App\Http\Controllers;
 
@@ -17,15 +9,9 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * CoffeePotController class
- * 
- * @method JsonResponse getCoffeePots()
- * @method JsonResponse getCoffeePot(CoffeePot $coffeePot)
- * @method JsonResponse create(CoffeePotRequest $request)
- * @method JsonResponse update(CoffeePot $coffeePot, CoffeePotRequest $request)
- * @method JsonResponse delete(CoffeePot $coffeePot)
- * 
+ *
  * @category Controllers
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class CoffeePotController extends BaseController
@@ -37,7 +23,7 @@ class CoffeePotController extends BaseController
      */
     public function __construct(protected CoffeePotService $service)
     {
-        
+
     }
 
     /**
@@ -56,7 +42,7 @@ class CoffeePotController extends BaseController
      * Gets one coffee shop
      *
      * @param CoffeePot $coffeePot
-     * 
+     *
      * @return JsonResponse
      */
     public function getCoffeePot(CoffeePot $coffeePot) : JsonResponse
@@ -70,7 +56,7 @@ class CoffeePotController extends BaseController
      * Create coffee shop
      *
      * @param CoffeePotRequest $request
-     * 
+     *
      * @return JsonResponse
      */
     public function create(CoffeePotRequest $request) : JsonResponse
@@ -85,11 +71,11 @@ class CoffeePotController extends BaseController
      *
      * @param CoffeePot        $coffeePot
      * @param CoffeePotRequest $request
-     * 
+     *
      * @return JsonResponse
      */
     public function update(CoffeePot $coffeePot, CoffeePotRequest $request) : JsonResponse
-    {   
+    {
         return $this->sendResponse(
             $this->service->update($coffeePot, $request)
         );
@@ -99,7 +85,7 @@ class CoffeePotController extends BaseController
      * Delete coffee shop
      *
      * @param CoffeePot $coffeePot
-     * 
+     *
      * @return JsonResponse
      */
     public function delete(CoffeePot $coffeePot) : JsonResponse

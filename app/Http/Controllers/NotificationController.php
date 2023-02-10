@@ -1,12 +1,5 @@
 <?php
-/**
- * Notifications controller
- * php version 8.1.2
- * 
- * @category Controllers
- * 
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Notification\CreateNotificationRequest;
@@ -16,15 +9,9 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * NotificationController class
- *  
- * @method JsonResponse getUserNotifications()
- * @method JsonResponse read(Notifiction $notifiction)
- * @method JsonResponse getCount()
- * @method JsonResponse getNotificationForAdmin()
- * @method JsonResponse createNotification(CreateNotificationRequest $request)
- * 
+ *
  * @category Controllers
- * 
+ *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
 class NotificationController extends BaseController
@@ -36,16 +23,16 @@ class NotificationController extends BaseController
      */
     public function __construct(protected NotificationService $service)
     {
-        
+
     }
-    
+
     /**
      * Get notifications for auth user
      *
      * @return JsonResponse
      */
     public function getUserNotifications() : JsonResponse
-    {   
+    {
         return $this->sendResponse(
             $this->service->getUserNotifications()
         );
@@ -54,12 +41,12 @@ class NotificationController extends BaseController
     /**
      * Read notification
      *
-     * @param Notifiction $notification
-     * 
+     * @param Notification $notification
+     *
      * @return JsonResponse
      */
     public function read(Notification $notification) : JsonResponse
-    {   
+    {
         return $this->sendResponse(
             $this->service->read($notification)
         );
@@ -71,7 +58,7 @@ class NotificationController extends BaseController
      * @return JsonResponse
      */
     public function getCount() : JsonResponse
-    {   
+    {
         return $this->sendResponse(
             $this->service->getCount()
         );
@@ -93,7 +80,7 @@ class NotificationController extends BaseController
      * Create notification
      *
      * @param CreateNotificationRequest $request
-     * 
+     *
      * @return JsonResponse
      */
     public function createNotification(CreateNotificationRequest $request) : JsonResponse
