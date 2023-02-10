@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Support\Classes\ErrorResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -50,18 +52,11 @@ class Handler extends ExceptionHandler
                 //
             }
         );
-        
+
         $this->renderable(
             function (NotFoundHttpException $e, $request) {
                 if ($request->wantsJson()) {
-                    return response()->json(
-                        [
-                            'errors' => [
-                                'message' => 'Страница не существует'
-                            ],
-                        ],
-                        404
-                    );
+                    return ErrorResponse::sendErrorResponse('Страница не существует', 404);
                 }
             }
         );
@@ -69,14 +64,16 @@ class Handler extends ExceptionHandler
         $this->renderable(
             function (ValidationException $e, $request) {
                 if ($request->wantsJson()) {
-                    return response()->json(
-                        [
-                            'errors' => [
-                                'messages' => $e->validator->errors()->all()
-                            ],
-                        ],
-                        422
-                    );
+                    return ErrorResponse::sendErrorResponse($e->validator->errors()->all(), 404);
+                }
+            }
+        );
+
+        $this->renderable(
+            function (RequestException $e, $request) {
+                if ($request->wantsJson()) {
+                    return ErrorResponse::sendErrorResponse(
+                        $e->response->json()['description'], $e->response->status());
                 }
             }
         );

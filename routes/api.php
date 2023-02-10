@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\SendCodeController;
 use App\Http\Controllers\BaristaProfileController;
 use App\Http\Controllers\BonusController;
-use App\Http\Controllers\CodeVerificateController;
 use App\Http\Controllers\CoffeePotController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SiteDataController;
 use App\Http\Controllers\StatisticController;
-use App\Http\Controllers\UserControler;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,31 +24,38 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['guest', 'reCaptcha', 'api_session'])->group(
+Route::middleware(['guest', 'reCaptcha'])->group(
     function () {
         Route::controller(AuthController::class)->group(
             function () {
                 //Login with phone and password
-                Route::post('/login', 'login')->withoutMiddleware('api_session');
+                Route::post('/login', 'login')
+                    ->withoutMiddleware('reCaptcha');
                 //Login with phone and code
-                Route::post('login/phone', 'phonelogin');
+                Route::post('login/phone', 'phoneLogin')
+                    ->middleware('codeVerification');
                 //Login with email and code
-                Route::post('/email/login', 'emailLogin');
-                Route::post('/register', 'register');
+                Route::post('/email/login', 'emailLogin')
+                    ->middleware('codeVerification:email');
+                Route::post('/register', 'register')
+                    ->middleware('codeVerification');
             }
         );
 
-        Route::controller(CodeVerificateController::class)->group(
+        Route::controller(SendCodeController::class)->group(
             function () {
                 //Call to get a login code by phone
-                Route::post('/login/call', 'call')->name('sendloginCode');
+                Route::post('/login/call', 'call')->name('sendLoginCode');
                 //receive code by email
                 Route::post('login/email/code', 'sendEmailCode');
+            }
+        );
+
+        Route::controller(ResetPasswordController::class)->group(
+            function () {
                 //get a password reset link
-                Route::post('forgot-password', 'forgotPassword')
-                    ->withoutMiddleware('api_session');
-                Route::post('reset-password', 'resetPassword')
-                    ->withoutMiddleware('api_session');
+                Route::post('forgot-password', 'forgotPassword');
+                Route::post('reset-password', 'resetPassword');
             }
         );
     }
@@ -55,24 +63,24 @@ Route::middleware(['guest', 'reCaptcha', 'api_session'])->group(
 
 Route::middleware('role:user,admin')->group(
     function () {
-        Route::controller(UserControler::class)->group(
+        Route::controller(UserController::class)->group(
             function () {
                 //gets a profile auth user
                 Route::get("/profile", 'authUser');
                 Route::put('profile/name', 'updateName');
                 Route::put('profile/phone', 'updatePhone')
-                    ->middleware(['api_session', 'reCaptcha']);
-                
+                    ->middleware(['reCaptcha', 'codeVerification']);
+
                 Route::put('profile/email', 'updateEmail')
-                    ->middleware(['api_session', 'reCaptcha']);
-                
+                    ->middleware('codeVerification:email');
+
                 Route::put("/profile/password", 'newPassword');
             }
-        );  
+        );
         //sends verification code to email
-        Route::post('/mail/verificate/code', [CodeVerificateController::class, 'sendEmailCode'])
-            ->middleware(['api_session', 'reCaptcha'])
-            ->name('verificateEmail');
+        Route::post('/mail/verification/code', [SendCodeController::class, 'sendEmailCode'])
+            //->middleware('reCaptcha')
+            ->name('verificationEmail');
     }
 );
 
@@ -120,7 +128,7 @@ Route::middleware('role:barista')->group(
             }
         );
 
-        Route::controller(UserControler::class)->group(
+        Route::controller(UserController::class)->group(
             function () {
                 //get all users
                 Route::get('/users', 'users');
@@ -135,7 +143,7 @@ Route::middleware('role:admin')->group(
     function () {
         Route::controller(StatisticController::class)->group(
             function () {
-                //get data for statsitic baristas
+                //get data for statistic baristas
                 Route::get('/statistic', 'barista');
                 //get data for statistic users
                 Route::get('statistic/users', 'user');
@@ -151,7 +159,7 @@ Route::middleware('role:admin')->group(
                 Route::get("admin/feedback", 'getFeedbacks');
                 //get one feedback
                 Route::get("admin/feedback/{feedback}", 'getFeedback');
-                //get all feedback on the coffee shop 
+                //get all feedback on the coffee shop
                 Route::get("admin/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
                 //create message for feedback
                 Route::post('admin/feedback/{feedback}', 'createMessage');
@@ -209,9 +217,9 @@ Route::controller(SiteDataController::class)->group(
 //get all coffeePot
 Route::get('coffeePot', [CoffeePotController::class, 'getCoffeePots']);
 
-//sends verification code to phone 
-Route::post('/call', [CodeVerificateController::class, 'call'])
-->middleware(['api_session', 'reCaptcha']);
+//sends verification code to phone
+Route::post('/call', [SendCodeController::class, 'call'])
+    ->middleware('reCaptcha');
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth:api');

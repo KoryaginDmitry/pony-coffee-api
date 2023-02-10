@@ -111,7 +111,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Helper files to include
+    | DataPrepare files to include
     |--------------------------------------------------------------------------
     |
     | Include helper files. By default not included, but can be toggled with the

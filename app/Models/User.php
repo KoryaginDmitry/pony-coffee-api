@@ -29,7 +29,7 @@ use Laravel\Passport\HasApiTokens;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * 
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $bonuses
  * @property-read int|null $bonuses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bonus[] $bonusesCreate
@@ -50,7 +50,7 @@ use Laravel\Passport\HasApiTokens;
  * @property-read int|null $burnt_bonuses_count
  * @property-read Collection|\App\Models\Bonus[] $usingBonuses
  * @property-read int|null $using_bonuses_count
- * 
+ *
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -70,7 +70,7 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin  \Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -174,7 +174,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get bonuses created by this user 
+     * Get bonuses created by this user
      *
      * @return HasMany
      */
@@ -202,7 +202,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(UserCoffeePot::class);
     }
-    
+
     /**
      * Check if the user is an admin
      *
