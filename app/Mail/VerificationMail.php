@@ -9,7 +9,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class VerificateMail extends Mailable implements ShouldQueue
+/**
+ * VerificationMail class
+ *
+ * @category Mail
+ *
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
+ */
+class VerificationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 

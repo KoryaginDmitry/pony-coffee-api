@@ -9,6 +9,13 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * NewsletterMail class
+ *
+ * @category Mail
+ *
+ * @author DmitryKoryagin <kor.dima97@mail.ru>
+ */
 class NewsletterMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
