@@ -210,11 +210,7 @@ class User extends Authenticatable
      */
     public function isAdmin() : bool
     {
-        if (auth()->user()?->role->name === 'admin') {
-            return true;
-        }
-
-        return false;
+        return auth()->user()?->role->name === 'admin';
     }
 
     /**
@@ -224,11 +220,7 @@ class User extends Authenticatable
      */
     public function isBarista() : bool
     {
-        if (auth()->user()?->role->name === 'barista') {
-            return true;
-        }
-
-        return false;
+        return auth()->user()?->role->name === 'barista';
     }
 
     /**
@@ -238,10 +230,6 @@ class User extends Authenticatable
      */
     public function isUser() : bool
     {
-        if (auth()->user()?->role->name === 'user') {
-            return true;
-        }
-
-        return false;
+        return auth()->user()?->role->name === 'user';
     }
 }
