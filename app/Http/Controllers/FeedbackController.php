@@ -7,6 +7,7 @@ use App\Http\Requests\Feedback\CreateRequest;
 use App\Models\CoffeePot;
 use App\Models\Feedback;
 use App\Services\FeedbackService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -46,6 +47,7 @@ class FeedbackController extends BaseController
      * @param Feedback $feedback
      *
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getFeedback(Feedback $feedback) : JsonResponse
     {
@@ -88,6 +90,7 @@ class FeedbackController extends BaseController
      * @param Feedback             $feedback
      * @param CreateMessageRequest $request
      *
+     * @throws AuthorizationException
      * @return JsonResponse
      */
     public function createMessage(Feedback $feedback, CreateMessageRequest $request) : JsonResponse

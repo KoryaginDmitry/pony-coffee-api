@@ -46,11 +46,12 @@ class NotificationService extends BaseService
      * Read notification
      *
      * @param Notification $notification
+     *
      * @return array
      * @throws NotFoundHttpException
      *
      */
-    public function read(Notification $notification) : array|NotFoundHttpException
+    public function read(Notification $notification) : array
     {
         $user_id = auth()->id();
 
@@ -106,8 +107,8 @@ class NotificationService extends BaseService
      * Create notification
      *
      * @param CreateNotificationRequest $request
-     * @return array
      * @throws RequestException
+     * @return array
      */
     public function createNotification(CreateNotificationRequest $request) : array
     {

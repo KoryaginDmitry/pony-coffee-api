@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Notification\CreateNotificationRequest;
 use App\Models\Notification;
 use App\Services\NotificationService;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -80,7 +81,7 @@ class NotificationController extends BaseController
      * Create notification
      *
      * @param CreateNotificationRequest $request
-     *
+     * @throws RequestException
      * @return JsonResponse
      */
     public function createNotification(CreateNotificationRequest $request) : JsonResponse

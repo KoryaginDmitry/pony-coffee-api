@@ -9,6 +9,7 @@ use App\Http\Requests\Feedback\CreateRequest;
 use App\Models\CoffeePot;
 use App\Models\Feedback;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\AuthorizationException;
 
 /**
  * FeedbackService class
@@ -45,7 +46,7 @@ class FeedbackService extends BaseService
      *
      * @param Feedback $feedback
      * @return array
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function getFeedback(Feedback $feedback) : array
     {
@@ -85,7 +86,7 @@ class FeedbackService extends BaseService
     /**
      * Create feedback and message
      *
-     * @param CreateRequest $request object CreateRequest
+     * @param CreateRequest $request
      *
      * @return array
      */
@@ -112,8 +113,10 @@ class FeedbackService extends BaseService
     /**
      * Create message for feedback
      *
-     * @param Feedback             $feedback object Feedback
-     * @param CreateMessageRequest $request  object CreateMessageRequest
+     * @param Feedback             $feedback
+     * @param CreateMessageRequest $request
+     *
+     * @throws AuthorizationException
      *
      * @return array
      */
@@ -125,7 +128,7 @@ class FeedbackService extends BaseService
             $request->validated()
         );
 
-        broadcast(new CreateMessage($message, $feedback, auth()->user()->isAdmin()));
+        broadcast(new CreateMessage($message, $feedback, auth()->user()?->isAdmin()));
 
         $this->data = [
             'message' => $message
