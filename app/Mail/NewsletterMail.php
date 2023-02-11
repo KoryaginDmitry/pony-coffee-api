@@ -20,7 +20,10 @@ class NewsletterMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $text;
+    /**
+     * @var string
+     */
+    public string $text;
 
     /**
      * Create a new message instance.
@@ -35,9 +38,9 @@ class NewsletterMail extends Mailable implements ShouldQueue
     /**
      * Get the message envelope.
      *
-     * @return \Illuminate\Mail\Mailables\Envelope
+     * @return Envelope
      */
-    public function envelope()
+    public function envelope() : Envelope
     {
         return new Envelope(
             subject: 'Рассылка',
@@ -47,9 +50,9 @@ class NewsletterMail extends Mailable implements ShouldQueue
     /**
      * Get the message content definition.
      *
-     * @return \Illuminate\Mail\Mailables\Content
+     * @return Content
      */
-    public function content()
+    public function content() : Content
     {
         return new Content(
             view: 'mail.message',
@@ -61,7 +64,7 @@ class NewsletterMail extends Mailable implements ShouldQueue
      *
      * @return array
      */
-    public function attachments()
+    public function attachments() : array
     {
         return [];
     }

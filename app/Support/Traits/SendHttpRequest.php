@@ -2,7 +2,6 @@
 
 namespace App\Support\Traits;
 
-use App\Exceptions\RequestExecutionErrorException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\RequestException;
 
@@ -25,10 +24,10 @@ trait SendHttpRequest
      *
      * @param string $url
      * @param array $data
-     * @return bool|RequestExecutionErrorException
+     * @return bool
      * @throws RequestException
      */
-    public function sendRequest(string $url, array $data) : bool|RequestException
+    public function sendRequest(string $url, array $data) : bool
     {
         $response = Http::acceptJson()
             ->get($url, $data)

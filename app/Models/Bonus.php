@@ -16,11 +16,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $usage
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * 
+ *
  * @property-read string $burnt
  * @property-read string $create_date
  * @property-read string $update_date
- * 
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bonus query()
@@ -90,17 +90,17 @@ class Bonus extends Model
      * @return string
      */
     public function getBurntAttribute() : string
-    {   
+    {
         $dateDiff = Carbon::now()
             ->diffInDays(
                 Carbon::create($this->attributes['created_at'])
             );
-        
-        return $this->attributes['date'] = !$dateDiff > self::getLifetime();
+
+        return $this->attributes['date'] = !($dateDiff > self::getLifetime());
     }
 
     /**
-     * Get lifitime bonus
+     * Get lifetime bonus
      *
      * @return int
      */

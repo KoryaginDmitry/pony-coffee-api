@@ -8,11 +8,11 @@ use Illuminate\Contracts\Validation\InvokableRule;
 class AtLeastOneIsActive implements DataAwareRule, InvokableRule
 {
     /**
-     * All of the data under validation.
+     * All the data under validation.
      *
      * @var array
      */
-    protected $data = [];
+    protected array $data = [];
 
     /**
      * Run the validation rule.
@@ -44,7 +44,7 @@ class AtLeastOneIsActive implements DataAwareRule, InvokableRule
     public function setData($data)
     {
         $this->data = $data;
- 
+
         return $this;
     }
 }

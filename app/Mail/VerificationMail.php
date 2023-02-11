@@ -20,14 +20,17 @@ class VerificationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $code;
+    /**
+     * @var int
+     */
+    public int $code;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $code)
+    public function __construct(int $code)
     {
         $this->code = $code;
     }
@@ -35,9 +38,9 @@ class VerificationMail extends Mailable implements ShouldQueue
     /**
      * Get the message envelope.
      *
-     * @return \Illuminate\Mail\Mailables\Envelope
+     * @return Envelope
      */
-    public function envelope()
+    public function envelope() : Envelope
     {
         return new Envelope(
             subject: 'Подтверждение почты',
@@ -47,12 +50,12 @@ class VerificationMail extends Mailable implements ShouldQueue
     /**
      * Get the message content definition.
      *
-     * @return \Illuminate\Mail\Mailables\Content
+     * @return Content
      */
-    public function content()
+    public function content() : Content
     {
         return new Content(
-            view: 'mail.verificate',
+            view: 'mail.verification',
         );
     }
 
@@ -61,7 +64,7 @@ class VerificationMail extends Mailable implements ShouldQueue
      *
      * @return array
      */
-    public function attachments()
+    public function attachments() : array
     {
         return [];
     }

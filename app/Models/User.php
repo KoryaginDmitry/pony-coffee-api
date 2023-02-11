@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -214,7 +213,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user is an barista
+     * Check if the user is a barista
      *
      * @return boolean
      */
@@ -224,7 +223,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user is an user
+     * Check if the user is a user
      *
      * @return boolean
      */
