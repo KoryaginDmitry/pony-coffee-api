@@ -3,82 +3,72 @@
 namespace App\Events;
 
 use App\Models\Feedback;
-use App\Models\Message;
-use App\Models\User;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\Channel;
 
 class CreateMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Event type to distribute to front-end
-     *
-     * @var string
-     */
-    public $type;
-
-    /**
      * Message to be sent
      *
-     * @var Message
+     * @var Model
      */
-    public $message;
+    public Model $message;
 
     /**
-     * Feedback
+     * Auth user id
      *
      * @var Feedback
      */
-    public $feedback;
+    public Feedback $feedback;
 
     /**
-     * Auth user
+     * The user who sent the message is an admin or not
      *
-     * @var User
+     * @var bool
      */
-    public $user;
+    public bool $isAdmin;
 
     /**
      * The name of the queue on which to place the broadcasting job.
      *
      * @var string
      */
-    public $queue = 'default';
+    public string $queue = 'default';
 
     /**
      * Construct
      *
+     * @param Model    $message
      * @param Feedback $feedback
-     * @param Message  $message
-     * @param User $user
+     * @param bool     $isAdmin
      */
-    public function __construct(Feedback $feedback, Message $message, User $user)
+    public function __construct(Model $message, Feedback $feedback, bool $isAdmin)
     {
-        $this->type = 'message';
         $this->message = $message;
         $this->feedback = $feedback;
-        $this->user = $user;
+        $this->isAdmin = $isAdmin;
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
-    public function broadcastOn()
+    public function broadcastOn() : Channel|array
     {
-        if ($this->user->role_id == 3) {
-            return new PrivateChannel('admin');
+        if ($this->isAdmin) {
+            return new PrivateChannel('message.user.' . $this->feedback->user_id);
         }
 
-        return new PrivateChannel('user.' . $this->feedback->user_id);
+        return new PrivateChannel('message.admin');
     }
 
     /**
@@ -86,12 +76,10 @@ class CreateMessage implements ShouldBroadcast
      *
      * @return array
      */
-    public function broadcastWith()
+    public function broadcastWith() : array
     {
         return [
-            'type' => $this->type,
             'message' => $this->message,
-            'feedback_id' => $this->feedback->id
         ];
     }
 }

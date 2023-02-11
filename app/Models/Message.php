@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $belongToAuthUser
- * 
+ *
  * @property-read int $belong_to_auth_user
- * 
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Message newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message query()
@@ -53,7 +53,6 @@ class Message extends Model
     protected $hidden = [
         'id',
         'user_id',
-        'feedback_id',
         'updated_at'
     ];
 

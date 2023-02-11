@@ -3,13 +3,12 @@
 namespace App\Events;
 
 use App\Models\Feedback;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\Channel;
 
 class CreateFeedback implements ShouldBroadcast
 {
@@ -20,42 +19,41 @@ class CreateFeedback implements ShouldBroadcast
      *
      * @var string
      */
-    public $type;
-    
+    public string $type;
+
     /**
      * Feedback and first message
      *
      * @var Feedback
      */
-    public $feedback;
+    public Feedback $feedback;
 
     /**
      * The name of the queue on which to place the broadcasting job.
      *
      * @var string
      */
-    public $queue = 'default';
+    public string $queue = 'default';
 
     /**
      * Create a new event instance.
      *
      * @param Feedback $feedback
-     * 
+     *
      * @return void
      */
     public function __construct(Feedback $feedback)
     {
-        $this->type = 'feedback';
         $this->feedback = $feedback;
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
-    public function broadcastOn()
+    public function broadcastOn() : Channel|array
     {
-        return new PrivateChannel('admin');
+        return new PrivateChannel('feedback.admin');
     }
 }

@@ -125,7 +125,7 @@ class FeedbackService extends BaseService
             $request->validated()
         );
 
-        broadcast(new CreateMessage($feedback, $message, auth()->user()));
+        broadcast(new CreateMessage($message, $feedback, auth()->user()->isAdmin()));
 
         $this->data = [
             'message' => $message
