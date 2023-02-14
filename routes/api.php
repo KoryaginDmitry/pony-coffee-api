@@ -225,4 +225,4 @@ Route::post('/call', [SendCodeController::class, 'call'])
     ->middleware('reCaptcha');
 
 Route::post('/logout', [AuthController::class, 'logout'])
-    ->middleware('auth:api');
+    ->middleware('auth');
