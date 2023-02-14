@@ -26,7 +26,7 @@ class FeedbackService extends BaseService
      *
      * @return array
      */
-    public function getFeedbacks() : array
+    public function getFeedbacks(): array
     {
         $this->data = [
             'feedbacks' => Feedback::when(
@@ -35,19 +35,28 @@ class FeedbackService extends BaseService
                     return $query->where('user_id', auth()->id());
                 }
             )
-            ->with(['messages', 'coffeePot', 'user'])
-            ->get()
+                ->with(['messages', 'coffeePot', 'user'])
+                ->get()
         ];
 
         return $this->sendResponse();
     }
 
-    public function getShortFeedbackInfo() : array
+    public function getShortFeedbackInfo(): array
     {
         $this->data = [
             'users' => User::whereHas('feedbacks')
                 ->with('lastMessage')
                 ->get()
+        ];
+
+        return $this->sendResponse();
+    }
+
+    public function getUserFeedbacks(User $user)
+    {
+        $this->data = [
+            'user' => $user->fresh(['feedbacks', 'feedbacks.messages'])
         ];
 
         return $this->sendResponse();

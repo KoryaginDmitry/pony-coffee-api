@@ -159,7 +159,7 @@ Route::middleware('role:admin')->group(
                 //get all users and last message
                 Route::get("admin/feedbacks", 'getFeedbacks');
                 //get all feedbacks of user
-                Route::get('admin/feedbacks/user/{user}', 'getUserAllFeedbacks');
+                Route::get('admin/feedbacks/user/{user}', 'getUserFeedbacks');
                 //get one feedback
                 Route::get("admin/feedback/{feedback}", 'getFeedback');
                 //get all feedback on the coffee shop

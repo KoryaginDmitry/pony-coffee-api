@@ -6,6 +6,7 @@ use App\Http\Requests\Feedback\CreateMessageRequest;
 use App\Http\Requests\Feedback\CreateRequest;
 use App\Models\CoffeePot;
 use App\Models\Feedback;
+use App\Models\User;
 use App\Services\FeedbackService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -45,6 +46,13 @@ class FeedbackController extends BaseController
     {
         return $this->sendResponse(
             $this->service->getShortFeedbackInfo()
+        );
+    }
+
+    public function getUserFeedbacks(User $user)
+    {
+        return $this->sendResponse(
+            $this->service->getUserFeedbacks($user)
         );
     }
 
