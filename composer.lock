@@ -7271,16 +7271,16 @@
         },
         {
             "name": "vonage/client-core",
-            "version": "4.0.6",
+            "version": "4.0.7",
             "source": {
                 "type": "git",
                 "url": "git@github.com:Vonage/vonage-php-sdk-core.git",
-                "reference": "c4e668837e4103f1439028ee7cb69678d9324e35"
+                "reference": "5a2ac50e5281ae3791ee464c065ae55a5f5cba6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vonage/vonage-php-sdk-core/zipball/c4e668837e4103f1439028ee7cb69678d9324e35",
-                "reference": "c4e668837e4103f1439028ee7cb69678d9324e35",
+                "url": "https://api.github.com/repos/Vonage/vonage-php-sdk-core/zipball/5a2ac50e5281ae3791ee464c065ae55a5f5cba6f",
+                "reference": "5a2ac50e5281ae3791ee464c065ae55a5f5cba6f",
                 "shasum": ""
             },
             "require": {
@@ -7330,7 +7330,7 @@
                 "issues": "https://github.com/Vonage/vonage-php-sdk-core/issues",
                 "source": "https://github.com/Vonage/vonage-php-sdk-core"
             },
-            "time": "2023-02-10T11:18:40+00:00"
+            "time": "2023-02-13T11:06:08+00:00"
         },
         {
             "name": "vonage/nexmo-bridge",
@@ -10368,5 +10368,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }

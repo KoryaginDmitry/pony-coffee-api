@@ -8,6 +8,7 @@ use App\Http\Requests\Feedback\CreateMessageRequest;
 use App\Http\Requests\Feedback\CreateRequest;
 use App\Models\CoffeePot;
 use App\Models\Feedback;
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 
@@ -36,6 +37,17 @@ class FeedbackService extends BaseService
             )
             ->with(['messages', 'coffeePot', 'user'])
             ->get()
+        ];
+
+        return $this->sendResponse();
+    }
+
+    public function getShortFeedbackInfo() : array
+    {
+        $this->data = [
+            'users' => User::whereHas('feedbacks')
+                ->with('lastMessage')
+                ->get()
         ];
 
         return $this->sendResponse();

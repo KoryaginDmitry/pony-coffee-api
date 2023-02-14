@@ -41,6 +41,13 @@ class FeedbackController extends BaseController
         );
     }
 
+    public function shortsFeedbacks()
+    {
+        return $this->sendResponse(
+            $this->service->getShortFeedbackInfo()
+        );
+    }
+
     /**
      * Gets one feedback
      *

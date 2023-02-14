@@ -203,6 +203,28 @@ class User extends Authenticatable
     }
 
     /**
+     * Relationship
+     *
+     * @return HasMany
+     */
+    public function feedbacks() : HasMany
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
+    /**
+     * Return last message
+     *
+     * @return HasOne
+     */
+    public function lastMessage() : HasOne
+    {
+        return $this->hasOne(Message::class)
+            ->orderBy('created_at', 'DESC')
+            ->limit(1);
+    }
+
+    /**
      * Check if the user is an admin
      *
      * @return boolean
