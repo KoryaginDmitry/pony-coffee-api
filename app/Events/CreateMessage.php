@@ -16,27 +16,6 @@ class CreateMessage implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Message to be sent
-     *
-     * @var Model
-     */
-    public Model $message;
-
-    /**
-     * Auth user id
-     *
-     * @var Feedback
-     */
-    public Feedback $feedback;
-
-    /**
-     * The user who sent the message is an admin or not
-     *
-     * @var bool
-     */
-    public bool $isAdmin;
-
-    /**
      * The name of the queue on which to place the broadcasting job.
      *
      * @var string
@@ -50,11 +29,11 @@ class CreateMessage implements ShouldBroadcast
      * @param Feedback $feedback
      * @param bool     $isAdmin
      */
-    public function __construct(Model $message, Feedback $feedback, bool $isAdmin)
+    public function __construct(
+        public Model $message,
+        public Feedback $feedback,
+        public bool $isAdmin)
     {
-        $this->message = $message;
-        $this->feedback = $feedback;
-        $this->isAdmin = $isAdmin;
     }
 
     /**
@@ -81,5 +60,13 @@ class CreateMessage implements ShouldBroadcast
         return [
             'message' => $this->message,
         ];
+    }
+
+    /**
+     * The event's broadcast name.
+     */
+    public function broadcastAs(): string
+    {
+        return 'message';
     }
 }

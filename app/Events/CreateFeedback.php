@@ -15,13 +15,6 @@ class CreateFeedback implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Feedback and first message
-     *
-     * @var Feedback
-     */
-    public Feedback $feedback;
-
-    /**
      * The name of the queue on which to place the broadcasting job.
      *
      * @var string
@@ -35,9 +28,8 @@ class CreateFeedback implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Feedback $feedback)
+    public function __construct(public Feedback $feedback)
     {
-        $this->feedback = $feedback;
     }
 
     /**
@@ -48,5 +40,13 @@ class CreateFeedback implements ShouldBroadcast
     public function broadcastOn() : Channel|array
     {
         return new PrivateChannel('feedback.admin');
+    }
+
+    /**
+     * The event's broadcast name.
+     */
+    public function broadcastAs(): string
+    {
+        return 'feedback';
     }
 }
