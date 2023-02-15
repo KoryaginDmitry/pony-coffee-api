@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Code\EmailReqeust;
+use App\Http\Requests\Code\EmailRequest;
 use App\Http\Requests\Code\PasswordResetRequest;
 use App\Services\auth\ResetPasswordService;
 use Illuminate\Http\JsonResponse;
@@ -25,11 +25,11 @@ class ResetPasswordController extends Controller
     /**
      * Sends a password reset link
      *
-     * @param EmailReqeust $request
+     * @param EmailRequest $request
      *
      * @return JsonResponse
      */
-    public function forgotPassword(EmailReqeust $request) : JsonResponse
+    public function forgotPassword(EmailRequest $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->forgotPassword($request)

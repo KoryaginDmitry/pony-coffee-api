@@ -21,6 +21,38 @@ use Illuminate\Auth\Access\AuthorizationException;
  */
 class FeedbackService extends BaseService
 {
+    private function _userFilter() : array
+    {
+        return [
+            'users' => User::whereHas('feedbacks')->with('lastMessage')->get()
+        ];
+    }
+
+    private function _coffeePotFilter() : array
+    {
+        return [
+            'coffeePots' => User::whereHas('feedbacks')
+                ->with('feedbacks', 'feedbacks.messages')
+                ->get()
+        ];
+    }
+
+    /**
+     * Get short information about users or coffee shops
+     *
+     * @param string $filter
+     * @return array
+     */
+    public function getShortFeedback(string $filter) : array
+    {
+        if ($filter === 'users') {
+            $this->data = $this->_userFilter();
+        } else {
+            $this->data = $this->_coffeePotFilter();
+        }
+
+        return $this->sendResponse();
+    }
     /**
      * Get feedbacks
      *
@@ -37,26 +69,6 @@ class FeedbackService extends BaseService
             )
                 ->with(['messages', 'coffeePot', 'user'])
                 ->get()
-        ];
-
-        return $this->sendResponse();
-    }
-
-    public function getShortFeedbackInfo(): array
-    {
-        $this->data = [
-            'users' => User::whereHas('feedbacks')
-                ->with('lastMessage')
-                ->get()
-        ];
-
-        return $this->sendResponse();
-    }
-
-    public function getUserFeedbacks(User $user)
-    {
-        $this->data = [
-            'user' => $user->fresh(['feedbacks', 'feedbacks.messages'])
         ];
 
         return $this->sendResponse();
@@ -105,6 +117,23 @@ class FeedbackService extends BaseService
     }
 
     /**
+     * Get user feedbacks
+     *
+     * @param User $user
+     * @return array
+     */
+    public function getFeedbackUser(User $user) : array
+    {
+        $this->data = [
+            'feedbacks' => Feedback::where('user_id', $user->id)
+                ->with(['messages', 'coffeePot', 'user'])
+                ->get()
+        ];
+
+        return $this->sendResponse();
+    }
+
+    /**
      * Create feedback and message
      *
      * @param CreateRequest $request
@@ -124,7 +153,7 @@ class FeedbackService extends BaseService
             )
         ];
 
-        broadcast(new CreateFeedback($feedback->fresh('messages')));
+        CreateFeedback::dispatch($feedback->fresh('messages'));
 
         $this->code = 201;
 
@@ -149,7 +178,7 @@ class FeedbackService extends BaseService
             $request->validated()
         );
 
-        broadcast(new CreateMessage($message, $feedback, auth()->user()->isAdmin()));
+        CreateMessage::dispatch($message, $feedback, auth()->user()->isAdmin());
 
         $this->data = [
             'message' => $message

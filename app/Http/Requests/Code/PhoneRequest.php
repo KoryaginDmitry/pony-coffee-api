@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Code;
 
-use App\Support\Classes\DataPrepare;
 use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +14,7 @@ class PhoneRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return true;
     }
@@ -25,11 +24,11 @@ class PhoneRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         $phone_regex = config('options.regex.phone');
 
-        if (Route::currentRouteName() == 'sendLoginCode') {
+        if (Route::currentRouteName() === 'sendLoginCode') {
             return [
                 "phone" => ["required", "regex:/$phone_regex/", "exists:users"]
             ];
@@ -45,7 +44,7 @@ class PhoneRequest extends FormRequest
      *
      * @return void
      */
-    public function prepareForValidation()
+    public function prepareForValidation() : void
     {
         $this->merge(
             [

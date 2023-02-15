@@ -11,7 +11,7 @@ class CoffeePotRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->user()->isAdmin();
     }
@@ -21,11 +21,11 @@ class CoffeePotRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         return [
             "name" => ["nullable", "string", "max:255"],
-            "address" => ["required", "string", "between:5,255"] 
+            "address" => ["required", "string", "between:5,255"]
         ];
     }
 }

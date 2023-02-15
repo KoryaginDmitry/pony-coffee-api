@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Support\Classes\DataPrepare;
 use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +13,7 @@ class LoginRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return !auth()->check();
     }
@@ -24,7 +23,7 @@ class LoginRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         $phone_regex = config('options.regex.phone');
 
@@ -39,7 +38,7 @@ class LoginRequest extends FormRequest
      *
      * @return void
      */
-    public function prepareForValidation()
+    public function prepareForValidation() : void
     {
         $this->merge(
             [

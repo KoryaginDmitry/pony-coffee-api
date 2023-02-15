@@ -155,15 +155,20 @@ Route::middleware('role:admin')->group(
 
         Route::controller(FeedbackController::class)->group(
             function () {
-                Route::get('admin/shorts/feedbacks', 'shortsFeedbacks');
-                //get all users and last message
+                //get short info
+                Route::get('admin/feedback/short/{filter}', 'getShortFeedback')
+                    ->whereIn('filter', ['users', 'coffeePots']);
+
+                //get all feedbacks
                 Route::get("admin/feedbacks", 'getFeedbacks');
-                //get all feedbacks of user
-                Route::get('admin/feedbacks/user/{user}', 'getUserFeedbacks');
-                //get one feedback
-                Route::get("admin/feedback/{feedback}", 'getFeedback');
+                //get all feedback on the user
+                Route::get('admin/feedback/user/{user}', 'getFeedbacksUser');
                 //get all feedback on the coffee shop
                 Route::get("admin/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
+
+                //get one feedback
+                Route::get("admin/feedback/{feedback}", 'getFeedback');
+
                 //create message for feedback
                 Route::post('admin/feedback/{feedback}', 'createMessage');
             }

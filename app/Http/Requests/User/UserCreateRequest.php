@@ -11,7 +11,7 @@ class UserCreateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->user()->isBarista();
     }
@@ -21,7 +21,7 @@ class UserCreateRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         $phone_regex = config('options.regex.phone');
 
@@ -37,7 +37,7 @@ class UserCreateRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function messages() : array
     {
         return [
             'code.between' => "Поле 'Код' должно быть четырехзначным числом",

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Barista;
 
-use App\Support\Classes\DataPrepare;
 use App\Support\Traits\DataPrepareTrait;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
@@ -16,7 +15,7 @@ class CreateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->user()->isAdmin();
     }
@@ -26,7 +25,7 @@ class CreateRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         $phone_regex = config('options.regex.phone');
 
@@ -47,7 +46,7 @@ class CreateRequest extends FormRequest
      *
      * @return void
      */
-    public function prepareForValidation()
+    public function prepareForValidation() : void
     {
         $this->merge(
             [
@@ -64,7 +63,7 @@ class CreateRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function messages() : array
     {
         return [
             'coffee_pot_id.required' => "Выберите кофейню",

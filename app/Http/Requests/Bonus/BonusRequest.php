@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Bonus;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class BonusRequest extends FormRequest
 {
@@ -12,7 +11,7 @@ class BonusRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->user()->isBarista();
     }
@@ -22,7 +21,7 @@ class BonusRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         return [
             "count" => ["required", "integer", "between:1,10"]
@@ -34,7 +33,7 @@ class BonusRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function messages() : array
     {
         return [
             'count.between' => "Поле 'Количество' должно быть от 1 до 10",

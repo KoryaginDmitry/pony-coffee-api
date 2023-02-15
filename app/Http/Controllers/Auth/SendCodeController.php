@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Code\EmailReqeust;
+use App\Http\Requests\Code\EmailRequest;
 use App\Http\Requests\Code\PhoneRequest;
 use App\Services\Auth\SendCodeService;
 use App\Support\Classes\SendCode\EmailCode;
@@ -46,11 +46,11 @@ class SendCodeController extends Controller
     /**
      * Send code to email
      *
-     * @param EmailReqeust $request
+     * @param EmailRequest $request
      *
      * @return JsonResponse
      */
-    public function sendEmailCode(EmailReqeust $request) : JsonResponse
+    public function sendEmailCode(EmailRequest $request) : JsonResponse
     {
         return $this->sendResponse(
             $this->service->sendCode(new EmailCode(), $request)

@@ -11,7 +11,7 @@ class CreateMessageRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->check();
     }
@@ -21,7 +21,7 @@ class CreateMessageRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         return [
             'user_id' => ['required', 'integer'],
@@ -34,7 +34,7 @@ class CreateMessageRequest extends FormRequest
      *
      * @return void
      */
-    public function prepareForValidation()
+    public function prepareForValidation() : void
     {
         $this->merge(
             [

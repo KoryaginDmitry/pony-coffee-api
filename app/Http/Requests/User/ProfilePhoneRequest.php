@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\User;
 
-use App\Support\Classes\DataPrepare;
 use App\Support\Traits\DataPrepareTrait;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
@@ -16,7 +15,7 @@ class ProfilePhoneRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->check();
     }
@@ -26,7 +25,7 @@ class ProfilePhoneRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         $phone_regex = config('options.regex.phone');
 
@@ -42,7 +41,7 @@ class ProfilePhoneRequest extends FormRequest
      *
      * @return void
      */
-    public function prepareForValidation()
+    public function prepareForValidation() : void
     {
         $this->merge(
             [
@@ -57,7 +56,7 @@ class ProfilePhoneRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function messages() : array
     {
         return [
             'code.between' => "Поле 'Код' должно быть четырехзначным числом",

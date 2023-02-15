@@ -11,7 +11,7 @@ class CreateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->user()->isUser();
     }
@@ -21,7 +21,7 @@ class CreateRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         return [
             "user_id" => ["required", "exists:users,id"],
@@ -36,7 +36,7 @@ class CreateRequest extends FormRequest
      *
      * @return void
      */
-    public function prepareForValidation()
+    public function prepareForValidation() : void
     {
         $this->merge(
             [
@@ -50,7 +50,7 @@ class CreateRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function messages() : array
     {
         return [
             'coffee_pot_id.required' => "Выберите кофейню",

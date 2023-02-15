@@ -11,7 +11,7 @@ class LoginEmailRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return !auth()->check();
     }
@@ -21,7 +21,7 @@ class LoginEmailRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         return [
             'email' => ['required', 'email', 'exists:users'],
@@ -34,7 +34,7 @@ class LoginEmailRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function messages() : array
     {
         return [
             'code.between' => "Поле 'Код' должно быть пятизначным",

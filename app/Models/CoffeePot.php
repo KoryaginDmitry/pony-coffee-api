@@ -14,10 +14,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $address
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * 
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserCoffeePot[] $userCoffeePot
  * @property-read int|null $user_coffee_pot_count
- * 
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot query()
@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class CoffeePot extends Model
 {
     use HasFactory;
-     
+
     /**
      * The attributes that are mass assignable.
      *
@@ -57,8 +57,18 @@ class CoffeePot extends Model
      *
      * @return HasMany
      */
-    public function userCoffeePot() : HasMany
+    public function userCoffeePot(): HasMany
     {
         return $this->hasMany(UserCoffeePot::class);
+    }
+
+    /**
+     * Relationship
+     *
+     * @return HasMany
+     */
+    public function feedbacks() : HasMany
+    {
+        return $this->hasMany(Feedback::class);
     }
 }

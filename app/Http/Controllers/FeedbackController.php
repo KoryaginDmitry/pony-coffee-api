@@ -31,6 +31,18 @@ class FeedbackController extends Controller
     }
 
     /**
+     * Get short information about users or coffee shops
+     *
+     * @param string $filter
+     * @return JsonResponse
+     */
+    public function getShortFeedback(string $filter) : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->getShortFeedback($filter)
+        );
+    }
+    /**
      * Get feedbacks
      *
      * @return JsonResponse
@@ -39,20 +51,6 @@ class FeedbackController extends Controller
     {
         return $this->sendResponse(
             $this->service->getFeedbacks()
-        );
-    }
-
-    public function shortsFeedbacks()
-    {
-        return $this->sendResponse(
-            $this->service->getShortFeedbackInfo()
-        );
-    }
-
-    public function getUserFeedbacks(User $user)
-    {
-        return $this->sendResponse(
-            $this->service->getUserFeedbacks($user)
         );
     }
 
@@ -82,6 +80,19 @@ class FeedbackController extends Controller
     {
         return $this->sendResponse(
             $this->service->getFeedbackCoffeePot($coffeePot)
+        );
+    }
+
+    /**
+     * Get user feedbacks
+     *
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function getFeedbacksUser(User $user) : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->getFeedbackUser($user)
         );
     }
 

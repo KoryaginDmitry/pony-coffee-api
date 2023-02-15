@@ -11,7 +11,7 @@ class ProfilePasswordRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->check();
     }
@@ -21,7 +21,7 @@ class ProfilePasswordRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         return [
             "password" => ["required", "between:8,255" , "confirmed"]

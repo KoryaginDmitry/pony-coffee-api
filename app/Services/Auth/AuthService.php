@@ -8,7 +8,6 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use App\Services\BaseService;
-use App\Support\Classes\DataPrepare;
 use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -94,7 +93,7 @@ class AuthService extends BaseService
     public function register(RegisterRequest $request) : array
     {
         $user = User::create(
-            $this->hashPassword($request->safe()->except('code'))
+            $this->passwordHash($request->safe()->except('code'))
         );
 
         $this->code = 201;

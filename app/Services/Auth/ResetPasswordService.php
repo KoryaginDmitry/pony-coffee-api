@@ -2,7 +2,7 @@
 
 namespace App\Services\Auth;
 
-use App\Http\Requests\Code\EmailReqeust;
+use App\Http\Requests\Code\EmailRequest;
 use App\Http\Requests\Code\PasswordResetRequest;
 use App\Services\BaseService;
 use Illuminate\Auth\Events\PasswordReset;
@@ -22,11 +22,11 @@ class ResetPasswordService extends BaseService
     /**
      * Sends a password reset link
      *
-     * @param EmailReqeust $request
+     * @param EmailRequest $request
      *
      * @return array
      */
-    public function forgotPassword(EmailReqeust $request) : array
+    public function forgotPassword(EmailRequest $request) : array
     {
         $status = Password::sendResetLink(
             $request->validated()

@@ -12,7 +12,7 @@ class CreateNotificationRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->user()->isAdmin();
     }
@@ -22,7 +22,7 @@ class CreateNotificationRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         return [
             "email" => ["required", "bool", new AtLeastOneIsActive],
@@ -37,7 +37,7 @@ class CreateNotificationRequest extends FormRequest
      *
      * @return void
      */
-    public function prepareForValidation()
+    public function prepareForValidation() : void
     {
         $this->merge(
             [

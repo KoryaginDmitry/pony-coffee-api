@@ -6,8 +6,6 @@ use App\Http\Requests\Barista\CreateRequest;
 use App\Http\Requests\Barista\UpdateRequest;
 use App\Models\CoffeePot;
 use App\Models\User;
-use App\Models\UserCoffeePot;
-use App\Support\Classes\DataPrepare;
 use App\Support\Traits\DataPrepareTrait;
 
 /**
@@ -68,7 +66,7 @@ class BaristaService extends BaseService
     public function create(CreateRequest $request) : array
     {
         $barista = User::create(
-            $this->hashPassword(
+            $this->passwordHash(
                 $request->safe()->except('coffee_pot_id')
             )
         );

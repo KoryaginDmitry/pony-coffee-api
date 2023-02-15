@@ -12,7 +12,7 @@ class ProfileEmailRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize() : bool
     {
         return auth()->check();
     }
@@ -22,7 +22,7 @@ class ProfileEmailRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules() : array
     {
         return [
             "email" => ["required", 'email', 'unique:users', 'max:255'],
@@ -36,7 +36,7 @@ class ProfileEmailRequest extends FormRequest
      *
      * @return void
      */
-    public function prepareForValidation()
+    public function prepareForValidation() : void
     {
         $this->merge(
             [
@@ -50,7 +50,7 @@ class ProfileEmailRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function messages() : array
     {
         return [
             'code.between' => "Поле 'Код' должно быть пятизначным числом",
