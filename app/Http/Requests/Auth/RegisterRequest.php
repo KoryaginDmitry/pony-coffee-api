@@ -3,11 +3,14 @@
 namespace App\Http\Requests\Auth;
 
 use App\Support\Classes\DataPrepare;
+use App\Support\Traits\DataPrepareTrait;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
 {
+    use DataPrepareTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -47,7 +50,7 @@ class RegisterRequest extends FormRequest
     {
         $this->merge(
             [
-                "phone" => DataPrepare::editPhoneNumber($this->phone),
+                "phone" => $this->editPhoneNumber($this->phone),
                 "phone_verified_at" => Carbon::now(),
                 "agreement" => $this->agreement ? '1' : '0',
                 "role_id" => 3

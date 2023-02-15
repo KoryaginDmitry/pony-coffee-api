@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Code\EmailReqeust;
 use App\Http\Requests\Code\PhoneRequest;
 use App\Services\Auth\SendCodeService;
@@ -17,7 +17,7 @@ use Illuminate\Http\JsonResponse;
  *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class SendCodeController extends BaseController
+class SendCodeController extends Controller
 {
     /**
      * Service connection

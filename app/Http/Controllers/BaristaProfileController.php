@@ -15,7 +15,7 @@ use Illuminate\Http\JsonResponse;
  *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class BaristaProfileController extends BaseController
+class BaristaProfileController extends Controller
 {
     /**
      * Service connection

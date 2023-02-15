@@ -3,11 +3,13 @@
 namespace App\Http\Requests\Barista;
 
 use App\Support\Classes\DataPrepare;
+use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
+    use DataPrepareTrait;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -48,7 +50,7 @@ class UpdateRequest extends FormRequest
     {
         $this->merge(
             [
-                'phone' => DataPrepare::editPhoneNumber($this->phone),
+                'phone' => $this->editPhoneNumber($this->phone),
             ]
         );
     }

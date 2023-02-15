@@ -2,14 +2,14 @@
 
 namespace App\Http\Middleware;
 
-use App\Support\Classes\ErrorResponse;
-use Carbon\Carbon;
+use App\Support\Traits\SendResponseTrait;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
 class CodeVerification
 {
+    use SendResponseTrait;
     /**
      * Handle an incoming request.
      *
@@ -22,7 +22,7 @@ class CodeVerification
     public function handle(Request $request, Closure $next, string $valueName = 'phone')
     {
         if (Redis::get($request->$valueName) != $request->code) {
-            return ErrorResponse::sendErrorResponse('Код недействителен');
+            return $this->sendErrorResponse('Код недействителен');
         }
 
         session()->forget($valueName);

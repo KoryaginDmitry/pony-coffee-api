@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
  *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class StatisticController extends BaseController
+class StatisticController extends Controller
 {
     /**
      * Service connection

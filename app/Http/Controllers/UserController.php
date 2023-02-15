@@ -17,7 +17,7 @@ use Illuminate\Http\JsonResponse;
  *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class UserController extends BaseController
+class UserController extends Controller
 {
     /**
      * Service connection

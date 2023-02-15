@@ -3,10 +3,12 @@
 namespace App\Http\Requests\Auth;
 
 use App\Support\Classes\DataPrepare;
+use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginPhoneRequest extends FormRequest
 {
+    use DataPrepareTrait;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -41,7 +43,7 @@ class LoginPhoneRequest extends FormRequest
     {
         $this->merge(
             [
-                "phone" => DataPrepare::editPhoneNumber($this->phone)
+                "phone" => $this->editPhoneNumber($this->phone)
             ]
         );
     }

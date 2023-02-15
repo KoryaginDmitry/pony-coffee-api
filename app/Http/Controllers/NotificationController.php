@@ -15,7 +15,7 @@ use Illuminate\Http\JsonResponse;
  *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class NotificationController extends BaseController
+class NotificationController extends Controller
 {
     /**
      * Service connection

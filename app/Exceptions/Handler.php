@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Support\Classes\ErrorResponse;
+use App\Support\Traits\SendResponseTrait;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Validation\ValidationException;
@@ -11,6 +11,8 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    use SendResponseTrait;
+
     /**
      * A list of exception types with their corresponding custom log levels.
      *
@@ -56,7 +58,7 @@ class Handler extends ExceptionHandler
         $this->renderable(
             function (NotFoundHttpException $e, $request) {
                 if ($request->wantsJson()) {
-                    return ErrorResponse::sendErrorResponse('Страница не существует', 404);
+                    return $this->sendErrorResponse('Страница не существует', 404);
                 }
             }
         );
@@ -64,7 +66,7 @@ class Handler extends ExceptionHandler
         $this->renderable(
             function (ValidationException $e, $request) {
                 if ($request->wantsJson()) {
-                    return ErrorResponse::sendErrorResponse($e->validator->errors()->all(), 404);
+                    return $this->sendErrorResponse($e->validator->errors()->all());
                 }
             }
         );
@@ -72,8 +74,9 @@ class Handler extends ExceptionHandler
         $this->renderable(
             function (RequestException $e, $request) {
                 if ($request->wantsJson()) {
-                    return ErrorResponse::sendErrorResponse(
-                        $e->response->json()['description'], $e->response->status());
+                    return $this->sendErrorResponse(
+                        $e->response->json()['description'], $e->response->status()
+                    );
                 }
             }
         );

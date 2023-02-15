@@ -18,7 +18,7 @@ use Illuminate\Http\JsonResponse;
  *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class FeedbackController extends BaseController
+class FeedbackController extends Controller
 {
     /**
      * Service connection

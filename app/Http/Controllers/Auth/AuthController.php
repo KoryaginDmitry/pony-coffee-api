@@ -9,7 +9,7 @@
  */
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginEmailRequest;
 use App\Http\Requests\Auth\LoginPhoneRequest;
 use App\Http\Requests\Auth\LoginRequest;
@@ -24,7 +24,7 @@ use Illuminate\Http\JsonResponse;
  *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class AuthController extends BaseController
+class AuthController extends Controller
 {
     /**
      * Service connection

@@ -3,11 +3,14 @@
 namespace App\Http\Requests\User;
 
 use App\Support\Classes\DataPrepare;
+use App\Support\Traits\DataPrepareTrait;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProfilePhoneRequest extends FormRequest
 {
+    use DataPrepareTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -43,7 +46,7 @@ class ProfilePhoneRequest extends FormRequest
     {
         $this->merge(
             [
-                'phone' => DataPrepare::editPhoneNumber($this->phone),
+                'phone' => $this->editPhoneNumber($this->phone),
                 'phone_verified_at' => Carbon::now()
             ]
         );

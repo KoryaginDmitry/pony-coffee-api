@@ -9,6 +9,7 @@ use App\Http\Requests\User\ProfilePhoneRequest;
 use App\Http\Requests\User\UserCreateRequest;
 use App\Models\User;
 use App\Support\Classes\DataPrepare;
+use App\Support\Traits\DataPrepareTrait;
 
 /**
  * UserController class
@@ -19,6 +20,8 @@ use App\Support\Classes\DataPrepare;
  */
 class UserService extends BaseService
 {
+    use DataPrepareTrait;
+
     /**
      * Update user
      *
@@ -149,7 +152,7 @@ class UserService extends BaseService
         $user = User::find(auth()->id());
 
         $user->update(
-            DataPrepare::hashPassword($request->validated())
+            $this->hashPassword($request->validated())
         );
 
         $this->data = [

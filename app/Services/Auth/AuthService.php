@@ -9,6 +9,7 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use App\Services\BaseService;
 use App\Support\Classes\DataPrepare;
+use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Hash;
  */
 class AuthService extends BaseService
 {
+    use DataPrepareTrait;
+
     /**
      * Creates a token for the user and returns data for the response
      *
@@ -91,7 +94,7 @@ class AuthService extends BaseService
     public function register(RegisterRequest $request) : array
     {
         $user = User::create(
-            DataPrepare::hashPassword($request->safe()->except('code'))
+            $this->hashPassword($request->safe()->except('code'))
         );
 
         $this->code = 201;

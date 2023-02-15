@@ -1,27 +1,19 @@
 <?php
 
-namespace App\Support\Classes;
+namespace App\Support\Traits;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * DataPrepare class
- *
- * @category Support
- *
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
-class DataPrepare
+trait DataPrepareTrait
 {
     /**
      * Removes extra characters from a phone number
      *
-     * @param string $phone number phone
-     *
+     * @param string|null $phone
      * @return string|null
      */
-    public static function editPhoneNumber(mixed $phone) : string|null
+    public function editPhoneNumber(string|null $phone) : string|null
     {
         if (!$phone) {
             return null;
@@ -41,11 +33,10 @@ class DataPrepare
     /**
      * Hashes the password parameter in the resulting array
      *
-     * @param array $data array to hash
-     *
+     * @param array $data
      * @return array
      */
-    public static function hashPassword(array $data) : array
+    public function passwordHash(array $data) : array
     {
         if ($data['password']) {
             $data['password'] = Hash::make($data['password']);

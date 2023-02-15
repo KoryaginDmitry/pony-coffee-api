@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
  *
  * @author DmitryKoryagin <kor.dima97@mail.ru>
  */
-class SiteDataController extends BaseController
+class SiteDataController extends Controller
 {
     /**
      * Service connection

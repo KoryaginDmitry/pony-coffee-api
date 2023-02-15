@@ -8,6 +8,7 @@ use App\Models\CoffeePot;
 use App\Models\User;
 use App\Models\UserCoffeePot;
 use App\Support\Classes\DataPrepare;
+use App\Support\Traits\DataPrepareTrait;
 
 /**
  * BaristaService class
@@ -18,6 +19,8 @@ use App\Support\Classes\DataPrepare;
  */
 class BaristaService extends BaseService
 {
+    use DataPrepareTrait;
+
     /**
      * Get all baristas
      *
@@ -65,7 +68,7 @@ class BaristaService extends BaseService
     public function create(CreateRequest $request) : array
     {
         $barista = User::create(
-            DataPrepare::hashPassword(
+            $this->hashPassword(
                 $request->safe()->except('coffee_pot_id')
             )
         );
@@ -98,14 +101,8 @@ class BaristaService extends BaseService
             $request->safe()->except('coffee_pot_id')
         );
 
-        UserCoffeePot::updateOrCreate(
-            [
-                'user_id' => $barista->id
-            ],
-            [
-                "coffee_pot_id" => $request->coffee_pot_id
-            ]
-        );
+        $barista->userCoffeePot()
+            ->updateOrCreate(["coffee_pot_id" => $request->coffee_pot_id]);
 
         $this->data = [
             "user" => $barista,
