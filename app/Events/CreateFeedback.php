@@ -15,13 +15,6 @@ class CreateFeedback implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Event type to distribute to front-end
-     *
-     * @var string
-     */
-    public string $type;
-
-    /**
      * Feedback and first message
      *
      * @var Feedback
