@@ -154,16 +154,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Relationship role
-     *
-     * @return BelongsTo
-     */
-    public function role() : BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    /**
      * Relationship all user bonuses
      *
      * @return HasMany
@@ -171,6 +161,16 @@ class User extends Authenticatable
     public function bonuses() : HasMany
     {
         return $this->hasMany(Bonus::class);
+    }
+
+    /**
+     * Relationship role
+     *
+     * @return BelongsTo
+     */
+    public function role() : BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 
     /**
@@ -216,10 +216,10 @@ class User extends Authenticatable
     /**
      * Return last message
      *
-     * @return HasOne
+     * @return HasMany
      */
-    public function lastMessage() : HasOne
+    public function messages() : HasMany
     {
-        return $this->hasOne(Message::class)->latest();
+        return $this->hasMany(Message::class);
     }
 }

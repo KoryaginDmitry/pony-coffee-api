@@ -24,7 +24,14 @@ class FeedbackService extends BaseService
     private function _userFilter() : array
     {
         return [
-            'users' => User::whereHas('feedbacks')->with('lastMessage')->get()
+            'users' => User::whereHas('feedbacks')
+                ->with(
+                    [
+                        'messages' => function ($query) {
+                            return $query->latest()->limit(1);
+                        }
+                    ]
+                )->get()
         ];
     }
 
@@ -32,7 +39,7 @@ class FeedbackService extends BaseService
     {
         return [
             'coffeePots' => User::whereHas('feedbacks')
-                ->with('feedbacks', 'feedbacks.messages')
+                ->with(['feedbacks', 'feedbacks.messages'])
                 ->get()
         ];
     }
