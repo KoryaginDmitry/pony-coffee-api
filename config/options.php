@@ -34,9 +34,34 @@ return [
     'regex' => [
         'phone' => '\+7\d{10}',
     ],
-    
+
     'bonus' => [
         'lifetime' => 30,
         'writeOffQuantity' => 3,
-    ]
+    ],
+
+    'channels' => [
+        'admin' => [
+            [
+                'event' => 'CreateFeedback',
+                'path' => 'feedback.admin'
+            ],
+            [
+                'event' => 'CreateMessage',
+                'path' => 'message.admin'
+            ]
+        ],
+        'barista' => [
+
+        ],
+        'user' => [
+            [
+                'event' => 'CreateMessage',
+                'path' => 'message.user.{id}'
+            ]
+        ],
+        'guest' => [
+
+        ],
+    ],
 ];

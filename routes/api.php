@@ -219,6 +219,8 @@ Route::controller(SiteDataController::class)->group(
         Route::get("/header", 'header');
         //get lifetime bonus
         Route::get('/bonus/lifetime', 'bonusLifetime');
+        //get channels for user
+        Route::get('/channels', 'getChannels');
     }
 );
 

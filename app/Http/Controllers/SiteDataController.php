@@ -47,4 +47,16 @@ class SiteDataController extends Controller
             $this->service->bonusLifetime()
         );
     }
+
+    /**
+     * Get channels for user
+     *
+     * @return JsonResponse
+     */
+    public function getChannels() : JsonResponse
+    {
+        return $this->sendResponse(
+            $this->service->getChannels()
+        );
+    }
 }
