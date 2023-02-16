@@ -43,12 +43,12 @@ return [
     'channels' => [
         'admin' => [
             [
-                'event' => 'CreateFeedback',
-                'path' => 'feedback.admin'
+                'event' => 'feedback',
+                'path' => 'private-feedback.admin'
             ],
             [
-                'event' => 'CreateMessage',
-                'path' => 'message.admin'
+                'event' => 'message',
+                'path' => 'private-message.admin'
             ]
         ],
         'barista' => [
@@ -56,8 +56,8 @@ return [
         ],
         'user' => [
             [
-                'event' => 'CreateMessage',
-                'path' => 'message.user.{id}'
+                'event' => 'message',
+                'path' => 'private-message.user.{id}'
             ]
         ],
         'guest' => [

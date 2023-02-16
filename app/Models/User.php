@@ -220,8 +220,6 @@ class User extends Authenticatable
      */
     public function lastMessage() : HasOne
     {
-        return $this->hasOne(Message::class)
-            ->orderBy('created_at', 'DESC')
-            ->limit(1);
+        return $this->hasOne(Message::class)->latest();
     }
 }

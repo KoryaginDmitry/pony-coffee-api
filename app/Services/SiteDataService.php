@@ -47,7 +47,12 @@ class SiteDataService extends BaseService
         return $this->sendResponse();
     }
 
-    public function getChannels()
+    /**
+     * Get channels for user
+     *
+     * @return array
+     */
+    public function getChannels() : array
     {
         $this->data = [
             'channels' => Arr::map(
