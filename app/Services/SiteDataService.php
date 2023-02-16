@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Bonus;
+use App\Models\User;
 use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -25,14 +26,8 @@ class SiteDataService extends BaseService
      */
     public function header() : array
     {
-        $role = auth()->user()?->role->name;
-
-        if (!$role) {
-            $role = 'guest';
-        }
-
         $this->data = [
-            'header' => config("options.header.$role")
+            'header' => config("options.header." . User::staticGetRole())
         ];
 
         return $this->sendResponse();
@@ -54,15 +49,9 @@ class SiteDataService extends BaseService
 
     public function getChannels()
     {
-        $role = auth()->user()?->role->name;
-
-        if (!$role) {
-            $role = 'guest';
-        }
-
         $this->data = [
             'channels' => Arr::map(
-                config("options.channels.$role"),
+                config("options.channels." . User::staticGetRole()),
                 function (array $value) {
                     $value['path'] = Str::replace('{id}', auth()->id(), $value['path']);
                     return $value;

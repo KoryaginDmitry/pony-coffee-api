@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Traits\UserRoleTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -71,7 +72,7 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, UserRoleTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -222,35 +223,5 @@ class User extends Authenticatable
         return $this->hasOne(Message::class)
             ->orderBy('created_at', 'DESC')
             ->limit(1);
-    }
-
-    /**
-     * Check if the user is an admin
-     *
-     * @return boolean
-     */
-    public function isAdmin() : bool
-    {
-        return auth()->user()?->role->name === 'admin';
-    }
-
-    /**
-     * Check if the user is a barista
-     *
-     * @return boolean
-     */
-    public function isBarista() : bool
-    {
-        return auth()->user()?->role->name === 'barista';
-    }
-
-    /**
-     * Check if the user is a user
-     *
-     * @return boolean
-     */
-    public function isUser() : bool
-    {
-        return auth()->user()?->role->name === 'user';
     }
 }
