@@ -4,6 +4,10 @@ namespace App\Http\Requests\Feedback;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $user_id
+ * @property $text
+ */
 class CreateMessageRequest extends FormRequest
 {
     /**

@@ -4,6 +4,12 @@ namespace App\Http\Requests\Feedback;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $user_id
+ * @property $coffee_pot_id
+ * @property $grade
+ * @property $text
+ */
 class CreateRequest extends FormRequest
 {
     /**
@@ -13,7 +19,7 @@ class CreateRequest extends FormRequest
      */
     public function authorize() : bool
     {
-        return auth()->user()->isUser();
+        return auth()->user()?->isUser();
     }
 
     /**

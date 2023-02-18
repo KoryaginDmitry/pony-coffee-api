@@ -4,6 +4,9 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $name
+ */
 class ProfileNameRequest extends FormRequest
 {
     /**

@@ -5,6 +5,9 @@ namespace App\Http\Requests\Code;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * @property $email
+ */
 class EmailRequest extends FormRequest
 {
     /**

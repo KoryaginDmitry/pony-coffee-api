@@ -6,6 +6,15 @@ use App\Support\Traits\DataPrepareTrait;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $name
+ * @property $phone
+ * @property $phone_verified_at
+ * @property $code
+ * @property $password
+ * @property $agreement
+ * @property $role_id
+ */
 class RegisterRequest extends FormRequest
 {
     use DataPrepareTrait;

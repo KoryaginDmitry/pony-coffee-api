@@ -57,7 +57,7 @@ class SiteDataService extends BaseService
         $this->data = [
             'channels' => Arr::map(
                 config("options.channels." . User::staticGetRole()),
-                function (array $value) {
+                static function (array $value) {
                     $value['path'] = Str::replace('{id}', auth()->id(), $value['path']);
                     return $value;
                 }

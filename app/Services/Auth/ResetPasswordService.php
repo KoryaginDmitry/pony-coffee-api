@@ -54,7 +54,7 @@ class ResetPasswordService extends BaseService
     {
         $status = Password::reset(
             $request->validated(),
-            function ($user, $password) {
+            static function ($user, $password) {
                 $user->forceFill(
                     [
                         'password' => Hash::make($password)

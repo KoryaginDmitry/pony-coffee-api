@@ -5,6 +5,12 @@ namespace App\Http\Requests\Notification;
 use App\Rules\AtLeastOneIsActive;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $email
+ * @property $telegram
+ * @property $site
+ * @property $text
+ */
 class CreateNotificationRequest extends FormRequest
 {
     /**
@@ -14,7 +20,7 @@ class CreateNotificationRequest extends FormRequest
      */
     public function authorize() : bool
     {
-        return auth()->user()->isAdmin();
+        return auth()->user()?->isAdmin();
     }
 
     /**

@@ -6,6 +6,16 @@ use App\Support\Traits\DataPrepareTrait;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $name
+ * @property $last_name
+ * @property $coffee_pot_id
+ * @property $phone
+ * @property $phone_verified_at
+ * @property $password
+ * @property $agreement
+ * @property $role_id
+ */
 class CreateRequest extends FormRequest
 {
     use DataPrepareTrait;
@@ -17,7 +27,7 @@ class CreateRequest extends FormRequest
      */
     public function authorize() : bool
     {
-        return auth()->user()->isAdmin();
+        return auth()->user()?->isAdmin();
     }
 
     /**

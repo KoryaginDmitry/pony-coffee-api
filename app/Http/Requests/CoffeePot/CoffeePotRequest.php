@@ -4,6 +4,10 @@ namespace App\Http\Requests\CoffeePot;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $name
+ * @property $address
+ */
 class CoffeePotRequest extends FormRequest
 {
     /**
@@ -13,7 +17,7 @@ class CoffeePotRequest extends FormRequest
      */
     public function authorize() : bool
     {
-        return auth()->user()->isAdmin();
+        return auth()->user()?->isAdmin();
     }
 
     /**

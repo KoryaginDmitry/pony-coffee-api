@@ -70,7 +70,7 @@ class FeedbackService extends BaseService
         $this->data = [
             'feedbacks' => Feedback::when(
                 !auth()->user()?->isAdmin(),
-                function ($query) {
+                static function ($query) {
                     return $query->where('user_id', auth()->id());
                 }
             )
@@ -111,7 +111,7 @@ class FeedbackService extends BaseService
         $this->data = [
             'feedbacks' => Feedback::when(
                 !auth()->user()?->isAdmin(),
-                function ($query) {
+                static function ($query) {
                     return $query->where('user_id', auth()->id());
                 }
             )
@@ -185,7 +185,7 @@ class FeedbackService extends BaseService
             $request->validated()
         );
 
-        CreateMessage::dispatch($message, $feedback, auth()->user()->isAdmin());
+        CreateMessage::dispatch($message, $feedback, auth()->user()?->isAdmin());
 
         $this->data = [
             'message' => $message

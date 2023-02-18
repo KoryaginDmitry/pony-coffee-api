@@ -5,6 +5,11 @@ namespace App\Http\Requests\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $email
+ * @property $code
+ * @property $email_verified_at
+ */
 class ProfileEmailRequest extends FormRequest
 {
     /**

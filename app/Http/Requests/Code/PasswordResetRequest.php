@@ -4,6 +4,11 @@ namespace App\Http\Requests\Code;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $token
+ * @property $email
+ * @property $password
+ */
 class PasswordResetRequest extends FormRequest
 {
     /**

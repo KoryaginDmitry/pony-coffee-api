@@ -20,7 +20,7 @@ class Role
      */
     public function handle(Request $request, Closure $next, ...$role)
     {
-        if (in_array(User::staticGetRole(), $role)) {
+        if (in_array(User::staticGetRole(), $role, true)) {
             return $next($request);
         }
 

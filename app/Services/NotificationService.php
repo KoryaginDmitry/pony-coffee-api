@@ -55,7 +55,7 @@ class NotificationService extends BaseService
     {
         $user_id = auth()->id();
 
-        if (Str::contains($notification->users_read, $user_id)) {
+        if (Str::contains($notification->users_read_id, $user_id)) {
             return throw new NotFoundHttpException();
         }
 

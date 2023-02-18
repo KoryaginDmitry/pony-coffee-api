@@ -4,6 +4,11 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $name
+ * @property $code
+ * @property $phone
+ */
 class UserCreateRequest extends FormRequest
 {
     /**
@@ -13,7 +18,7 @@ class UserCreateRequest extends FormRequest
      */
     public function authorize() : bool
     {
-        return auth()->user()->isBarista();
+        return auth()->user()?->isBarista();
     }
 
     /**

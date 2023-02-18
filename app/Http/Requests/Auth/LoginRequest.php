@@ -5,6 +5,10 @@ namespace App\Http\Requests\Auth;
 use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $phone
+ * @property $password
+ */
 class LoginRequest extends FormRequest
 {
     use DataPrepareTrait;

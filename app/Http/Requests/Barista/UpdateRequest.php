@@ -6,6 +6,13 @@ use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property $name
+ * @property $last_name
+ * @property $phone
+ * @property $coffee_pot_id
+ * @property $barista
+ */
 class UpdateRequest extends FormRequest
 {
     use DataPrepareTrait;
@@ -16,7 +23,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize() : bool
     {
-        return auth()->user()->isAdmin();
+        return auth()->user()?->isAdmin();
     }
 
     /**

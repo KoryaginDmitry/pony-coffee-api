@@ -6,6 +6,9 @@ use App\Support\Traits\DataPrepareTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * @property $phone
+ */
 class PhoneRequest extends FormRequest
 {
     use DataPrepareTrait;

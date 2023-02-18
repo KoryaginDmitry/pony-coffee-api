@@ -4,6 +4,10 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $email
+ * @property $code
+ */
 class LoginEmailRequest extends FormRequest
 {
     /**

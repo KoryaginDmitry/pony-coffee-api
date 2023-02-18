@@ -4,6 +4,9 @@ namespace App\Http\Requests\Bonus;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $count
+ */
 class BonusRequest extends FormRequest
 {
     /**
@@ -13,7 +16,7 @@ class BonusRequest extends FormRequest
      */
     public function authorize() : bool
     {
-        return auth()->user()->isBarista();
+        return auth()->user()?->isBarista();
     }
 
     /**

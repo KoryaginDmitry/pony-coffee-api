@@ -6,6 +6,11 @@ use App\Support\Traits\DataPrepareTrait;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property $phone
+ * @property $code
+ * @property $phone_verified_at
+ */
 class ProfilePhoneRequest extends FormRequest
 {
     use DataPrepareTrait;

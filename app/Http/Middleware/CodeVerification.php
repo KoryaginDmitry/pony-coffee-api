@@ -21,11 +21,9 @@ class CodeVerification
      */
     public function handle(Request $request, Closure $next, string $valueName = 'phone')
     {
-        if (Redis::get($request->$valueName) != $request->code) {
+        if (Redis::get($request->$valueName) !== $request->code) {
             return $this->sendErrorResponse('Код недействителен');
         }
-
-        session()->forget($valueName);
 
         return $next($request);
     }
