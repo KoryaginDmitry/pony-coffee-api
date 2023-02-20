@@ -40,25 +40,22 @@ return [
         'writeOffQuantity' => 3,
     ],
 
-    'channels' => [
+    'Channels' => [
         'admin' => [
-            [
-                'event' => 'feedback',
-                'path' => 'private-feedback.admin'
+            'channel' => 'private-admin',
+            'events' => [
+                'messageForAdmin',
+                'feedback',
             ],
-            [
-                'event' => 'message',
-                'path' => 'private-message.admin'
-            ]
         ],
         'barista' => [
 
         ],
         'user' => [
-            [
-                'event' => 'message',
-                'path' => 'private-message.user.{id}'
-            ]
+            'channel' => 'private-user.{id}',
+            'events' => [
+                'message',
+            ],
         ],
         'guest' => [
 

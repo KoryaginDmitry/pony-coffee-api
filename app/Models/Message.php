@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Database\Factories\MessageFactory;
+use Eloquent;
 
 /**
  * App\Models\Message
@@ -12,23 +16,23 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $text
  * @property int $user_id
  * @property int $feedback_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int $belongToAuthUser
  *
  * @property-read int $belong_to_auth_user
  *
- * @method static \Illuminate\Database\Eloquent\Builder|Message newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Message newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Message query()
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereFeedbackId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereText($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereUserId($value)
- * @method static \Database\Factories\MessageFactory factory(...$parameters)
- * @mixin  \Eloquent
+ * @method static Builder|Message newModelQuery()
+ * @method static Builder|Message newQuery()
+ * @method static Builder|Message query()
+ * @method static Builder|Message whereCreatedAt($value)
+ * @method static Builder|Message whereFeedbackId($value)
+ * @method static Builder|Message whereId($value)
+ * @method static Builder|Message whereText($value)
+ * @method static Builder|Message whereUpdatedAt($value)
+ * @method static Builder|Message whereUserId($value)
+ * @method static MessageFactory factory(...$parameters)
+ * @mixin  Eloquent
  */
 class Message extends Model
 {

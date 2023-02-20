@@ -54,14 +54,13 @@ class SiteDataService extends BaseService
      */
     public function getChannels() : array
     {
+        $channels = config("options.Channels." . User::staticGetRole());
+
+        $channels['channel'] = Str::replace('{id}', auth()->id(), Arr::get($channels, 'channel'));
+
+
         $this->data = [
-            'channels' => Arr::map(
-                config("options.channels." . User::staticGetRole()),
-                static function (array $value) {
-                    $value['path'] = Str::replace('{id}', auth()->id(), $value['path']);
-                    return $value;
-                }
-            )
+            'channels' => $channels
         ];
 
         return $this->sendResponse();

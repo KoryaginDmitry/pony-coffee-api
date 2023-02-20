@@ -1,12 +1,5 @@
 <?php
-/**
- * Auth controller
- * php version 8.1.2
- *
- * @category Controllers
- *
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;

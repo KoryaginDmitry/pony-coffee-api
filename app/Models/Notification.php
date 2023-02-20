@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Database\Factories\NotificationFactory;
+use Eloquent;
 
 /**
  * App\Models\Notification
@@ -13,23 +17,23 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $telegram
  * @property string $text
  * @property string|null $users_read_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string $email
- * 
- * @method static \Illuminate\Database\Eloquent\Builder|Notification newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Notification newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Notification query()
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereSite($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereTelegram($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereText($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUsersReadId($value)
- * @method static \Database\Factories\NotificationFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereEmail($value)
- * @mixin  \Eloquent
+ *
+ * @method static Builder|Notification newModelQuery()
+ * @method static Builder|Notification newQuery()
+ * @method static Builder|Notification query()
+ * @method static Builder|Notification whereCreatedAt($value)
+ * @method static Builder|Notification whereId($value)
+ * @method static Builder|Notification whereSite($value)
+ * @method static Builder|Notification whereTelegram($value)
+ * @method static Builder|Notification whereText($value)
+ * @method static Builder|Notification whereUpdatedAt($value)
+ * @method static Builder|Notification whereUsersReadId($value)
+ * @method static NotificationFactory factory(...$parameters)
+ * @method static Builder|Notification whereEmail($value)
+ * @mixin  Eloquent
  */
 class Notification extends Model
 {

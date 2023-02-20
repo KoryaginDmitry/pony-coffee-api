@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Database\Factories\CoffeePotFactory;
+use Illuminate\Support\Carbon;
+use Eloquent;
 
 /**
  * App\Models\CoffeePot
@@ -12,22 +17,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property string|null $name
  * @property string $address
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserCoffeePot[] $userCoffeePot
+ * @property-read Collection|UserCoffeePot[] $userCoffeePot
  * @property-read int|null $user_coffee_pot_count
  *
- * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot query()
- * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CoffeePot whereUpdatedAt($value)
- * @method static \Database\Factories\CoffeePotFactory factory(...$parameters)
- * @mixin  \Eloquent
+ * @method static Builder|CoffeePot newModelQuery()
+ * @method static Builder|CoffeePot newQuery()
+ * @method static Builder|CoffeePot query()
+ * @method static Builder|CoffeePot whereAddress($value)
+ * @method static Builder|CoffeePot whereCreatedAt($value)
+ * @method static Builder|CoffeePot whereId($value)
+ * @method static Builder|CoffeePot whereName($value)
+ * @method static Builder|CoffeePot whereUpdatedAt($value)
+ * @method static CoffeePotFactory factory(...$parameters)
+ * @mixin  Eloquent
  */
 class CoffeePot extends Model
 {

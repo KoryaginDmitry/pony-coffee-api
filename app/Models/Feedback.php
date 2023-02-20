@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Database\Factories\FeedbackFactory;
+use Illuminate\Database\Eloquent\Collection;
+use Eloquent;
 
 /**
  * App\Models\Feedback
@@ -14,25 +19,25 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $grade
  * @property int $user_id
  * @property int $coffee_pot_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Message[] $messages
+ * @property-read Collection|Message[] $messages
  * @property-read int|null $messages_count
- * @property-read \App\Models\CoffeePot|null $coffeePot
- * @property-read \App\Models\User|null $user
+ * @property-read CoffeePot|null $coffeePot
+ * @property-read User|null $user
  *
- * @method static \Illuminate\Database\Eloquent\Builder|Feedback newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Feedback newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Feedback query()
- * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereCoffeePotId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereGrade($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Feedback whereUserId($value)
- * @method static \Database\Factories\FeedbackFactory factory(...$parameters)
- * @mixin  \Eloquent
+ * @method static Builder|Feedback newModelQuery()
+ * @method static Builder|Feedback newQuery()
+ * @method static Builder|Feedback query()
+ * @method static Builder|Feedback whereCoffeePotId($value)
+ * @method static Builder|Feedback whereCreatedAt($value)
+ * @method static Builder|Feedback whereGrade($value)
+ * @method static Builder|Feedback whereId($value)
+ * @method static Builder|Feedback whereUpdatedAt($value)
+ * @method static Builder|Feedback whereUserId($value)
+ * @method static FeedbackFactory factory(...$parameters)
+ * @mixin  Eloquent
  */
 class Feedback extends Model
 {

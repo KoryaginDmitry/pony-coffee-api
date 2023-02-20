@@ -4,6 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\InvokableRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
 class AtLeastOneIsActive implements DataAwareRule, InvokableRule
 {
@@ -19,10 +20,10 @@ class AtLeastOneIsActive implements DataAwareRule, InvokableRule
      *
      * @param  string  $attribute
      * @param  mixed  $value
-     * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
+     * @param  \Closure(string): PotentiallyTranslatedString  $fail
      * @return void
      */
-    public function __invoke($attribute, $value, $fail)
+    public function __invoke($attribute, $value, $fail) : void
     {
         $array = [
             $this->data['email'],

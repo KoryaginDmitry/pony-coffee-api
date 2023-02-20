@@ -5,6 +5,9 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Database\Factories\BonusFactory;
+use Eloquent;
 
 /**
  * App\Models\Bonus
@@ -21,18 +24,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read string $create_date
  * @property-read string $update_date
  *
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus query()
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUsage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdCreate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bonus whereUserIdWrote($value)
- * @method static \Database\Factories\BonusFactory factory(...$parameters)
- * @mixin  \Eloquent
+ * @method static Builder|Bonus newModelQuery()
+ * @method static Builder|Bonus newQuery()
+ * @method static Builder|Bonus query()
+ * @method static Builder|Bonus whereCreatedAt($value)
+ * @method static Builder|Bonus whereId($value)
+ * @method static Builder|Bonus whereUpdatedAt($value)
+ * @method static Builder|Bonus whereUsage($value)
+ * @method static Builder|Bonus whereUserId($value)
+ * @method static Builder|Bonus whereUserIdCreate($value)
+ * @method static Builder|Bonus whereUserIdWrote($value)
+ * @method static BonusFactory factory(...$parameters)
+ * @mixin  Eloquent
  */
 class Bonus extends Model
 {

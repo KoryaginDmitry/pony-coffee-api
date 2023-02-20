@@ -13,14 +13,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('message.user.{id}', function ($user, $id) {
+Broadcast::channel('user.{id}', static function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('message.admin', function ($user) {
-    return $user->isAdmin();
-});
-
-Broadcast::channel('feedback.admin', function ($user) {
+Broadcast::channel('admin', static function ($user) {
     return $user->isAdmin();
 });

@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Events\CreateFeedback;
-use App\Events\CreateMessage;
+use App\Events\CreateMessageForAdmin;
+use App\Events\CreateMessageForUser;
 use App\Http\Requests\Feedback\CreateMessageRequest;
 use App\Http\Requests\Feedback\CreateRequest;
 use App\Models\CoffeePot;
@@ -60,6 +61,7 @@ class FeedbackService extends BaseService
 
         return $this->sendResponse();
     }
+
     /**
      * Get feedbacks
      *
@@ -185,7 +187,11 @@ class FeedbackService extends BaseService
             $request->validated()
         );
 
-        CreateMessage::dispatch($message, $feedback, auth()->user()?->isAdmin());
+        if (auth()->user()?->isAdmin()) {
+            broadcast(new CreateMessageForUser($message, $feedback));
+        } else {
+            broadcast(new CreateMessageForAdmin($message));
+        }
 
         $this->data = [
             'message' => $message
