@@ -18,5 +18,5 @@ Broadcast::channel('user.{id}', static function ($user, $id) {
 });
 
 Broadcast::channel('admin', static function ($user) {
-    return true;
+    return $user->isAdmin();
 });
