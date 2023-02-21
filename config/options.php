@@ -44,7 +44,7 @@ return [
         'admin' => [
             'channel' => 'private-admin',
             'events' => [
-                'messageForAdmin',
+                'message',
                 'feedback',
             ],
         ],
