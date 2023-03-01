@@ -94,7 +94,9 @@ class UpdateBaristaTest extends TestCase
             User::find(1),
             $this->notValidateData,
             $this->parameters
-        )->assertUnprocessable();
+        )
+            ->assertUnprocessable()
+            ->assertJsonCount('4', 'errors.message');
     }
 
     /**

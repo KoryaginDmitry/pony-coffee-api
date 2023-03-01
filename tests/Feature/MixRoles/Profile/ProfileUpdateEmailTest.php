@@ -34,7 +34,7 @@ class ProfileUpdateEmailTest extends TestCase
     /**
      * @return void
      */
-    public function middleware() : void
+    public function testMiddleware() : void
     {
         $this->assertRouteHasExactMiddleware('role:user,admin', 'api', 'codeVerification:email');
     }
@@ -103,6 +103,8 @@ class ProfileUpdateEmailTest extends TestCase
         $this->callAuthorizedByUserRouteAction(
             User::find(3),
             $this->inValidData
-        )->assertUnprocessable();
+        )
+            ->assertUnprocessable()
+            ->assertJsonCount('3', 'errors.message');
     }
 }

@@ -108,8 +108,9 @@ class CallTest extends TestCase
     public function testValidate() : void
     {
         $this->withoutMiddleware(ReCaptcha::class);
-        
+
         $this->callRouteAction($this->invalidData)
-            ->assertUnprocessable();
+            ->assertUnprocessable()
+            ->assertJsonCount('1', 'errors.message');
     }
 }

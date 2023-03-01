@@ -55,7 +55,12 @@ class GetCountNotificationTest extends TestCase
     public function testFromUser(): void
     {
         $this->callAuthorizedByUserRouteAction(User::find(3))
-            ->assertOk();
+            ->assertOk()
+            ->assertJsonStructure([
+                    'data' => [
+                        'count'
+                    ]
+                ]);
     }
 
     /**

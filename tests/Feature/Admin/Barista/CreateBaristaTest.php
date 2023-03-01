@@ -97,6 +97,7 @@ class CreateBaristaTest extends TestCase
     public function testValidate() : void
     {
         $this->callAuthorizedByUserRouteAction(User::find(1), $this->notValidateData)
-            ->assertUnprocessable();
+            ->assertUnprocessable()
+            ->assertJsonCount('6', 'errors.message');
     }
 }

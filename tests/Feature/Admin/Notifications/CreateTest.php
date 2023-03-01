@@ -97,6 +97,8 @@ class CreateTest extends TestCase
         $this->callAuthorizedByUserRouteAction(
             User::find(1),
             $this->notValidateData
-        )->assertUnprocessable();
+        )
+            ->assertUnprocessable()
+            ->assertJsonCount('1', 'errors.message');
     }
 }

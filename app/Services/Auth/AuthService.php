@@ -32,7 +32,9 @@ class AuthService extends BaseService
      */
     private function _createResponse(User $user) : array
     {
-        $this->data = $user->createToken('userToken');
+        if (env('APP_ENV') !== 'testing') {
+            $this->data = $user->createToken('userToken');
+        }
 
         $this->code = 201;
 

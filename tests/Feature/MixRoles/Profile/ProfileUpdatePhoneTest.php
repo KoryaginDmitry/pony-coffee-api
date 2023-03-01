@@ -104,11 +104,13 @@ class ProfileUpdatePhoneTest extends TestCase
      */
     public function testValidate() : void
     {
-        $this->withoutMiddleware(['codeVerification', 'reCaptcha']);
+        $this->withoutMiddleware([CodeVerification::class, ReCaptcha::class]);
 
         $this->callAuthorizedByUserRouteAction(
             User::find(3),
             $this->inValidData
-        )->assertUnprocessable();
+        )
+            ->assertUnprocessable()
+            ->assertJsonCount('3', 'errors.message');
     }
 }

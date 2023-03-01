@@ -30,6 +30,7 @@ Route::middleware(['role:guest', 'reCaptcha'])->group(
             function () {
                 //Login with phone and password
                 Route::post('/login', 'login')
+                    ->withoutMiddleware('reCaptcha')
                     ->name('login');
 
                 //Login with phone and code

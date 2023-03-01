@@ -82,6 +82,9 @@ class GetFeedbackTest extends TestCase
             ->assertNotFound();
     }
 
+    /**
+     * @return void
+     */
     public function testInvalidParameters() : void
     {
         $this->callAuthorizedByUserRouteAction(

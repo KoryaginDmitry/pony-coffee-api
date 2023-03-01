@@ -131,6 +131,8 @@ class CallTest extends TestCase
         $this->callAuthorizedByUserRouteAction(
             User::find(3),
             $this->invalidData
-        )->assertUnprocessable();
+        )
+            ->assertUnprocessable()
+            ->assertJsonCount('1', 'errors.message');
     }
 }

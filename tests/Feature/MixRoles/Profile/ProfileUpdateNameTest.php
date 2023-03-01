@@ -94,6 +94,8 @@ class ProfileUpdateNameTest extends TestCase
         $this->callAuthorizedByUserRouteAction(
             User::find(3),
             $this->inValidData
-        )->assertUnprocessable();
+        )
+            ->assertUnprocessable()
+            ->assertJsonCount('1', 'errors.message');
     }
 }

@@ -111,6 +111,7 @@ class RegisterTest extends TestCase
         $this->withoutMiddleware([ReCaptcha::class, CodeVerification::class]);
 
         $this->callRouteAction($this->invalidData)
-            ->assertUnprocessable();
+            ->assertUnprocessable()
+            ->assertJsonCount('4', 'errors.message');
     }
 }

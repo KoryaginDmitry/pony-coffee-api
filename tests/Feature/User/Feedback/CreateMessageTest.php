@@ -113,7 +113,9 @@ class CreateMessageTest extends TestCase
             User::find(3),
             $this->invalidData,
             $this->parameters
-        )->assertUnprocessable();
+        )
+            ->assertUnprocessable()
+            ->assertJsonCount('1', 'errors.message');
     }
 
     /**

@@ -105,6 +105,8 @@ class CreateFeedbackTest extends TestCase
         $this->callAuthorizedByUserRouteAction(
             User::find(3),
             $this->invalidData
-        )->assertUnprocessable();
+        )
+            ->assertUnprocessable()
+            ->assertJsonCount('3', 'errors.message');
     }
 }

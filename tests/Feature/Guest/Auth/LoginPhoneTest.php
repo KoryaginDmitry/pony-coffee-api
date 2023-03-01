@@ -103,6 +103,7 @@ class LoginPhoneTest extends TestCase
         $this->withoutMiddleware([ReCaptcha::class, CodeVerification::class]);
 
         $this->callRouteAction($this->invalidData)
-            ->assertUnprocessable();
+            ->assertUnprocessable()
+            ->assertJsonCount('2', 'errors.message');
     }
 }

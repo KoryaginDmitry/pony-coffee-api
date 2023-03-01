@@ -102,6 +102,7 @@ class LoginTest extends TestCase
         $this->withoutMiddleware(ReCaptcha::class);
 
         $this->callRouteAction($this->invalidData)
-            ->assertUnprocessable();
+            ->assertUnprocessable()
+            ->assertJsonCount('1', 'errors.message');
     }
 }

@@ -88,6 +88,7 @@ class CoffeePotUpdateTest extends TestCase
     public function testValidate() : void
     {
         $this->callAuthorizedByUserRouteAction(User::find(1), $this->notValidateData, $this->parameters)
-            ->assertUnprocessable();
+            ->assertUnprocessable()
+            ->assertJsonCount('1', 'errors.message');
     }
 }
