@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Message;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class MessageSeeder extends Seeder
@@ -13,7 +12,7 @@ class MessageSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run() : void
     {
         Message::factory()->create(
             [

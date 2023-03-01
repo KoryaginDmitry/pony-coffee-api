@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Code\EmailRequest;
 use App\Http\Requests\Code\PasswordResetRequest;
-use App\Services\auth\ResetPasswordService;
+use App\Services\Auth\ResetPasswordService;
 use Illuminate\Http\JsonResponse;
 
 /**

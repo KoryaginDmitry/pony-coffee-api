@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Notification;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class NotificationSeeder extends Seeder
@@ -13,7 +12,7 @@ class NotificationSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run() : void
     {
         Notification::factory()
             ->count(3)

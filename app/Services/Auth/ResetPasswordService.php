@@ -33,6 +33,8 @@ class ResetPasswordService extends BaseService
         );
 
         if ($status === Password::RESET_LINK_SENT) {
+            $this->code = 201;
+
             $this->data = [
                 'status' => __($status)
             ];

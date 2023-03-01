@@ -14,9 +14,11 @@ class NotificationFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition() : array
     {
         return [
+            'email' => '0',
+            'telegram' => '0',
             'site' => '1',
             'text' => fake()->realTextBetween(10, 50, 2)
         ];

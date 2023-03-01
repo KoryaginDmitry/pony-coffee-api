@@ -68,6 +68,8 @@ class UserService extends BaseService
             )
         ];
 
+        $this->code = 201;
+
         return $this->sendResponse();
     }
 

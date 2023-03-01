@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\CoffeePot;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CoffeePotSeeder extends Seeder
@@ -13,7 +12,7 @@ class CoffeePotSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run() : void
     {
         CoffeePot::factory()
             ->count(3)

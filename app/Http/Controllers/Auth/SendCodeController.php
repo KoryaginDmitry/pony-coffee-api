@@ -33,13 +33,13 @@ class SendCodeController extends Controller
      * Makes a call to the specified number
      *
      * @param PhoneRequest $request
-     *
+     * @param PhoneCode $sender
      * @return JsonResponse
      */
-    public function call(PhoneRequest $request) : JsonResponse
+    public function call(PhoneRequest $request, PhoneCode $sender) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->sendCode(new PhoneCode(), $request)
+            $this->service->sendCode($sender, $request)
         );
     }
 
@@ -47,13 +47,13 @@ class SendCodeController extends Controller
      * Send code to email
      *
      * @param EmailRequest $request
-     *
+     * @param EmailCode $sender
      * @return JsonResponse
      */
-    public function sendEmailCode(EmailRequest $request) : JsonResponse
+    public function sendEmailCode(EmailRequest $request, EmailCode $sender) : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->sendCode(new EmailCode(), $request)
+            $this->service->sendCode($sender, $request)
         );
     }
 

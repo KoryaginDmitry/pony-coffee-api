@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Bonus;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class BonusSeeder extends Seeder
@@ -13,7 +12,7 @@ class BonusSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run() : void
     {
         Bonus::factory()
             ->count(5)

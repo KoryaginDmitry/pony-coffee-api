@@ -24,30 +24,39 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['guest', 'reCaptcha'])->group(
+Route::middleware(['role:guest', 'reCaptcha'])->group(
     function () {
         Route::controller(AuthController::class)->group(
             function () {
                 //Login with phone and password
                 Route::post('/login', 'login')
-                    ->withoutMiddleware('reCaptcha');
+                    ->name('login');
+
                 //Login with phone and code
                 Route::post('login/phone', 'phoneLogin')
-                    ->middleware('codeVerification');
+                    ->middleware('codeVerification')
+                    ->name('login.phone');
+
                 //Login with email and code
                 Route::post('/email/login', 'emailLogin')
-                    ->middleware('codeVerification:email');
+                    ->middleware('codeVerification:email')
+                    ->name('login.email');
+
                 Route::post('/register', 'register')
-                    ->middleware('codeVerification');
+                    ->middleware('codeVerification')
+                    ->name('register');
             }
         );
 
         Route::controller(SendCodeController::class)->group(
             function () {
                 //Call to get a login code by phone
-                Route::post('/login/call', 'call')->name('sendLoginCode');
+                Route::post('/login/call', 'call')
+                    ->name('sendLoginCode');
+
                 //receive code by email
-                Route::post('login/email/code', 'sendEmailCode');
+                Route::post('login/email/code', 'sendEmailCode')
+                    ->name('emailCode.guest');
             }
         );
 
@@ -66,20 +75,27 @@ Route::middleware('role:user,admin')->group(
         Route::controller(UserController::class)->group(
             function () {
                 //gets a profile auth user
-                Route::get("/profile", 'authUser');
-                Route::put('profile/name', 'updateName');
+                Route::get("/profile", 'authUser')
+                    ->name('profile');
+
+                Route::put('profile/name', 'updateName')
+                    ->name('profile.name');
+
                 Route::put('profile/phone', 'updatePhone')
-                    ->middleware(['reCaptcha', 'codeVerification']);
+                    ->middleware(['reCaptcha', 'codeVerification'])
+                    ->name('profile.phone');
 
                 Route::put('profile/email', 'updateEmail')
-                    ->middleware('codeVerification:email');
+                    ->middleware('codeVerification:email')
+                    ->name('profile.email');
 
-                Route::put("/profile/password", 'newPassword');
+                Route::put("/profile/password", 'newPassword')
+                    ->name('profile.password');
             }
         );
         //sends verification code to email
         Route::post('/mail/verification/code', [SendCodeController::class, 'sendEmailCode'])
-            //->middleware('reCaptcha')
+            ->middleware('reCaptcha')
             ->name('verificationEmail');
     }
 );
@@ -87,31 +103,40 @@ Route::middleware('role:user,admin')->group(
 Route::middleware('role:user')->group(
     function () {
         //get data about authorized user's bonuses
-        Route::get('/user/bonuses', [BonusController::class, 'getInfoBonuses']);
+        Route::get('/user/bonuses', [BonusController::class, 'getInfoBonuses'])
+            ->name('bonus.information');
 
         Route::controller(NotificationController::class)->group(
             function () {
                 //get notifications for auth user
-                Route::get("/notification", 'getUserNotifications');
+                Route::get("/notification", 'getUserNotifications')
+                    ->name('notification.getForUser');
                 //read notification
-                Route::put("/notification/{notification}", "read");
+                Route::put("/notification/{notification}", "read")
+                    ->name('notification.read');
                 //get count notifications for auth user
-                Route::get("notification/count", "getCount");
+                Route::get("notification/count", "getCount")
+                    ->name('notification.getCount');
             }
         );
 
         Route::controller(FeedbackController::class)->group(
             function () {
                 //get user feedbacks
-                Route::get("/feedback", 'getFeedbacks');
+                Route::get("/feedback", 'getFeedbacks')
+                    ->name('feedbacks.getForUser');
                 //get one feedback
-                Route::get("/feedback/{feedback}", 'getFeedback');
+                Route::get("/feedback/{feedback}", 'getFeedback')
+                    ->name('feedback.getForUser');
                 //user requests for feedback on the coffee shop
-                Route::get("/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
+                Route::get("/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot')
+                    ->name('user.feedback.coffeePot');
                 //create feedback and message
-                Route::post('/feedback', 'create');
+                Route::post('/feedback', 'create')
+                    ->name('feedback.create');
                 //create message for feedback
-                Route::post('/feedback/{feedback}', 'createMessage');
+                Route::post('/feedback/{feedback}', 'createMessage')
+                    ->name('feedback.createMessage');
             }
         );
     }
@@ -122,18 +147,20 @@ Route::middleware('role:barista')->group(
         Route::controller(BonusController::class)->group(
             function () {
                 //create bonuses for user
-                Route::post('bonus/{user}', 'create');
+                Route::post('bonus/{user}', 'create')->name('bonus.create');
                 //write off bonuses from the user
-                Route::put('bonus/{user}', 'wrote');
+                Route::put('bonus/{user}', 'wrote')->name('bonus.wrote');
             }
         );
 
         Route::controller(UserController::class)->group(
             function () {
                 //get all users
-                Route::get('/users', 'users');
+                Route::get('/users', 'users')->name('barista.getUsers');
                 //create user
-                Route::post('/user/create', 'create');
+                Route::post('/user/create', 'userCreate')
+                    ->middleware('codeVerification')
+                    ->name('barista.user.create');
             }
         );
     }
@@ -144,12 +171,13 @@ Route::middleware('role:admin')->group(
         Route::controller(StatisticController::class)->group(
             function () {
                 //get data for statistic baristas
-                Route::get('/statistic', 'barista');
+                Route::get('/statistic', 'barista')->name('statistic.barista');
                 //get data for statistic users
-                Route::get('statistic/users', 'user');
+                Route::get('statistic/users', 'user')->name('statistic.user');
                 //get data for user statistics for a week or a month
                 Route::get('statistic/users/{interval}', 'userTimeInterval')
-                    ->where('interval', '7|31');
+                    ->where('interval', '7|31')
+                    ->name('statistic.interval');
             }
         );
 
@@ -157,57 +185,66 @@ Route::middleware('role:admin')->group(
             function () {
                 //get short info
                 Route::get('admin/feedback/short/{filter}', 'getShortFeedback')
-                    ->whereIn('filter', ['users', 'coffeePots']);
+                    ->whereIn('filter', ['users', 'coffeePots'])
+                    ->name('feedback.short');
 
                 //get all feedbacks
-                Route::get("admin/feedbacks", 'getFeedbacks');
+                Route::get("admin/feedbacks", 'getFeedbacks')
+                    ->name('feedback.all');
                 //get all feedback on the user
-                Route::get('admin/feedback/user/{user}', 'getFeedbacksUser');
+                Route::get('admin/feedback/user/{user}', 'getFeedbacksUser')
+                    ->name('feedback.user');
                 //get all feedback on the coffee shop
-                Route::get("admin/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot');
+                Route::get("admin/feedback/coffeePot/{coffeePot}", 'getFeedbackCoffeePot')
+                    ->name('feedback.coffeePot');
 
                 //get one feedback
-                Route::get("admin/feedback/{feedback}", 'getFeedback');
+                Route::get("admin/feedback/{feedback}", 'getFeedback')
+                    ->name('feedback.one');
 
                 //create message for feedback
-                Route::post('admin/feedback/{feedback}', 'createMessage');
+                Route::post('admin/feedback/{feedback}', 'createMessage')
+                    ->name('feedback.create.message');
             }
         );
 
         Route::controller(NotificationController::class)->group(
             function () {
                 //get all notifications
-                Route::get('admin/notification', 'getNotificationForAdmin');
+                Route::get('admin/notification', 'getNotificationForAdmin')
+                    ->name('notification.getForAdmin');
                 //create notification
-                Route::post('admin/notification', 'createNotification');
+                Route::post('admin/notification', 'createNotification')
+                    ->name('notification.create');
             }
         );
 
         Route::controller(CoffeePotController::class)->group(
             function () {
                 //get one coffeePot
-                Route::get('admin/coffeePot/{coffeePot}', 'getCoffeePot');
+                Route::get('admin/coffeePot/{coffeePot}', 'getCoffeePot')
+                    ->name('coffeePot.getOne');
                 //create coffeePot
-                Route::post('admin/coffeePot', 'create');
+                Route::post('admin/coffeePot', 'create')->name('coffeePot.create');
                 //update coffeePot
-                Route::put('admin/coffeePot/{coffeePot}', 'update');
+                Route::put('admin/coffeePot/{coffeePot}', 'update')->name('coffeePot.update');
                 //delete coffeePot
-                Route::delete('admin/coffeePot/{coffeePot}', 'delete');
+                Route::delete('admin/coffeePot/{coffeePot}', 'delete')->name('coffeePot.delete');
             }
         );
 
         Route::controller(BaristaProfileController::class)->group(
             function () {
                 //get all baristas user
-                Route::get('barista', 'getAll');
+                Route::get('barista', 'getAll')->name('barista.getAll');
                 //get one barista user
-                Route::get('barista/{barista}', 'getBarista');
+                Route::get('barista/{barista}', 'getBarista')->name('barista.getOne');
                 //create barista user
-                Route::post('barista', 'create');
+                Route::post('barista', 'create')->name('barista.create');
                 //update barista user
-                Route::put('barista/{barista}', 'update');
+                Route::put('barista/{barista}', 'update')->name('barista.update');
                 //delete barista user
-                Route::delete('barista/{barista}', 'delete');
+                Route::delete('barista/{barista}', 'delete')->name('barista.delete');
             }
         );
     }
@@ -216,20 +253,23 @@ Route::middleware('role:admin')->group(
 Route::controller(SiteDataController::class)->group(
     function () {
         //get links for header site
-        Route::get("/header", 'header');
+        Route::get("/header", 'header')->name('SiteData.header');
         //get lifetime bonus
-        Route::get('/bonus/lifetime', 'bonusLifetime');
+        Route::get('/bonus/lifetime', 'bonusLifetime')->name('SiteData.bonus.lifetime');
         //get channels for user
-        Route::get('/channels', 'getChannels');
+        Route::get('/channels', 'getChannels')->name('SiteData.channels');
     }
 );
 
 //get all coffeePot
-Route::get('coffeePot', [CoffeePotController::class, 'getCoffeePots']);
+Route::get('coffeePot', [CoffeePotController::class, 'getCoffeePots'])
+    ->name('coffeePot.getAll');
 
 //sends verification code to phone
 Route::post('/call', [SendCodeController::class, 'call'])
-    ->middleware('reCaptcha');
+    ->middleware('reCaptcha')
+    ->name('call');
 
 Route::post('/logout', [AuthController::class, 'logout'])
-    ->middleware('auth');
+    ->middleware('auth')
+    ->name('logout');

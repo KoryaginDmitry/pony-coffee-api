@@ -133,6 +133,8 @@ class NotificationService extends BaseService
             Mail::to($users)->send(new NewsletterMail($request->text));
         }
 
+        $this->code = 201;
+
         $this->data = [
             'notification' => Notification::create(
                 $request->validated()

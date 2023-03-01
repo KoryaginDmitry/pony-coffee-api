@@ -33,8 +33,23 @@ class UserCreateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'between:2, 255'],
             'phone' => ['required', "regex:/$phone_regex/", 'unique:users'],
-            'code' => ['required', 'integer', 'between:1000,9999']
+            'code' => ['required', 'integer', 'between:1000,9999'],
+            'role_id' => ['required']
         ];
+    }
+
+    /**
+     * Prepare data for validation.
+     *
+     * @return void
+     */
+    public function prepareForValidation() : void
+    {
+        $this->merge(
+            [
+                'role_id' => 3,
+            ]
+        );
     }
 
     /**

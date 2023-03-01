@@ -34,6 +34,8 @@ class AuthService extends BaseService
     {
         $this->data = $user->createToken('userToken');
 
+        $this->code = 201;
+
         return $this->sendResponse();
     }
 
@@ -64,9 +66,9 @@ class AuthService extends BaseService
      */
     public function phoneLogin(LoginPhoneRequest $request) : array
     {
-        $user = User::where('phone', $request->phone)->first();
-
-        return $this->_createResponse($user);
+        return $this->_createResponse(
+            User::where('phone', $request->phone)->first()
+        );
     }
 
     /**
@@ -78,9 +80,9 @@ class AuthService extends BaseService
      */
     public function emailLogin(LoginEmailRequest $request) : array
     {
-        $user = User::where('email', $request->email)->first();
-
-        return $this->_createResponse($user);
+        return $this->_createResponse(
+            User::where('email', $request->email)->first()
+        );
     }
 
     /**
@@ -92,13 +94,11 @@ class AuthService extends BaseService
      */
     public function register(RegisterRequest $request) : array
     {
-        $user = User::create(
-            $this->passwordHash($request->safe()->except('code'))
+        return $this->_createResponse(
+            User::create(
+                $this->passwordHash($request->safe()->except('code'))
+            )
         );
-
-        $this->code = 201;
-
-        return $this->_createResponse($user);
     }
 
     /**

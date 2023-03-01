@@ -56,8 +56,9 @@ class SiteDataService extends BaseService
     {
         $channels = config("options.Channels." . User::staticGetRole());
 
-        $channels['channel'] = Str::replace('{id}', auth()->id(), Arr::get($channels, 'channel'));
-
+        if ($channels) {
+            $channels['channel'] = Str::replace('{id}', auth()->id(), Arr::get($channels, 'channel'));
+        }
 
         $this->data = [
             'channels' => $channels

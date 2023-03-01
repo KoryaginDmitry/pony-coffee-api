@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('notifications', static function (Blueprint $table) {
             $table->id();
             $table->enum("email", [0,1]);
             $table->enum("site", [0,1]);

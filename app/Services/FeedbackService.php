@@ -193,6 +193,8 @@ class FeedbackService extends BaseService
             broadcast(new CreateMessageForAdmin($message));
         }
 
+        $this->code = 201;
+
         $this->data = [
             'message' => $message
         ];
