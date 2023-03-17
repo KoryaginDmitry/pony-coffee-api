@@ -34,7 +34,7 @@ trait SendResponseTrait
         $response = [
             'data' => null,
             'errors' => [
-                'message' => $errors
+                'messages' => $errors
             ],
             'status' => false,
             'code' => $code

@@ -71,36 +71,6 @@ Route::middleware(['role:guest', 'reCaptcha'])->group(
     }
 );
 
-Route::middleware('role:user,admin')->group(
-    function () {
-        Route::controller(UserController::class)->group(
-            function () {
-                //gets a profile auth user
-                Route::get("/profile", 'authUser')
-                    ->name('profile');
-
-                Route::put('profile/name', 'updateName')
-                    ->name('profile.name');
-
-                Route::put('profile/phone', 'updatePhone')
-                    ->middleware(['reCaptcha', 'codeVerification'])
-                    ->name('profile.phone');
-
-                Route::put('profile/email', 'updateEmail')
-                    ->middleware('codeVerification:email')
-                    ->name('profile.email');
-
-                Route::put("/profile/password", 'newPassword')
-                    ->name('profile.password');
-            }
-        );
-        //sends verification code to email
-        Route::post('/mail/verification/code', [SendCodeController::class, 'sendEmailCode'])
-            ->middleware('reCaptcha')
-            ->name('verificationEmail');
-    }
-);
-
 Route::middleware('role:user')->group(
     function () {
         //get data about authorized user's bonuses
@@ -271,6 +241,36 @@ Route::post('/call', [SendCodeController::class, 'call'])
     ->middleware('reCaptcha')
     ->name('call');
 
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->middleware('auth')
-    ->name('logout');
+Route::middleware('auth')->group(
+    function () {
+        Route::controller(UserController::class)->group(
+            function () {
+                //gets a profile auth user
+                Route::get("/profile", 'authUser')
+                    ->name('profile');
+
+                Route::put('profile/name', 'updateName')
+                    ->name('profile.name');
+
+                Route::put('profile/phone', 'updatePhone')
+                    ->middleware(['reCaptcha', 'codeVerification'])
+                    ->name('profile.phone');
+
+                Route::put('profile/email', 'updateEmail')
+                    ->middleware('codeVerification:email')
+                    ->name('profile.email');
+
+                Route::put("/profile/password", 'newPassword')
+                    ->name('profile.password');
+            }
+        );
+        //sends verification code to email
+        Route::post('/mail/verification/code', [SendCodeController::class, 'sendEmailCode'])
+            ->middleware('reCaptcha')
+            ->name('verificationEmail');
+
+        Route::post('/logout', [AuthController::class, 'logout'])
+            ->middleware('auth')
+            ->name('logout');
+    }
+);
