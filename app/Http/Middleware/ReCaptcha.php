@@ -34,6 +34,6 @@ class ReCaptcha
             return $next($request);
         }
 
-        return $this->sendErrorResponse('Ошибка ReCaptcha');
+        return $this->sendErrorResponse(['Ошибка ReCaptcha']);
     }
 }
