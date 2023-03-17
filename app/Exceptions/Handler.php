@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
         $this->renderable(
             function (NotFoundHttpException $e, $request) {
                 if ($request->wantsJson()) {
-                    return $this->sendErrorResponse('Страница не существует', 404);
+                    return $this->sendErrorResponse(['Страница не существует'], 404);
                 }
             }
         );
