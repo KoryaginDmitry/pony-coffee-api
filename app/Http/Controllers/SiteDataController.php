@@ -41,10 +41,10 @@ class SiteDataController extends Controller
      *
      * @return JsonResponse
      */
-    public function bonusLifetime() : JsonResponse
+    public function getBonusConfig() : JsonResponse
     {
         return $this->sendResponse(
-            $this->service->bonusLifetime()
+            $this->service->getBonusConfig()
         );
     }
 

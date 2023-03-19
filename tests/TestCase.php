@@ -20,6 +20,13 @@ abstract class TestCase extends BaseTestCase
     protected bool $seed = true;
 
     /**
+     * Path in array to errors
+     *
+     * @var string
+     */
+    protected string $errorPath = 'errors.messages';
+
+    /**
      * Getting the route name
      *
      * @return string

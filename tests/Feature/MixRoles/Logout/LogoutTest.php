@@ -22,7 +22,7 @@ class LogoutTest extends TestCase
      */
     public function testMiddleware(): void
     {
-        $this->assertRouteHasExactMiddleware('api', 'auth');
+        $this->assertRouteHasExactMiddleware('api', 'role:admin,barista,user');
     }
 
     /**
@@ -66,6 +66,6 @@ class LogoutTest extends TestCase
     public function testFromGuest(): void
     {
         $this->callRouteAction()
-            ->assertUnauthorized();
+            ->assertNotFound();
     }
 }

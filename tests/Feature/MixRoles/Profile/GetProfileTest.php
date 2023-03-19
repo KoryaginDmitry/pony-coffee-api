@@ -22,7 +22,7 @@ class GetProfileTest extends TestCase
      */
     public function testMiddleware() : void
     {
-        $this->assertRouteHasExactMiddleware('role:user,admin', 'api');
+        $this->assertRouteHasExactMiddleware('role:admin,barista,user', 'api');
     }
 
     /**
@@ -44,7 +44,7 @@ class GetProfileTest extends TestCase
     public function testFromBarista(): void
     {
         $this->callAuthorizedByUserRouteAction(User::find(2))
-            ->assertNotFound();
+            ->assertOk();
     }
 
     /**

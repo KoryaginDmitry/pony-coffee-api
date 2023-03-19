@@ -104,7 +104,7 @@ class CreateUserTest extends TestCase
             $this->notValidateData
         )
             ->assertUnprocessable()
-            ->assertJsonCount('2', 'errors.message');
+            ->assertJsonCount('2', $this->errorPath);
 
     }
 }

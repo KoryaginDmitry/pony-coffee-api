@@ -115,7 +115,7 @@ class CreateMessageTest extends TestCase
             $this->parameters
         )
             ->assertUnprocessable()
-            ->assertJsonCount('1', 'errors.message');
+            ->assertJsonCount('1', $this->errorPath);
     }
 
     /**

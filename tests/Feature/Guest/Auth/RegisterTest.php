@@ -112,6 +112,6 @@ class RegisterTest extends TestCase
 
         $this->callRouteAction($this->invalidData)
             ->assertUnprocessable()
-            ->assertJsonCount('4', 'errors.message');
+            ->assertJsonCount('4', $this->errorPath);
     }
 }

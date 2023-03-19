@@ -107,6 +107,6 @@ class CreateFeedbackTest extends TestCase
             $this->invalidData
         )
             ->assertUnprocessable()
-            ->assertJsonCount('3', 'errors.message');
+            ->assertJsonCount('3', $this->errorPath);
     }
 }

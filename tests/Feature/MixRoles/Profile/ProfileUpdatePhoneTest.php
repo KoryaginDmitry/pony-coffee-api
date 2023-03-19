@@ -38,7 +38,7 @@ class ProfileUpdatePhoneTest extends TestCase
     public function testMiddleware() : void
     {
         $this->assertRouteHasExactMiddleware(
-            'role:user,admin',
+            'role:admin,barista,user',
             'api',
             'codeVerification',
             'reCaptcha'
@@ -67,10 +67,12 @@ class ProfileUpdatePhoneTest extends TestCase
      */
     public function testFromBarista(): void
     {
+        $this->withoutMiddleware([CodeVerification::class, ReCaptcha::class]);
+
         $this->callAuthorizedByUserRouteAction(
             User::find(2),
             $this->data
-        )->assertNotFound();
+        )->assertOk();
     }
 
     /**
@@ -111,6 +113,6 @@ class ProfileUpdatePhoneTest extends TestCase
             $this->inValidData
         )
             ->assertUnprocessable()
-            ->assertJsonCount('3', 'errors.message');
+            ->assertJsonCount('3', $this->errorPath);
     }
 }

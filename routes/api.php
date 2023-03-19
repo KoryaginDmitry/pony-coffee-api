@@ -226,7 +226,7 @@ Route::controller(SiteDataController::class)->group(
         //get links for header site
         Route::get("/header", 'header')->name('SiteData.header');
         //get lifetime bonus
-        Route::get('/bonus/lifetime', 'bonusLifetime')->name('SiteData.bonus.lifetime');
+        Route::get('/bonus/config', 'getBonusConfig')->name('SiteData.bonus');
         //get channels for user
         Route::get('/channels', 'getChannels')->name('SiteData.channels');
     }
@@ -241,7 +241,7 @@ Route::post('/call', [SendCodeController::class, 'call'])
     ->middleware('reCaptcha')
     ->name('call');
 
-Route::middleware('auth')->group(
+Route::middleware('role:admin,barista,user')->group(
     function () {
         Route::controller(UserController::class)->group(
             function () {
@@ -269,8 +269,6 @@ Route::middleware('auth')->group(
             ->middleware('reCaptcha')
             ->name('verificationEmail');
 
-        Route::post('/logout', [AuthController::class, 'logout'])
-            ->middleware('auth')
-            ->name('logout');
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     }
 );

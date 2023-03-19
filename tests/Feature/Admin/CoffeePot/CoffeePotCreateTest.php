@@ -71,6 +71,6 @@ class CoffeePotCreateTest extends TestCase
             $this->notValidateData
         )
             ->assertUnprocessable()
-            ->assertJsonCount('1', 'errors.message');
+            ->assertJsonCount('1', $this->errorPath);
     }
 }

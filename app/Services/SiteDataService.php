@@ -38,10 +38,11 @@ class SiteDataService extends BaseService
      *
      * @return array
      */
-    public function bonusLifetime() : array
+    public function getBonusConfig() : array
     {
         $this->data = [
-            'lifetime' => Bonus::getLifetime()
+            'lifetime' => Bonus::getLifetime(),
+            'writeOffQuantity' => config('options.bonus.writeOffQuantity')
         ];
 
         return $this->sendResponse();

@@ -133,6 +133,6 @@ class CallTest extends TestCase
             $this->invalidData
         )
             ->assertUnprocessable()
-            ->assertJsonCount('1', 'errors.message');
+            ->assertJsonCount('1', $this->errorPath);
     }
 }

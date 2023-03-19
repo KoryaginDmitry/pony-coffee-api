@@ -5,7 +5,7 @@ namespace Tests\Feature\MixRoles\SiteData;
 use App\Models\User;
 use Tests\TestCase;
 
-class BonusLifetimeTest extends TestCase
+class BonusConfig extends TestCase
 {
     /**
      * Create data for response
@@ -16,7 +16,8 @@ class BonusLifetimeTest extends TestCase
     {
         return [
             'data' => [
-                'lifetime' => config('options.bonus.lifetime')
+                'lifetime' => config('options.bonus.lifetime'),
+                'writeOffQuantity' => config('options.bonus.writeOffQuantity'),
             ],
             'errors' => [],
             'status' => true
@@ -30,7 +31,7 @@ class BonusLifetimeTest extends TestCase
      */
     public function getRouteName(): string
     {
-        return 'SiteData.bonus.lifetime';
+        return 'SiteData.bonus';
     }
 
     /**

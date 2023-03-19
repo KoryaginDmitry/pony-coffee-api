@@ -33,7 +33,7 @@ class ProfileUpdateNameTest extends TestCase
      */
     public function testMiddleware() : void
     {
-        $this->assertRouteHasExactMiddleware('role:user,admin', 'api');
+        $this->assertRouteHasExactMiddleware('role:admin,barista,user', 'api');
     }
 
     /**
@@ -59,7 +59,7 @@ class ProfileUpdateNameTest extends TestCase
         $this->callAuthorizedByUserRouteAction(
             User::find(2),
             $this->data
-        )->assertNotFound();
+        )->assertOk();
     }
 
     /**
@@ -96,6 +96,6 @@ class ProfileUpdateNameTest extends TestCase
             $this->inValidData
         )
             ->assertUnprocessable()
-            ->assertJsonCount('1', 'errors.message');
+            ->assertJsonCount('1', $this->errorPath);
     }
 }

@@ -37,7 +37,7 @@ class SendTest extends TestCase
 
     public function testMiddleware() : void
     {
-        $this->assertRouteHasExactMiddleware('api', 'reCaptcha', 'role:user,admin');
+        $this->assertRouteHasExactMiddleware('api', 'reCaptcha', 'role:admin,barista,user');
     }
 
     /**
@@ -69,10 +69,19 @@ class SendTest extends TestCase
      */
     public function testFromBarista(): void
     {
+        $this->withoutMiddleware(ReCaptcha::class);
+
+        $this->instance(
+            EmailCode::class,
+            Mockery::mock(EmailCode::class, static function (MockInterface $mock) {
+                $mock->shouldReceive('sendCode')->once();
+            })
+        );
+
         $this->callAuthorizedByUserRouteAction(
             User::find(2),
             $this->data
-        )->assertNotFound();
+        )->assertCreated();
     }
 
     /**
@@ -120,6 +129,6 @@ class SendTest extends TestCase
             $this->invalidData
         )
             ->assertUnprocessable()
-            ->assertJsonCount('1', 'errors.message');
+            ->assertJsonCount('1', $this->errorPath);
     }
 }

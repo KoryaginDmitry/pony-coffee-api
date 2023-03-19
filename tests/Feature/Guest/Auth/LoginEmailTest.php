@@ -114,6 +114,6 @@ class LoginEmailTest extends TestCase
 
         $this->callRouteAction($this->invalidData)
             ->assertUnprocessable()
-            ->assertJsonCount('2', 'errors.message');
+            ->assertJsonCount('2', $this->errorPath);
     }
 }

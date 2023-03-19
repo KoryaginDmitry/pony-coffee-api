@@ -36,7 +36,7 @@ class ProfileUpdateEmailTest extends TestCase
      */
     public function testMiddleware() : void
     {
-        $this->assertRouteHasExactMiddleware('role:user,admin', 'api', 'codeVerification:email');
+        $this->assertRouteHasExactMiddleware('role:admin,barista,user', 'api', 'codeVerification:email');
     }
 
     /**
@@ -61,10 +61,12 @@ class ProfileUpdateEmailTest extends TestCase
      */
     public function testFromBarista(): void
     {
+        $this->withoutMiddleware(CodeVerification::class);
+
         $this->callAuthorizedByUserRouteAction(
             User::find(2),
             $this->data
-        )->assertNotFound();
+        )->assertOk();
     }
 
     /**
@@ -105,6 +107,6 @@ class ProfileUpdateEmailTest extends TestCase
             $this->inValidData
         )
             ->assertUnprocessable()
-            ->assertJsonCount('3', 'errors.message');
+            ->assertJsonCount('3', $this->errorPath);
     }
 }
