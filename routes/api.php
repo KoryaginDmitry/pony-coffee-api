@@ -145,10 +145,6 @@ Route::middleware('role:admin')->group(
                 Route::get('/statistic', 'barista')->name('statistic.barista');
                 //get data for statistic users
                 Route::get('statistic/users', 'user')->name('statistic.user');
-                //get data for user statistics for a week or a month
-                Route::get('statistic/users/{interval}', 'userTimeInterval')
-                    ->where('interval', '7|31')
-                    ->name('statistic.interval');
             }
         );
 

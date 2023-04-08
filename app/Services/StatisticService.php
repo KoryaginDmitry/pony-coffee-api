@@ -39,9 +39,11 @@ class StatisticService extends BaseService
     public function user() : array
     {
         $this->data = [
-            'user' => User::where("role_id", "3")
+            'users' => User::where("role_id", "3")
                 ->withCount(["activeBonuses", "usingBonuses", "burntBonuses"])
-                ->get()
+                ->get(),
+            'users_data_week' => $this->userTimeInterval(7),
+            'users_data_month' => $this->userTimeInterval(31),
         ];
 
         return $this->sendResponse();
@@ -54,9 +56,9 @@ class StatisticService extends BaseService
      *
      * @return array
      */
-    public function userTimeInterval(int $interval) : array
+    private function userTimeInterval(int $interval) : array
     {
-        $this->data = [
+        return [
             'users' => User::where("role_id", "3")
                 ->withCount(
                     [
@@ -80,7 +82,5 @@ class StatisticService extends BaseService
                     ]
                 )->get()
         ];
-
-        return $this->sendResponse();
     }
 }

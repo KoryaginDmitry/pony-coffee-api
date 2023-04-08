@@ -47,18 +47,4 @@ class StatisticController extends Controller
             $this->service->user()
         );
     }
-
-    /**
-     * Get user statistics for a week or month
-     *
-     * @param integer $interval
-     *
-     * @return JsonResponse
-     */
-    public function userTimeInterval(int $interval) : JsonResponse
-    {
-        return $this->sendResponse(
-            $this->service->userTimeInterval($interval)
-        );
-    }
 }
