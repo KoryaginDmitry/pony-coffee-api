@@ -2,124 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\User\ProfileEmailRequest;
-use App\Http\Requests\User\ProfileNameRequest;
-use App\Http\Requests\User\ProfilePasswordRequest;
-use App\Http\Requests\User\ProfilePhoneRequest;
-use App\Http\Requests\User\UserCreateRequest;
-use App\Services\UserService;
+use App\Contracts\Services\UserServiceContract;
+use App\Dto\Request\User\UserPasswordDto;
+use App\Dto\Request\User\UserUpdateDto;
+use App\Http\Requests\User\NewPasswordRequest;
+use App\Http\Requests\User\UpdateRequest;
+use App\Http\Resources\UserResource;
+use Exception;
+use Fillincode\Swagger\Attributes\FormRequest;
+use Fillincode\Swagger\Attributes\Group;
+use Fillincode\Swagger\Attributes\Resource;
+use Fillincode\Swagger\Attributes\Summary;
 use Illuminate\Http\JsonResponse;
 
-/**
- * UserController class
- *
- * @category Controllers
- *
- * @author DmitryKoryagin <kor.dima97@mail.ru>
- */
 class UserController extends Controller
 {
-    /**
-     * Service connection
-     *
-     * @param UserService $service
-     */
-    public function __construct(protected UserService $service)
-    {
+    public function __construct(
+        protected UserServiceContract $service
+    ) {}
 
+    #[Group('User')]
+    #[Summary('Получение данных текущего пользователя')]
+    #[Resource(UserResource::class)]
+    public function show(): UserResource|JsonResponse
+    {
+        try {
+            return $this->service->user();
+        } catch (Exception $exception) {
+            return $this->createErrorResponse(__('errors.user.show'), $exception);
+        }
     }
 
-    /**
-     * Get users and relationship bonuses for barista profile
-     *
-     * @return JsonResponse
-     */
-    public function users() : JsonResponse
+    #[Group('User')]
+    #[Summary('Обновление данных текущего пользователя')]
+    #[Resource(UserResource::class)]
+    #[FormRequest(UpdateRequest::class)]
+    public function update(UpdateRequest $request): UserResource|JsonResponse
     {
-        return $this->sendResponse(
-            $this->service->users()
-        );
+        try {
+            return $this->service->update(
+                UserUpdateDto::fromRequest($request)
+            );
+        } catch (Exception $exception) {
+            return $this->createErrorResponse(__('errors.user.update'), $exception);
+        }
     }
 
-    /**
-     * Creating a user through a barista profile
-     *
-     * @param UserCreateRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function userCreate(UserCreateRequest $request) : JsonResponse
+    #[Group('User')]
+    #[Summary('Обновление пароля текущего пользователя')]
+    #[FormRequest(NewPasswordRequest::class)]
+    public function newPassword(NewPasswordRequest $request): JsonResponse
     {
-        return $this->sendResponse(
-            $this->service->userCreate($request)
-        );
+        try {
+            return $this->service->newPassword(
+                UserPasswordDto::fromRequest($request)
+            );
+        } catch (Exception $exception) {
+            return $this->createErrorResponse(__('errors.user.new_password'), $exception);
+        }
     }
 
-    /**
-     * Get auth user
-     *
-     * @return JsonResponse
-     */
-    public function authUser() : JsonResponse
+    #[Group('User')]
+    #[Summary('Удаление текущего пользователя')]
+    public function destroy(): JsonResponse
     {
-        return $this->sendResponse(
-            $this->service->authUser()
-        );
-    }
-
-    /**
-     * Update name auth user
-     *
-     * @param ProfileNameRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function updateName(ProfileNameRequest $request) : JsonResponse
-    {
-        return $this->sendResponse(
-            $this->service->updateName($request)
-        );
-    }
-
-    /**
-     * Update phone auth user
-     *
-     * @param ProfilePhoneRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function updatePhone(ProfilePhoneRequest $request) : JsonResponse
-    {
-        return $this->sendResponse(
-            $this->service->updatePhone($request)
-        );
-    }
-
-    /**
-     * Update email auth user
-     *
-     * @param ProfileEmailRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function updateEmail(ProfileEmailRequest $request) : JsonResponse
-    {
-        return $this->sendResponse(
-            $this->service->updateEmail($request)
-        );
-    }
-
-    /**
-     * New password for auth user
-     *
-     * @param ProfilePasswordRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function newPassword(ProfilePasswordRequest $request) : JsonResponse
-    {
-        return $this->sendResponse(
-            $this->service->newPassword($request)
-        );
+        try {
+            return $this->service->destroy();
+        } catch (Exception $exception) {
+            return $this->createErrorResponse(__('errors.user.destroy'), $exception);
+        }
     }
 }

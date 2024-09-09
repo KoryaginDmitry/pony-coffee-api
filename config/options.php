@@ -1,21 +1,21 @@
 <?php
 
 return [
-    "header" => [
-        "user" => [
+    'header' => [
+        'user' => [
             ['href' => '/', 'text' => 'Главная'],
             ['href' => '/profile', 'text' => 'Профиль'],
             ['href' => '/notifications', 'text' => 'Уведомления'],
             ['href' => '/feedback', 'text' => 'Обратная связь'],
             ['href' => '/logout', 'text' => 'Выход'],
         ],
-        "barista" => [
+        'barista' => [
             ['href' => '/', 'text' => 'Главная'],
             ['href' => '/user', 'text' => 'Создать пользователя'],
             ['href' => '/bonuses', 'text' => 'Бонусы'],
             ['href' => '/logout', 'text' => 'Выход'],
         ],
-        "admin" => [
+        'admin' => [
             ['href' => '/', 'text' => 'Главная'],
             ['href' => '/statistic/barista', 'text' => 'Статистика сотрудников'],
             ['href' => '/statistic/user', 'text' => 'Статистика гостей'],
@@ -25,10 +25,10 @@ return [
             ['href' => '/barista', 'text' => 'Сотрудники'],
             ['href' => '/logout', 'text' => 'Выход'],
         ],
-        "guest" => [
+        'guest' => [
             ['href' => '/login', 'text' => 'Вход'],
             ['href' => '/register', 'text' => 'Регистрация'],
-        ]
+        ],
     ],
 
     'regex' => [

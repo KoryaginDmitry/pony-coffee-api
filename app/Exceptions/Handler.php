@@ -2,10 +2,13 @@
 
 namespace App\Exceptions;
 
-use App\Support\Traits\SendResponseTrait;
+use App\Traits\SendResponseTrait;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -16,7 +19,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of exception types with their corresponding custom log levels.
      *
-     * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
+     * @var array<class-string<Throwable>, \Psr\Log\LogLevel::*>
      */
     protected $levels = [
         //
@@ -25,7 +28,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that are not reported.
      *
-     * @var array<int, class-string<\Throwable>>
+     * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
         //
@@ -44,41 +47,37 @@ class Handler extends ExceptionHandler
 
     /**
      * Register the exception handling callbacks for the application.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->reportable(
-            function (Throwable $e) {
-                //
-            }
+        $this->renderable(fn (NotFoundHttpException $e, $request) => $this->isJson($request)
+            ? $this->sendErrorResponse(['Страница не существует'], 404)
+            : null
         );
 
-        $this->renderable(
-            function (NotFoundHttpException $e, $request) {
-                if ($request->wantsJson()) {
-                    return $this->sendErrorResponse(['Страница не существует'], 404);
-                }
-            }
+        $this->renderable(fn (ValidationException $e, Request $request) => $this->isJson($request)
+            ? $this->sendErrorResponse($e->validator->errors()->toArray())
+            : null
         );
 
-        $this->renderable(
-            function (ValidationException $e, $request) {
-                if ($request->wantsJson()) {
-                    return $this->sendErrorResponse($e->validator->errors()->all());
-                }
-            }
+        $this->renderable(fn (AuthenticationException $e, Request $request) => $this->isJson($request)
+            ? $this->sendErrorResponse(['Пользователь не аутентифицирован'], 401)
+            : null
         );
 
-        $this->renderable(
-            function (RequestException $e, $request) {
-                if ($request->wantsJson()) {
-                    return $this->sendErrorResponse(
-                        $e->response->json()['description'], $e->response->status()
-                    );
-                }
-            }
+        $this->renderable(fn (AccessDeniedHttpException $e, Request $request) => $this->isJson($request)
+            ? $this->sendErrorResponse(['Недостаточно прав'], 403)
+            : null
         );
+
+        $this->renderable(fn (ThrottleRequestsException $e, Request $request) => $this->isJson($request)
+            ? $this->sendErrorResponse(['Слишком много запросов'], 429)
+            : null
+        );
+    }
+
+    protected function isJson(Request $request): bool
+    {
+        return $request->wantsJson() || $request->ajax();
     }
 }

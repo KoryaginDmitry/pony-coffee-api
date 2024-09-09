@@ -4,47 +4,19 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run() : void
+    public function run(): void
     {
-        User::factory()->create(
-            [
-                'password' => Hash::make('admin-admin'),
-                'phone' => '+79999999999',
-                'role_id' => 1
-            ]
-        );
+        $userRole = Role::query()->where('name', 'user')->first();
+        $baristaRole = Role::query()->where('name', 'barista')->first();
 
-        User::factory()->create(
-            [
-                'password' => Hash::make('barista-barista'),
-                'phone' => '+79998888888',
-                'role_id' => 2
-            ]
-        );
-
-        User::factory()->create(
-            [
-                'password' => Hash::make('user-user'),
-                'phone' => "+79997777777",
-                'role_id' => 3
-            ]
-        );
-
-        User::factory()->create(
-            [
-                'password' => Hash::make('user-user-user'),
-                'phone' => "+79996666666",
-                'role_id' => 3
-            ]
-        );
+        User::factory(3)->hasAttached($userRole)->create();
+        User::factory(2)->hasAttached($baristaRole)->create();
     }
 }

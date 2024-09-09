@@ -31,18 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'telegram' => [
-        'channel_id' => env('TELEGRAM_CHANEL_ID'),
-        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+    'telegram-exception-bot' => [
+        'token' => env('EXCEPTION_BOT_TOKEN'),
+        'username' => env('EXCEPTION_BOT_USERNAME'),
+        'chat_id' => env('EXCEPTION_BOT_CHAT_ID'),
     ],
-    
-    'sms' => [
-        'api_id' => env('SMS_API_ID'),
-    ],
-
-    'recaptcha' => [
-        'key' => env('RECAPTCHA_SITE_KEY'),
-        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
-        'min_score' => 0.5,
-    ]
 ];

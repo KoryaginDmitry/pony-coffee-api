@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\CoffeePotFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Builder;
-use Database\Factories\CoffeePotFactory;
 use Illuminate\Support\Carbon;
-use Eloquent;
 
 /**
  * App\Models\CoffeePot
@@ -19,10 +20,12 @@ use Eloquent;
  * @property string $address
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<int, User> $employers
+ * @property-read int|null $employers_count
+ * @property-read Collection<int, Review> $reviews
+ * @property-read int|null $reviews_count
  *
- * @property-read Collection|UserCoffeePot[] $userCoffeePot
- * @property-read int|null $user_coffee_pot_count
- *
+ * @method static CoffeePotFactory factory($count = null, $state = [])
  * @method static Builder|CoffeePot newModelQuery()
  * @method static Builder|CoffeePot newQuery()
  * @method static Builder|CoffeePot query()
@@ -31,8 +34,8 @@ use Eloquent;
  * @method static Builder|CoffeePot whereId($value)
  * @method static Builder|CoffeePot whereName($value)
  * @method static Builder|CoffeePot whereUpdatedAt($value)
- * @method static CoffeePotFactory factory(...$parameters)
- * @mixin  Eloquent
+ *
+ * @mixin Eloquent
  */
 class CoffeePot extends Model
 {
@@ -48,32 +51,13 @@ class CoffeePot extends Model
         'address',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'updated_at'
-    ];
-
-    /**
-     * Relationship
-     *
-     * @return HasMany
-     */
-    public function userCoffeePot(): HasMany
+    public function reviews(): HasMany
     {
-        return $this->hasMany(UserCoffeePot::class);
+        return $this->hasMany(Review::class);
     }
 
-    /**
-     * Relationship
-     *
-     * @return HasMany
-     */
-    public function feedbacks() : HasMany
+    public function employers(): BelongsToMany
     {
-        return $this->hasMany(Feedback::class);
+        return $this->belongsToMany(User::class);
     }
 }
